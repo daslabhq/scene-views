@@ -9,7 +9,11 @@ Typed asset shapes + visual + headless **views** for AI agents. Authors return *
 - **Markdown** — rendered from WidgetData for LLM context injection (3–5× cheaper in tokens than dumping raw JSON, while preserving the structure agents need to reason about)
 - **Text** — rendered from WidgetData for terminals and text-only models
 
-Ships with **10 typed assets** out of the box (Gmail, Salesforce, Slack, Google Sheets, Google Calendar, Airtable, Jira, Notion, Stripe, GitHub) plus a library of widget primitives (Table, Metric, List, KeyValue, Calendar, Status, Document, Image, Plan, Stack).
+Ships with **6 canonical types** in core — abstract primitives any vendor can implement: **Email**, **Message**, **Contact**, **Event**, **Task**, **Document**. Plus a library of widget primitives (Table, Metric, List, KeyValue, Calendar, Status, Document, Image, Plan, Stack).
+
+Vendor implementations (Gmail, Slack, Salesforce, Google Sheets, Notion, Jira, etc.) live in sibling packages following the `scene-state-<vendor>` convention. They declare which canonical type they implement via `extends: ["email/mailbox"]` and tools that consume canonical types work uniformly across all vendors.
+
+> *v0.3 transitional state: vendor implementations are still bundled in core under `src/vendors/` and exported as `vendors`. They will move to sibling packages (`scene-state-google`, `scene-state-slack`, …) in v0.4. The canonical types are the stable contract; vendor extensions are progressive.*
 
 **[Live gallery →](https://daslabhq.github.io/scene-state/)**
 
@@ -22,16 +26,16 @@ npm install scene-state
 ## Use
 
 ```ts
-import { Gmail, Salesforce } from "scene-state";
+import { Email } from "scene-state";
 
-const inboxState = await fetchGmail();        // your code
+const inboxState = { messages: await fetchInbox() };  // any vendor — Gmail, Outlook, IMAP, …
 
 // Visual — drop into any HTML surface
 document.querySelector("#inbox")!.innerHTML =
-  Gmail.defaultView.toHTML(inboxState);
+  Email.defaultView.toHTML(inboxState, { size: "medium" });
 
 // Headless — feed your agent compact, structured context
-const ctx = Gmail.defaultView.toMarkdown(inboxState);
+const ctx = Email.defaultView.toMarkdown(inboxState, { size: "medium" });
 //   "Inbox (5 messages, 3 unread)
 //
 //    - **Invoice #4421 — overdue** — from alice@vendor.com · unread
