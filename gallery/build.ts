@@ -26,7 +26,8 @@ interface SizeRender {
   size:     ViewSize;
   html:     string;
   markdown: string;
-  tokens:   number;   // rough: words / 0.75
+  json:     string;   // pretty-printed WidgetData (or "" if legacy)
+  tokens:   number;   // rough: markdown words / 0.75
 }
 
 interface Card {
@@ -50,7 +51,9 @@ function buildCards(group: Record<string, AssetDef<any>>): Card[] {
     const renders: SizeRender[] = SIZES.map(size => {
       const html     = asset.defaultView.toHTML(state, { size });
       const markdown = asset.defaultView.toMarkdown(state, { size });
-      return { size, html, markdown, tokens: approxTokens(markdown) };
+      const widget   = asset.defaultView.toJSON?.(state, { size });
+      const json     = widget ? JSON.stringify(widget, null, 2) : "";
+      return { size, html, markdown, json, tokens: approxTokens(markdown) };
     });
     const icon = renders.find(r => r.size === "icon")!;
     out.push({
@@ -108,33 +111,36 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .mosaic-tile .ws-app-name { color: rgba(255,255,255,0.85); }
 
 /* ----- App icon (size=icon) ----- */
-.ws-app-icon { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.ws-app-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .ws-app-tile {
   position: relative;
-  width: 78px;
-  height: 78px;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;            /* never compress — bug bait otherwise */
   /* iOS squircle approximation — superellipse-ish via large border-radius */
-  border-radius: 22px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 6px 20px rgba(0,0,0,0.25), 0 1px 2px rgba(255,255,255,0.15) inset;
   transition: transform 0.12s ease;
 }
+.mosaic-tile { display: block; text-decoration: none; }
+.mosaic-tile .ws-app-tile { width: 78px; height: 78px; border-radius: 22px; }
 .mosaic-tile:hover .ws-app-tile { transform: translateY(-2px); }
 .ws-app-tile--chip { width: 28px; height: 28px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-.ws-app-glyph { width: 44%; height: 44%; display: flex; align-items: center; justify-content: center; }
+.ws-app-glyph { width: 50%; height: 50%; display: flex; align-items: center; justify-content: center; }
 .ws-app-glyph svg { width: 100%; height: 100%; }
 .ws-app-tile--chip .ws-app-glyph { width: 60%; height: 60%; }
-.ws-app-name { font-size: 12px; color: var(--fg); font-weight: 500; line-height: 1.2; }
+.ws-app-name { font-size: 11px; color: var(--fg); font-weight: 500; line-height: 1.2; flex-shrink: 0; }
 .ws-app-badge {
   position: absolute; top: -4px; right: -4px;
-  min-width: 22px; height: 22px;
-  padding: 0 6px;
+  min-width: 20px; height: 20px;
+  padding: 0 5px;
   border-radius: 999px;
   background: #ff3b30;
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   display: flex; align-items: center; justify-content: center;
   border: 2px solid #fff;
@@ -217,14 +223,14 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .size-cell.small { aspect-ratio: 1; }      /* 2×2 — square */
 .size-cell.medium { aspect-ratio: 2 / 1; } /* 4×2 — wide */
 .size-cell.large { aspect-ratio: 1; }      /* 4×4 — square */
-.cell-html, .cell-md {
+.cell-html, .cell-md, .cell-json {
   position: absolute; inset: 12px;
   overflow: hidden;
 }
 .cell-html { display: flex; align-items: center; justify-content: center; }
 .cell-html > * { width: 100%; max-height: 100%; overflow: hidden; }
 .size-cell.icon .cell-html > * { width: auto; }
-.cell-md {
+.cell-md, .cell-json {
   display: none;
   background: white;
   border: 1px solid var(--border);
@@ -236,8 +242,11 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   color: var(--fg);
   overflow: auto;
 }
-.size-strip[data-format="markdown"] .cell-html { display: none; }
-.size-strip[data-format="markdown"] .cell-md   { display: block; }
+.cell-json { color: #475569; }
+.size-strip[data-format="markdown"] .cell-html  { display: none; }
+.size-strip[data-format="markdown"] .cell-md    { display: block; }
+.size-strip[data-format="json"]     .cell-html  { display: none; }
+.size-strip[data-format="json"]     .cell-json  { display: block; }
 .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 28px; overflow: hidden; }
 .card-head { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .card-name { font-size: 18px; font-weight: 600; }
@@ -364,6 +373,7 @@ const sizeCell = (r: SizeRender) => `
     <div class="size-cell ${r.size}">
       <div class="cell-html">${r.html}</div>
       <div class="cell-md">${mdSyntax(r.markdown)}</div>
+      <div class="cell-json">${escapeHtml(r.json || "// legacy view (no JSON form)")}</div>
     </div>
   </div>
 `;
@@ -401,6 +411,7 @@ const cardHtml = (c: Card) => {
       <div class="format-tabs" data-tabs>
         <button data-format="html" class="active">HTML</button>
         <button data-format="markdown">Markdown</button>
+        <button data-format="json">JSON</button>
       </div>
       <div class="size-strip" data-format="html">
         ${c.renders.map(sizeCell).join("")}

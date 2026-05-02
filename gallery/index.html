@@ -44,33 +44,36 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .mosaic-tile .ws-app-name { color: rgba(255,255,255,0.85); }
 
 /* ----- App icon (size=icon) ----- */
-.ws-app-icon { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.ws-app-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .ws-app-tile {
   position: relative;
-  width: 78px;
-  height: 78px;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;            /* never compress — bug bait otherwise */
   /* iOS squircle approximation — superellipse-ish via large border-radius */
-  border-radius: 22px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 6px 20px rgba(0,0,0,0.25), 0 1px 2px rgba(255,255,255,0.15) inset;
   transition: transform 0.12s ease;
 }
+.mosaic-tile { display: block; text-decoration: none; }
+.mosaic-tile .ws-app-tile { width: 78px; height: 78px; border-radius: 22px; }
 .mosaic-tile:hover .ws-app-tile { transform: translateY(-2px); }
 .ws-app-tile--chip { width: 28px; height: 28px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-.ws-app-glyph { width: 44%; height: 44%; display: flex; align-items: center; justify-content: center; }
+.ws-app-glyph { width: 50%; height: 50%; display: flex; align-items: center; justify-content: center; }
 .ws-app-glyph svg { width: 100%; height: 100%; }
 .ws-app-tile--chip .ws-app-glyph { width: 60%; height: 60%; }
-.ws-app-name { font-size: 12px; color: var(--fg); font-weight: 500; line-height: 1.2; }
+.ws-app-name { font-size: 11px; color: var(--fg); font-weight: 500; line-height: 1.2; flex-shrink: 0; }
 .ws-app-badge {
   position: absolute; top: -4px; right: -4px;
-  min-width: 22px; height: 22px;
-  padding: 0 6px;
+  min-width: 20px; height: 20px;
+  padding: 0 5px;
   border-radius: 999px;
   background: #ff3b30;
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   display: flex; align-items: center; justify-content: center;
   border: 2px solid #fff;
@@ -153,14 +156,14 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .size-cell.small { aspect-ratio: 1; }      /* 2×2 — square */
 .size-cell.medium { aspect-ratio: 2 / 1; } /* 4×2 — wide */
 .size-cell.large { aspect-ratio: 1; }      /* 4×4 — square */
-.cell-html, .cell-md {
+.cell-html, .cell-md, .cell-json {
   position: absolute; inset: 12px;
   overflow: hidden;
 }
 .cell-html { display: flex; align-items: center; justify-content: center; }
 .cell-html > * { width: 100%; max-height: 100%; overflow: hidden; }
 .size-cell.icon .cell-html > * { width: auto; }
-.cell-md {
+.cell-md, .cell-json {
   display: none;
   background: white;
   border: 1px solid var(--border);
@@ -172,8 +175,11 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   color: var(--fg);
   overflow: auto;
 }
-.size-strip[data-format="markdown"] .cell-html { display: none; }
-.size-strip[data-format="markdown"] .cell-md   { display: block; }
+.cell-json { color: #475569; }
+.size-strip[data-format="markdown"] .cell-html  { display: none; }
+.size-strip[data-format="markdown"] .cell-md    { display: block; }
+.size-strip[data-format="json"]     .cell-html  { display: none; }
+.size-strip[data-format="json"]     .cell-json  { display: block; }
 .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 28px; overflow: hidden; }
 .card-head { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .card-name { font-size: 18px; font-weight: 600; }
@@ -437,6 +443,7 @@ footer a { color: var(--muted); }
       <div class="format-tabs" data-tabs>
         <button data-format="html" class="active">HTML</button>
         <button data-format="markdown">Markdown</button>
+        <button data-format="json">JSON</button>
       </div>
       <div class="size-strip" data-format="html">
         
@@ -456,6 +463,13 @@ footer a { color: var(--muted); }
     <div class="ws-app-name">Email</div>
   </div></div>
       <div class="cell-md">🔵 <b>Email</b> · 4</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;icon&quot;,
+  &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+  &quot;color&quot;: &quot;blue&quot;,
+  &quot;label&quot;: &quot;Email&quot;,
+  &quot;badge&quot;: 4
+}</div>
     </div>
   </div>
 
@@ -485,6 +499,27 @@ footer a { color: var(--muted); }
       <div class="cell-md"><b>Inbox</b> · 4 unread
 
 • <b>Invoice #4421 — overdue</b> <code>unread</code> — alice@vendor.com</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;blue&quot;,
+    &quot;title&quot;: &quot;Inbox&quot;,
+    &quot;meta&quot;: &quot;4 unread&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;Invoice #4421 — overdue&quot;,
+          &quot;subtitle&quot;: &quot;alice@vendor.com&quot;,
+          &quot;badge&quot;: &quot;unread&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -538,6 +573,43 @@ footer a { color: var(--muted); }
 • <b>Quick question about Q2 plan</b> <code>unread</code> — ceo@company.com
 • <b>Payout completed: $1,200</b> <code>unread</code> — alerts@stripe.com
 • <b>Re: contract terms</b> <code>unread</code> — jordan@bigco.example</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;blue&quot;,
+    &quot;title&quot;: &quot;Inbox&quot;,
+    &quot;meta&quot;: &quot;10 · 4 unread&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;layout&quot;: &quot;grid-2&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;Invoice #4421 — overdue&quot;,
+          &quot;subtitle&quot;: &quot;alice@vendor.com&quot;,
+          &quot;badge&quot;: &quot;unread&quot;
+        },
+        {
+          &quot;title&quot;: &quot;Quick question about Q2 plan&quot;,
+          &quot;subtitle&quot;: &quot;ceo@company.com&quot;,
+          &quot;badge&quot;: &quot;unread&quot;
+        },
+        {
+          &quot;title&quot;: &quot;Payout completed: $1,200&quot;,
+          &quot;subtitle&quot;: &quot;alerts@stripe.com&quot;,
+          &quot;badge&quot;: &quot;unread&quot;
+        },
+        {
+          &quot;title&quot;: &quot;Re: contract terms&quot;,
+          &quot;subtitle&quot;: &quot;jordan@bigco.example&quot;,
+          &quot;badge&quot;: &quot;unread&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -622,6 +694,56 @@ footer a { color: var(--muted); }
   &gt; Sales review tomorrow at 1 PM. Conf Room 3.
 • <b>[scene-state] PR review</b> — support@github.com
   &gt; Alice approved your PR #44. Tests are green; ready to merge.</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;list&quot;,
+  &quot;title&quot;: &quot;Inbox · 10 messages · 4 unread&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;title&quot;: &quot;Invoice #4421 — overdue&quot;,
+      &quot;subtitle&quot;: &quot;alice@vendor.com&quot;,
+      &quot;detail&quot;: &quot;Hi, just a heads up the invoice for $1,240 is past due. Please confirm payment status — would help m…&quot;,
+      &quot;badge&quot;: &quot;unread&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Quick question about Q2 plan&quot;,
+      &quot;subtitle&quot;: &quot;ceo@company.com&quot;,
+      &quot;detail&quot;: &quot;Got a sec to chat about the launch timeline for the new product? Want to align on the scope before t…&quot;,
+      &quot;badge&quot;: &quot;unread&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Payout completed: $1,200&quot;,
+      &quot;subtitle&quot;: &quot;alerts@stripe.com&quot;,
+      &quot;detail&quot;: &quot;Your payout of $1,200 has been deposited. Reference id: po_1Q4Bxz.&quot;,
+      &quot;badge&quot;: &quot;unread&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Re: contract terms&quot;,
+      &quot;subtitle&quot;: &quot;jordan@bigco.example&quot;,
+      &quot;detail&quot;: &quot;Thanks for the redlines. Legal will respond by EOW. Two open questions on the SLA section.&quot;,
+      &quot;badge&quot;: &quot;unread&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Morning briefing — Apr 30&quot;,
+      &quot;subtitle&quot;: &quot;newsletter@nyt.com&quot;,
+      &quot;detail&quot;: &quot;Top stories: markets, climate, an interview with the new EU AI commissioner.&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Re: standup notes&quot;,
+      &quot;subtitle&quot;: &quot;bob@team.com&quot;,
+      &quot;detail&quot;: &quot;Adding two things to the agenda: deploy retro + capacity planning for next sprint.&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Reminder: Sales review&quot;,
+      &quot;subtitle&quot;: &quot;calendar-noreply@google&quot;,
+      &quot;detail&quot;: &quot;Sales review tomorrow at 1 PM. Conf Room 3.&quot;
+    },
+    {
+      &quot;title&quot;: &quot;[scene-state] PR review&quot;,
+      &quot;subtitle&quot;: &quot;support@github.com&quot;,
+      &quot;detail&quot;: &quot;Alice approved your PR #44. Tests are green; ready to merge.&quot;
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -724,6 +846,66 @@ footer a { color: var(--muted); }
   &gt; Open enrollment runs through May 15. Pick your plan options on Workday.
 • <b>5 new jobs that match your search</b> — linkedin@e.linkedin.com · 2026-04-28
   &gt; We found 5 new senior engineering roles in your area.</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;list&quot;,
+  &quot;title&quot;: &quot;Inbox · 10 messages · 4 unread&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;title&quot;: &quot;Invoice #4421 — overdue&quot;,
+      &quot;subtitle&quot;: &quot;alice@vendor.com · 2026-04-30&quot;,
+      &quot;detail&quot;: &quot;Hi, just a heads up the invoice for $1,240 is past due. Please confirm payment status — would help me close out the books for the quarter.&quot;,
+      &quot;badge&quot;: &quot;unread&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Quick question about Q2 plan&quot;,
+      &quot;subtitle&quot;: &quot;ceo@company.com · 2026-04-30&quot;,
+      &quot;detail&quot;: &quot;Got a sec to chat about the launch timeline for the new product? Want to align on the scope before the partner call tomorrow.&quot;,
+      &quot;badge&quot;: &quot;unread&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Payout completed: $1,200&quot;,
+      &quot;subtitle&quot;: &quot;alerts@stripe.com · 2026-04-30&quot;,
+      &quot;detail&quot;: &quot;Your payout of $1,200 has been deposited. Reference id: po_1Q4Bxz.&quot;,
+      &quot;badge&quot;: &quot;unread&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Re: contract terms&quot;,
+      &quot;subtitle&quot;: &quot;jordan@bigco.example · 2026-04-30&quot;,
+      &quot;detail&quot;: &quot;Thanks for the redlines. Legal will respond by EOW. Two open questions on the SLA section.&quot;,
+      &quot;badge&quot;: &quot;unread&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Morning briefing — Apr 30&quot;,
+      &quot;subtitle&quot;: &quot;newsletter@nyt.com · 2026-04-30&quot;,
+      &quot;detail&quot;: &quot;Top stories: markets, climate, an interview with the new EU AI commissioner.&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Re: standup notes&quot;,
+      &quot;subtitle&quot;: &quot;bob@team.com · 2026-04-29&quot;,
+      &quot;detail&quot;: &quot;Adding two things to the agenda: deploy retro + capacity planning for next sprint.&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Reminder: Sales review&quot;,
+      &quot;subtitle&quot;: &quot;calendar-noreply@google · 2026-04-29&quot;,
+      &quot;detail&quot;: &quot;Sales review tomorrow at 1 PM. Conf Room 3.&quot;
+    },
+    {
+      &quot;title&quot;: &quot;[scene-state] PR review&quot;,
+      &quot;subtitle&quot;: &quot;support@github.com · 2026-04-29&quot;,
+      &quot;detail&quot;: &quot;Alice approved your PR #44. Tests are green; ready to merge.&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Benefits enrollment open&quot;,
+      &quot;subtitle&quot;: &quot;people@company.com · 2026-04-29&quot;,
+      &quot;detail&quot;: &quot;Open enrollment runs through May 15. Pick your plan options on Workday.&quot;
+    },
+    {
+      &quot;title&quot;: &quot;5 new jobs that match your search&quot;,
+      &quot;subtitle&quot;: &quot;linkedin@e.linkedin.com · 2026-04-28&quot;,
+      &quot;detail&quot;: &quot;We found 5 new senior engineering roles in your area.&quot;
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -789,6 +971,7 @@ footer a { color: var(--muted); }
       <div class="format-tabs" data-tabs>
         <button data-format="html" class="active">HTML</button>
         <button data-format="markdown">Markdown</button>
+        <button data-format="json">JSON</button>
       </div>
       <div class="size-strip" data-format="html">
         
@@ -808,6 +991,13 @@ footer a { color: var(--muted); }
     <div class="ws-app-name">Chat</div>
   </div></div>
       <div class="cell-md">🟢 <b>Chat</b> · 3</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;icon&quot;,
+  &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+  &quot;color&quot;: &quot;green&quot;,
+  &quot;label&quot;: &quot;Chat&quot;,
+  &quot;badge&quot;: 3
+}</div>
     </div>
   </div>
 
@@ -837,6 +1027,25 @@ footer a { color: var(--muted); }
       <div class="cell-md"><b>2 channels active</b>
 
 • <b>#engineering</b> — 2 messages</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;green&quot;,
+    &quot;title&quot;: &quot;2 channels active&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;#engineering&quot;,
+          &quot;subtitle&quot;: &quot;2 messages&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -876,6 +1085,32 @@ footer a { color: var(--muted); }
   &gt; bob: Looks good — bumping to 25%.
 • <b>#marketing</b> — 1 message
   &gt; carol: Paused c-retain. CPA was high.</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;green&quot;,
+    &quot;title&quot;: &quot;Recent activity&quot;,
+    &quot;meta&quot;: &quot;2 channels&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;#engineering&quot;,
+          &quot;subtitle&quot;: &quot;2 messages&quot;,
+          &quot;detail&quot;: &quot;bob: Looks good — bumping to 25%.&quot;
+        },
+        {
+          &quot;title&quot;: &quot;#marketing&quot;,
+          &quot;subtitle&quot;: &quot;1 message&quot;,
+          &quot;detail&quot;: &quot;carol: Paused c-retain. CPA was high.&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -915,6 +1150,32 @@ footer a { color: var(--muted); }
   &gt; bob: Looks good — bumping to 25%.
 • <b>#marketing</b> — 1 message
   &gt; carol: Paused c-retain. CPA was high.</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;green&quot;,
+    &quot;title&quot;: &quot;Recent activity&quot;,
+    &quot;meta&quot;: &quot;2 channels&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;#engineering&quot;,
+          &quot;subtitle&quot;: &quot;2 messages&quot;,
+          &quot;detail&quot;: &quot;bob: Looks good — bumping to 25%.&quot;
+        },
+        {
+          &quot;title&quot;: &quot;#marketing&quot;,
+          &quot;subtitle&quot;: &quot;1 message&quot;,
+          &quot;detail&quot;: &quot;carol: Paused c-retain. CPA was high.&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -954,6 +1215,32 @@ footer a { color: var(--muted); }
   &gt; bob: Looks good — bumping to 25%.
 • <b>#marketing</b> — 1 message
   &gt; carol: Paused c-retain. CPA was high.</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;green&quot;,
+    &quot;title&quot;: &quot;Recent activity&quot;,
+    &quot;meta&quot;: &quot;2 channels&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;#engineering&quot;,
+          &quot;subtitle&quot;: &quot;2 messages&quot;,
+          &quot;detail&quot;: &quot;bob: Looks good — bumping to 25%.&quot;
+        },
+        {
+          &quot;title&quot;: &quot;#marketing&quot;,
+          &quot;subtitle&quot;: &quot;1 message&quot;,
+          &quot;detail&quot;: &quot;carol: Paused c-retain. CPA was high.&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1006,6 +1293,7 @@ footer a { color: var(--muted); }
       <div class="format-tabs" data-tabs>
         <button data-format="html" class="active">HTML</button>
         <button data-format="markdown">Markdown</button>
+        <button data-format="json">JSON</button>
       </div>
       <div class="size-strip" data-format="html">
         
@@ -1025,6 +1313,13 @@ footer a { color: var(--muted); }
     <div class="ws-app-name">Contacts</div>
   </div></div>
       <div class="cell-md">🟣 <b>Contacts</b> · 3</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;icon&quot;,
+  &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+  &quot;color&quot;: &quot;purple&quot;,
+  &quot;label&quot;: &quot;Contacts&quot;,
+  &quot;badge&quot;: 3
+}</div>
     </div>
   </div>
 
@@ -1054,6 +1349,25 @@ footer a { color: var(--muted); }
       <div class="cell-md"><b>3 contacts</b>
 
 • <b>Jordan Lee</b> — Director of Ops</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;purple&quot;,
+    &quot;title&quot;: &quot;3 contacts&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;Jordan Lee&quot;,
+          &quot;subtitle&quot;: &quot;Director of Ops&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1080,6 +1394,42 @@ footer a { color: var(--muted); }
 | Jordan Lee | jordan@acme.com | Director of Ops |
 | Maria Santos | maria@brightwave.com | VP Marketing |
 | Aiden Park | aiden@meridian.com | CEO |</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;purple&quot;,
+    &quot;title&quot;: &quot;Contacts&quot;,
+    &quot;meta&quot;: &quot;3&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;table&quot;,
+      &quot;columns&quot;: [
+        &quot;Name&quot;,
+        &quot;Email&quot;,
+        &quot;Title&quot;
+      ],
+      &quot;rows&quot;: [
+        {
+          &quot;Name&quot;: &quot;Jordan Lee&quot;,
+          &quot;Email&quot;: &quot;jordan@acme.com&quot;,
+          &quot;Title&quot;: &quot;Director of Ops&quot;
+        },
+        {
+          &quot;Name&quot;: &quot;Maria Santos&quot;,
+          &quot;Email&quot;: &quot;maria@brightwave.com&quot;,
+          &quot;Title&quot;: &quot;VP Marketing&quot;
+        },
+        {
+          &quot;Name&quot;: &quot;Aiden Park&quot;,
+          &quot;Email&quot;: &quot;aiden@meridian.com&quot;,
+          &quot;Title&quot;: &quot;CEO&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1097,6 +1447,40 @@ footer a { color: var(--muted); }
 | Jordan Lee | jordan@acme.com | +1-555-0101 | Director of Ops | Acme |
 | Maria Santos | maria@brightwave.com | +1-555-0182 | VP Marketing | Brightwave |
 | Aiden Park | aiden@meridian.com | +1-555-0301 | CEO | Meridian |</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;table&quot;,
+  &quot;title&quot;: &quot;3 contacts&quot;,
+  &quot;columns&quot;: [
+    &quot;Name&quot;,
+    &quot;Email&quot;,
+    &quot;Phone&quot;,
+    &quot;Title&quot;,
+    &quot;Company&quot;
+  ],
+  &quot;rows&quot;: [
+    {
+      &quot;Name&quot;: &quot;Jordan Lee&quot;,
+      &quot;Email&quot;: &quot;jordan@acme.com&quot;,
+      &quot;Phone&quot;: &quot;+1-555-0101&quot;,
+      &quot;Title&quot;: &quot;Director of Ops&quot;,
+      &quot;Company&quot;: &quot;Acme&quot;
+    },
+    {
+      &quot;Name&quot;: &quot;Maria Santos&quot;,
+      &quot;Email&quot;: &quot;maria@brightwave.com&quot;,
+      &quot;Phone&quot;: &quot;+1-555-0182&quot;,
+      &quot;Title&quot;: &quot;VP Marketing&quot;,
+      &quot;Company&quot;: &quot;Brightwave&quot;
+    },
+    {
+      &quot;Name&quot;: &quot;Aiden Park&quot;,
+      &quot;Email&quot;: &quot;aiden@meridian.com&quot;,
+      &quot;Phone&quot;: &quot;+1-555-0301&quot;,
+      &quot;Title&quot;: &quot;CEO&quot;,
+      &quot;Company&quot;: &quot;Meridian&quot;
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1114,6 +1498,40 @@ footer a { color: var(--muted); }
 | Jordan Lee | jordan@acme.com | +1-555-0101 | Director of Ops | Acme |
 | Maria Santos | maria@brightwave.com | +1-555-0182 | VP Marketing | Brightwave |
 | Aiden Park | aiden@meridian.com | +1-555-0301 | CEO | Meridian |</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;table&quot;,
+  &quot;title&quot;: &quot;3 contacts&quot;,
+  &quot;columns&quot;: [
+    &quot;Name&quot;,
+    &quot;Email&quot;,
+    &quot;Phone&quot;,
+    &quot;Title&quot;,
+    &quot;Company&quot;
+  ],
+  &quot;rows&quot;: [
+    {
+      &quot;Name&quot;: &quot;Jordan Lee&quot;,
+      &quot;Email&quot;: &quot;jordan@acme.com&quot;,
+      &quot;Phone&quot;: &quot;+1-555-0101&quot;,
+      &quot;Title&quot;: &quot;Director of Ops&quot;,
+      &quot;Company&quot;: &quot;Acme&quot;
+    },
+    {
+      &quot;Name&quot;: &quot;Maria Santos&quot;,
+      &quot;Email&quot;: &quot;maria@brightwave.com&quot;,
+      &quot;Phone&quot;: &quot;+1-555-0182&quot;,
+      &quot;Title&quot;: &quot;VP Marketing&quot;,
+      &quot;Company&quot;: &quot;Brightwave&quot;
+    },
+    {
+      &quot;Name&quot;: &quot;Aiden Park&quot;,
+      &quot;Email&quot;: &quot;aiden@meridian.com&quot;,
+      &quot;Phone&quot;: &quot;+1-555-0301&quot;,
+      &quot;Title&quot;: &quot;CEO&quot;,
+      &quot;Company&quot;: &quot;Meridian&quot;
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1193,6 +1611,7 @@ footer a { color: var(--muted); }
       <div class="format-tabs" data-tabs>
         <button data-format="html" class="active">HTML</button>
         <button data-format="markdown">Markdown</button>
+        <button data-format="json">JSON</button>
       </div>
       <div class="size-strip" data-format="html">
         
@@ -1212,6 +1631,13 @@ footer a { color: var(--muted); }
     <div class="ws-app-name">Events</div>
   </div></div>
       <div class="cell-md">🔴 <b>Events</b> · 4</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;icon&quot;,
+  &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+  &quot;color&quot;: &quot;red&quot;,
+  &quot;label&quot;: &quot;Events&quot;,
+  &quot;badge&quot;: 4
+}</div>
     </div>
   </div>
 
@@ -1241,6 +1667,25 @@ footer a { color: var(--muted); }
       <div class="cell-md"><b>Next up</b>
 
 • <b>Off-site</b> — all day</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;red&quot;,
+    &quot;title&quot;: &quot;Next up&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;Off-site&quot;,
+          &quot;subtitle&quot;: &quot;all day&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1294,6 +1739,44 @@ footer a { color: var(--muted); }
 • <b>May 2 at 1:00 PM</b> — Sales review · Q2 · Conf Room 3
 • <b>May 2 at 3:30 PM</b> — Customer call · Zoom
 • <b>May 4</b> — Off-site</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;red&quot;,
+    &quot;title&quot;: &quot;Upcoming&quot;,
+    &quot;meta&quot;: &quot;4 events&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;calendar&quot;,
+      &quot;events&quot;: [
+        {
+          &quot;title&quot;: &quot;Daily standup&quot;,
+          &quot;startsAt&quot;: &quot;2026-05-02T10:00:00&quot;,
+          &quot;endsAt&quot;: &quot;2026-05-02T10:15:00&quot;
+        },
+        {
+          &quot;title&quot;: &quot;Sales review · Q2&quot;,
+          &quot;startsAt&quot;: &quot;2026-05-02T13:00:00&quot;,
+          &quot;endsAt&quot;: &quot;2026-05-02T14:00:00&quot;,
+          &quot;location&quot;: &quot;Conf Room 3&quot;
+        },
+        {
+          &quot;title&quot;: &quot;Customer call&quot;,
+          &quot;startsAt&quot;: &quot;2026-05-02T15:30:00&quot;,
+          &quot;endsAt&quot;: &quot;2026-05-02T16:00:00&quot;,
+          &quot;location&quot;: &quot;Zoom&quot;
+        },
+        {
+          &quot;title&quot;: &quot;Off-site&quot;,
+          &quot;startsAt&quot;: &quot;2026-05-04&quot;,
+          &quot;allDay&quot;: true
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1338,6 +1821,38 @@ footer a { color: var(--muted); }
 • <b>May 2 at 1:00 PM</b> — Sales review · Q2 · Conf Room 3
 • <b>May 2 at 3:30 PM</b> — Customer call · Zoom
 • <b>May 4</b> — Off-site</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;calendar&quot;,
+  &quot;title&quot;: &quot;Upcoming&quot;,
+  &quot;events&quot;: [
+    {
+      &quot;title&quot;: &quot;Daily standup&quot;,
+      &quot;startsAt&quot;: &quot;2026-05-02T10:00:00&quot;,
+      &quot;endsAt&quot;: &quot;2026-05-02T10:15:00&quot;,
+      &quot;attendees&quot;: [
+        &quot;alice@team&quot;,
+        &quot;bob@team&quot;
+      ]
+    },
+    {
+      &quot;title&quot;: &quot;Sales review · Q2&quot;,
+      &quot;startsAt&quot;: &quot;2026-05-02T13:00:00&quot;,
+      &quot;endsAt&quot;: &quot;2026-05-02T14:00:00&quot;,
+      &quot;location&quot;: &quot;Conf Room 3&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Customer call&quot;,
+      &quot;startsAt&quot;: &quot;2026-05-02T15:30:00&quot;,
+      &quot;endsAt&quot;: &quot;2026-05-02T16:00:00&quot;,
+      &quot;location&quot;: &quot;Zoom&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Off-site&quot;,
+      &quot;startsAt&quot;: &quot;2026-05-04&quot;,
+      &quot;allDay&quot;: true
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1382,6 +1897,38 @@ footer a { color: var(--muted); }
 • <b>May 2 at 1:00 PM</b> — Sales review · Q2 · Conf Room 3
 • <b>May 2 at 3:30 PM</b> — Customer call · Zoom
 • <b>May 4</b> — Off-site</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;calendar&quot;,
+  &quot;title&quot;: &quot;Upcoming&quot;,
+  &quot;events&quot;: [
+    {
+      &quot;title&quot;: &quot;Daily standup&quot;,
+      &quot;startsAt&quot;: &quot;2026-05-02T10:00:00&quot;,
+      &quot;endsAt&quot;: &quot;2026-05-02T10:15:00&quot;,
+      &quot;attendees&quot;: [
+        &quot;alice@team&quot;,
+        &quot;bob@team&quot;
+      ]
+    },
+    {
+      &quot;title&quot;: &quot;Sales review · Q2&quot;,
+      &quot;startsAt&quot;: &quot;2026-05-02T13:00:00&quot;,
+      &quot;endsAt&quot;: &quot;2026-05-02T14:00:00&quot;,
+      &quot;location&quot;: &quot;Conf Room 3&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Customer call&quot;,
+      &quot;startsAt&quot;: &quot;2026-05-02T15:30:00&quot;,
+      &quot;endsAt&quot;: &quot;2026-05-02T16:00:00&quot;,
+      &quot;location&quot;: &quot;Zoom&quot;
+    },
+    {
+      &quot;title&quot;: &quot;Off-site&quot;,
+      &quot;startsAt&quot;: &quot;2026-05-04&quot;,
+      &quot;allDay&quot;: true
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1449,6 +1996,7 @@ footer a { color: var(--muted); }
       <div class="format-tabs" data-tabs>
         <button data-format="html" class="active">HTML</button>
         <button data-format="markdown">Markdown</button>
+        <button data-format="json">JSON</button>
       </div>
       <div class="size-strip" data-format="html">
         
@@ -1468,6 +2016,13 @@ footer a { color: var(--muted); }
     <div class="ws-app-name">Tasks</div>
   </div></div>
       <div class="cell-md">🟠 <b>Tasks</b> · 2</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;icon&quot;,
+  &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+  &quot;color&quot;: &quot;orange&quot;,
+  &quot;label&quot;: &quot;Tasks&quot;,
+  &quot;badge&quot;: 2
+}</div>
     </div>
   </div>
 
@@ -1497,6 +2052,25 @@ footer a { color: var(--muted); }
       <div class="cell-md"><b>Tasks</b>
 
 • <b>1 in progress · 1 done</b> — ⚠️ 1 blocked</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;orange&quot;,
+    &quot;title&quot;: &quot;Tasks&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;1 in progress · 1 done&quot;,
+          &quot;subtitle&quot;: &quot;⚠️ 1 blocked&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1538,6 +2112,67 @@ footer a { color: var(--muted); }
 | Add canonical types to scene-state | in_progress | bob |
 | Land daslab.dev/labs page | todo | alice |
 | iOS scene viewer: image card aspect bug | blocked | carol |</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;orange&quot;,
+    &quot;title&quot;: &quot;Sprint board&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;metric_grid&quot;,
+      &quot;metrics&quot;: [
+        {
+          &quot;type&quot;: &quot;metric&quot;,
+          &quot;value&quot;: 1,
+          &quot;label&quot;: &quot;In progress&quot;
+        },
+        {
+          &quot;type&quot;: &quot;metric&quot;,
+          &quot;value&quot;: 1,
+          &quot;label&quot;: &quot;Done&quot;
+        },
+        {
+          &quot;type&quot;: &quot;metric&quot;,
+          &quot;value&quot;: 1,
+          &quot;label&quot;: &quot;Blocked&quot;,
+          &quot;trend&quot;: &quot;down&quot;
+        }
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;table&quot;,
+      &quot;columns&quot;: [
+        &quot;Title&quot;,
+        &quot;Status&quot;,
+        &quot;Assignee&quot;
+      ],
+      &quot;rows&quot;: [
+        {
+          &quot;Title&quot;: &quot;Wire up scene-bench AB adapter&quot;,
+          &quot;Status&quot;: &quot;done&quot;,
+          &quot;Assignee&quot;: &quot;alice&quot;
+        },
+        {
+          &quot;Title&quot;: &quot;Add canonical types to scene-state&quot;,
+          &quot;Status&quot;: &quot;in_progress&quot;,
+          &quot;Assignee&quot;: &quot;bob&quot;
+        },
+        {
+          &quot;Title&quot;: &quot;Land daslab.dev/labs page&quot;,
+          &quot;Status&quot;: &quot;todo&quot;,
+          &quot;Assignee&quot;: &quot;alice&quot;
+        },
+        {
+          &quot;Title&quot;: &quot;iOS scene viewer: image card aspect bug&quot;,
+          &quot;Status&quot;: &quot;blocked&quot;,
+          &quot;Assignee&quot;: &quot;carol&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1581,6 +2216,73 @@ footer a { color: var(--muted); }
 | Add canonical types to scene-state | in_progress | bob | high |
 | Land daslab.dev/labs page | todo | alice | medium |
 | iOS scene viewer: image card aspect bug | blocked | carol | medium |</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;orange&quot;,
+    &quot;title&quot;: &quot;Sprint board&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;metric_grid&quot;,
+      &quot;metrics&quot;: [
+        {
+          &quot;type&quot;: &quot;metric&quot;,
+          &quot;value&quot;: 1,
+          &quot;label&quot;: &quot;In progress&quot;
+        },
+        {
+          &quot;type&quot;: &quot;metric&quot;,
+          &quot;value&quot;: 1,
+          &quot;label&quot;: &quot;Done&quot;
+        },
+        {
+          &quot;type&quot;: &quot;metric&quot;,
+          &quot;value&quot;: 1,
+          &quot;label&quot;: &quot;Blocked&quot;,
+          &quot;trend&quot;: &quot;down&quot;
+        }
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;table&quot;,
+      &quot;title&quot;: &quot;Tasks&quot;,
+      &quot;columns&quot;: [
+        &quot;Title&quot;,
+        &quot;Status&quot;,
+        &quot;Assignee&quot;,
+        &quot;Priority&quot;
+      ],
+      &quot;rows&quot;: [
+        {
+          &quot;Title&quot;: &quot;Wire up scene-bench AB adapter&quot;,
+          &quot;Status&quot;: &quot;done&quot;,
+          &quot;Assignee&quot;: &quot;alice&quot;,
+          &quot;Priority&quot;: &quot;high&quot;
+        },
+        {
+          &quot;Title&quot;: &quot;Add canonical types to scene-state&quot;,
+          &quot;Status&quot;: &quot;in_progress&quot;,
+          &quot;Assignee&quot;: &quot;bob&quot;,
+          &quot;Priority&quot;: &quot;high&quot;
+        },
+        {
+          &quot;Title&quot;: &quot;Land daslab.dev/labs page&quot;,
+          &quot;Status&quot;: &quot;todo&quot;,
+          &quot;Assignee&quot;: &quot;alice&quot;,
+          &quot;Priority&quot;: &quot;medium&quot;
+        },
+        {
+          &quot;Title&quot;: &quot;iOS scene viewer: image card aspect bug&quot;,
+          &quot;Status&quot;: &quot;blocked&quot;,
+          &quot;Assignee&quot;: &quot;carol&quot;,
+          &quot;Priority&quot;: &quot;medium&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1624,6 +2326,73 @@ footer a { color: var(--muted); }
 | Add canonical types to scene-state | in_progress | bob | high |
 | Land daslab.dev/labs page | todo | alice | medium |
 | iOS scene viewer: image card aspect bug | blocked | carol | medium |</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;orange&quot;,
+    &quot;title&quot;: &quot;Sprint board&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;metric_grid&quot;,
+      &quot;metrics&quot;: [
+        {
+          &quot;type&quot;: &quot;metric&quot;,
+          &quot;value&quot;: 1,
+          &quot;label&quot;: &quot;In progress&quot;
+        },
+        {
+          &quot;type&quot;: &quot;metric&quot;,
+          &quot;value&quot;: 1,
+          &quot;label&quot;: &quot;Done&quot;
+        },
+        {
+          &quot;type&quot;: &quot;metric&quot;,
+          &quot;value&quot;: 1,
+          &quot;label&quot;: &quot;Blocked&quot;,
+          &quot;trend&quot;: &quot;down&quot;
+        }
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;table&quot;,
+      &quot;title&quot;: &quot;Tasks&quot;,
+      &quot;columns&quot;: [
+        &quot;Title&quot;,
+        &quot;Status&quot;,
+        &quot;Assignee&quot;,
+        &quot;Priority&quot;
+      ],
+      &quot;rows&quot;: [
+        {
+          &quot;Title&quot;: &quot;Wire up scene-bench AB adapter&quot;,
+          &quot;Status&quot;: &quot;done&quot;,
+          &quot;Assignee&quot;: &quot;alice&quot;,
+          &quot;Priority&quot;: &quot;high&quot;
+        },
+        {
+          &quot;Title&quot;: &quot;Add canonical types to scene-state&quot;,
+          &quot;Status&quot;: &quot;in_progress&quot;,
+          &quot;Assignee&quot;: &quot;bob&quot;,
+          &quot;Priority&quot;: &quot;high&quot;
+        },
+        {
+          &quot;Title&quot;: &quot;Land daslab.dev/labs page&quot;,
+          &quot;Status&quot;: &quot;todo&quot;,
+          &quot;Assignee&quot;: &quot;alice&quot;,
+          &quot;Priority&quot;: &quot;medium&quot;
+        },
+        {
+          &quot;Title&quot;: &quot;iOS scene viewer: image card aspect bug&quot;,
+          &quot;Status&quot;: &quot;blocked&quot;,
+          &quot;Assignee&quot;: &quot;carol&quot;,
+          &quot;Priority&quot;: &quot;medium&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1686,6 +2455,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
       <div class="format-tabs" data-tabs>
         <button data-format="html" class="active">HTML</button>
         <button data-format="markdown">Markdown</button>
+        <button data-format="json">JSON</button>
       </div>
       <div class="size-strip" data-format="html">
         
@@ -1705,6 +2475,13 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
     <div class="ws-app-name">Docs</div>
   </div></div>
       <div class="cell-md">🟡 <b>Docs</b> · 3</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;icon&quot;,
+  &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+  &quot;color&quot;: &quot;yellow&quot;,
+  &quot;label&quot;: &quot;Docs&quot;,
+  &quot;badge&quot;: 3
+}</div>
     </div>
   </div>
 
@@ -1734,6 +2511,25 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
       <div class="cell-md"><b>3 pages</b>
 
 • <b>Q2 launch plan</b> — 2026-04-30</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;yellow&quot;,
+    &quot;title&quot;: &quot;3 pages&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;Q2 launch plan&quot;,
+          &quot;subtitle&quot;: &quot;2026-04-30&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1770,6 +2566,23 @@ _ops team_
 Overview
 
 We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench integration to production with belief-vs-truth scoring.</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;yellow&quot;,
+    &quot;title&quot;: &quot;Featured page&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;document&quot;,
+      &quot;title&quot;: &quot;Q2 launch plan&quot;,
+      &quot;body&quot;: &quot;Overview\n\nWe&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench integration to production with belief-vs-truth scoring.&quot;,
+      &quot;byline&quot;: &quot;ops team&quot;,
+      &quot;meta&quot;: &quot;modified 2026-04-30&quot;
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1825,6 +2638,37 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
 
 • <b>On-call runbook</b> — 2026-04-29
 • <b>Customer feedback · April</b> — 2026-04-28</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;yellow&quot;,
+    &quot;title&quot;: &quot;Featured page&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;document&quot;,
+      &quot;title&quot;: &quot;Q2 launch plan&quot;,
+      &quot;body&quot;: &quot;Overview\n\nWe&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench integration to production with belief-vs-truth scoring.&quot;,
+      &quot;byline&quot;: &quot;ops team&quot;,
+      &quot;meta&quot;: &quot;modified 2026-04-30&quot;
+    },
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;title&quot;: &quot;More pages&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;On-call runbook&quot;,
+          &quot;subtitle&quot;: &quot;2026-04-29&quot;
+        },
+        {
+          &quot;title&quot;: &quot;Customer feedback · April&quot;,
+          &quot;subtitle&quot;: &quot;2026-04-28&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 
@@ -1880,6 +2724,37 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
 
 • <b>On-call runbook</b> — 2026-04-29
 • <b>Customer feedback · April</b> — 2026-04-28</div>
+      <div class="cell-json">{
+  &quot;type&quot;: &quot;stack&quot;,
+  &quot;header&quot;: {
+    &quot;glyph&quot;: &quot;&lt;svg viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot; stroke=\&quot;currentColor\&quot; stroke-width=\&quot;2\&quot; stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot; aria-hidden=\&quot;true\&quot;&gt;\n      &lt;path d=\&quot;M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z\&quot;/&gt;\n    &lt;/svg&gt;&quot;,
+    &quot;color&quot;: &quot;yellow&quot;,
+    &quot;title&quot;: &quot;Featured page&quot;
+  },
+  &quot;body&quot;: [
+    {
+      &quot;type&quot;: &quot;document&quot;,
+      &quot;title&quot;: &quot;Q2 launch plan&quot;,
+      &quot;body&quot;: &quot;Overview\n\nWe&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench integration to production with belief-vs-truth scoring.&quot;,
+      &quot;byline&quot;: &quot;ops team&quot;,
+      &quot;meta&quot;: &quot;modified 2026-04-30&quot;
+    },
+    {
+      &quot;type&quot;: &quot;list&quot;,
+      &quot;title&quot;: &quot;More pages&quot;,
+      &quot;items&quot;: [
+        {
+          &quot;title&quot;: &quot;On-call runbook&quot;,
+          &quot;subtitle&quot;: &quot;2026-04-29&quot;
+        },
+        {
+          &quot;title&quot;: &quot;Customer feedback · April&quot;,
+          &quot;subtitle&quot;: &quot;2026-04-28&quot;
+        }
+      ]
+    }
+  ]
+}</div>
     </div>
   </div>
 

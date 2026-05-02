@@ -46,6 +46,12 @@ export interface ViewDef<TState = unknown> {
   description?: string;
   /** Optional JSON Schema for the input state. */
   schema?: JSONSchema;
+  /**
+   * Return the canonical WidgetData JSON for the requested size, or null if
+   * this view uses the legacy escape-hatch (toHTML/toMarkdown only). Useful
+   * for previewing the JSON in galleries / docs / tooling.
+   */
+  toJSON?(state: TState, opts?: ViewOpts): import("./widgets.js").WidgetData | null;
   /** Render to HTML at the requested size (default "medium"). */
   toHTML(state: TState, opts?: ViewOpts): string;
   /** Render to Markdown at the requested size (default "medium"). */
@@ -163,6 +169,11 @@ export function defineView<TState = unknown>(config: ViewDefConfig<TState>): Vie
       if (c.kind === "widget") return renderText(c.data);
       return c.out.text ?? stripTags(c.out.html);
     };
+    const toJSON = (state: TState, opts?: ViewOpts) => {
+      const c = callSized(state, opts);
+      if (!c) return null;
+      return c.kind === "widget" ? c.data : null;
+    };
 
     return {
       name:       config.name,
@@ -171,6 +182,7 @@ export function defineView<TState = unknown>(config: ViewDefConfig<TState>): Vie
       toHTML:     config.toHTML     ?? toHTML,
       toMarkdown: config.toMarkdown ?? toMarkdown,
       toText:     config.toText     ?? toText,
+      toJSON,
     };
   }
 
