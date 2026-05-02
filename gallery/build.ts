@@ -13,8 +13,9 @@ import { writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { assets } from "../src/index.js";
+import { vendors, canonicalTypes } from "../src/index.js";
 import { escapeHtml } from "../src/view.js";
+import type { AssetDef } from "../src/asset.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT  = join(HERE, "index.html");
@@ -24,22 +25,30 @@ interface Card {
   type:     string;
   desc:     string;
   viewName: string;
+  extends:  string[];
   html:     string;
   markdown: string;
 }
 
-const cards: Card[] = [];
-for (const [name, asset] of Object.entries(assets)) {
-  const state = asset.mockState!();
-  cards.push({
-    name,
-    type:     asset.type,
-    desc:     asset.description ?? "",
-    viewName: asset.defaultView.name,
-    html:     asset.defaultView.toHTML(state),
-    markdown: asset.defaultView.toMarkdown(state),
-  });
+function buildCards(group: Record<string, AssetDef<any>>): Card[] {
+  const out: Card[] = [];
+  for (const [name, asset] of Object.entries(group)) {
+    const state = asset.mockState!();
+    out.push({
+      name,
+      type:     asset.type,
+      desc:     asset.description ?? "",
+      viewName: asset.defaultView.name,
+      extends:  asset.extends ?? [],
+      html:     asset.defaultView.toHTML(state),
+      markdown: asset.defaultView.toMarkdown(state),
+    });
+  }
+  return out;
 }
+
+const canonicalCards = buildCards(canonicalTypes);
+const vendorCards    = buildCards(vendors);
 
 const css = `
 :root {
@@ -62,9 +71,14 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .intro h2 { margin: 0 0 8px; font-size: 18px; }
 .intro p { margin: 6px 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
 .intro code { background: #eef2ff; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
-.toc { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.toc { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
 .toc a { padding: 4px 10px; background: var(--bg); border-radius: 999px; font-size: 12px; text-decoration: none; color: var(--fg); border: 1px solid var(--border); }
 .toc a:hover { background: var(--accent); color: white; border-color: var(--accent); }
+.toc-section { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; margin-left: 4px; margin-right: 4px; }
+.toc-section:first-child { margin-left: 0; }
+.section-h { margin-top: 36px; margin-bottom: 4px; font-size: 20px; }
+.section-p { color: var(--muted); margin: 0 0 18px; font-size: 14px; }
+.ext-pill { background: #f0fdf4; color: #166534; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 28px; overflow: hidden; }
 .card-head { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .card-name { font-size: 18px; font-weight: 600; }
@@ -168,6 +182,7 @@ const cardHtml = (c: Card) => `
           <span class="pill">${escapeHtml(c.type)}</span>
           ·
           view: <span class="mono">${escapeHtml(c.viewName)}</span>
+          ${c.extends.length ? `· extends: ${c.extends.map(e => `<span class="mono ext-pill">${escapeHtml(e)}</span>`).join(" ")}` : ""}
         </div>
         ${c.desc ? `<div class="card-desc">${escapeHtml(c.desc)}</div>` : ""}
       </div>
@@ -208,18 +223,29 @@ const html = `<!DOCTYPE html>
       <h2>What you're looking at</h2>
       <p>Each card below is one <code>defineAsset()</code> declaration from the scene-state library. Every asset comes with a default <code>view</code> that renders the same state to <b>HTML</b> (left — the version humans see) and <b>Markdown</b> (right — the version an LLM sees in its context window).</p>
       <p>Same definition. Different consumers. The Markdown version is typically <b>3–5× cheaper in tokens</b> than dumping the raw JSON, while preserving the structure agents need to reason about.</p>
+      <p><b>Two layers:</b> <i>Canonical types</i> (Email, Message, Contact, …) are abstract primitives anyone can implement. <i>Vendor implementations</i> (Gmail, Slack, …) declare which canonical they extend. Tools that consume canonical types work uniformly across all vendors.</p>
       <div class="toc">
-        ${cards.map(c => `<a href="#${c.name.toLowerCase()}">${c.name}</a>`).join("")}
+        <span class="toc-section">Canonical:</span>
+        ${canonicalCards.map(c => `<a href="#${c.name.toLowerCase()}">${c.name}</a>`).join("")}
+        <span class="toc-section">Vendors:</span>
+        ${vendorCards.map(c => `<a href="#${c.name.toLowerCase()}">${c.name}</a>`).join("")}
       </div>
     </div>
-    ${cards.map(cardHtml).join("")}
+
+    <h2 class="section-h">Canonical types</h2>
+    <p class="section-p">Abstract primitives. Use them directly, or as targets for vendor extensions.</p>
+    ${canonicalCards.map(cardHtml).join("")}
+
+    <h2 class="section-h">Vendor implementations</h2>
+    <p class="section-p">Vendor-specific shapes that extend (where applicable) one or more canonical types.</p>
+    ${vendorCards.map(cardHtml).join("")}
   </main>
   <footer>
-    scene-state · MIT · <a href="https://github.com/daslabhq/scene-state">github.com/daslabhq/scene-state</a> · ${cards.length} assets shown
+    scene-state · MIT · <a href="https://github.com/daslabhq/scene-state">github.com/daslabhq/scene-state</a> · ${canonicalCards.length} canonical · ${vendorCards.length} vendors
   </footer>
 </body>
 </html>
 `;
 
 writeFileSync(OUT, html);
-console.log(`✓ wrote gallery → ${OUT.replace(process.cwd(), "")}  (${cards.length} assets, ${html.length.toLocaleString()} bytes)`);
+console.log(`✓ wrote gallery → ${OUT.replace(process.cwd(), "")}  (${canonicalCards.length} canonical + ${vendorCards.length} vendors, ${html.length.toLocaleString()} bytes)`);

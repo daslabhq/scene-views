@@ -25,9 +25,14 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .intro h2 { margin: 0 0 8px; font-size: 18px; }
 .intro p { margin: 6px 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
 .intro code { background: #eef2ff; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
-.toc { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.toc { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
 .toc a { padding: 4px 10px; background: var(--bg); border-radius: 999px; font-size: 12px; text-decoration: none; color: var(--fg); border: 1px solid var(--border); }
 .toc a:hover { background: var(--accent); color: white; border-color: var(--accent); }
+.toc-section { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; margin-left: 4px; margin-right: 4px; }
+.toc-section:first-child { margin-left: 0; }
+.section-h { margin-top: 36px; margin-bottom: 4px; font-size: 20px; }
+.section-p { color: var(--muted); margin: 0 0 18px; font-size: 14px; }
+.ext-pill { background: #f0fdf4; color: #166534; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 28px; overflow: hidden; }
 .card-head { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .card-name { font-size: 18px; font-weight: 600; }
@@ -130,10 +135,306 @@ footer a { color: var(--muted); }
       <h2>What you're looking at</h2>
       <p>Each card below is one <code>defineAsset()</code> declaration from the scene-state library. Every asset comes with a default <code>view</code> that renders the same state to <b>HTML</b> (left — the version humans see) and <b>Markdown</b> (right — the version an LLM sees in its context window).</p>
       <p>Same definition. Different consumers. The Markdown version is typically <b>3–5× cheaper in tokens</b> than dumping the raw JSON, while preserving the structure agents need to reason about.</p>
+      <p><b>Two layers:</b> <i>Canonical types</i> (Email, Message, Contact, …) are abstract primitives anyone can implement. <i>Vendor implementations</i> (Gmail, Slack, …) declare which canonical they extend. Tools that consume canonical types work uniformly across all vendors.</p>
       <div class="toc">
+        <span class="toc-section">Canonical:</span>
+        <a href="#email">Email</a><a href="#message">Message</a><a href="#contact">Contact</a><a href="#event">Event</a><a href="#task">Task</a><a href="#document">Document</a>
+        <span class="toc-section">Vendors:</span>
         <a href="#gmail">Gmail</a><a href="#salesforce">Salesforce</a><a href="#slack">Slack</a><a href="#googlesheets">GoogleSheets</a><a href="#googlecalendar">GoogleCalendar</a><a href="#airtable">Airtable</a><a href="#jira">Jira</a><a href="#notion">Notion</a><a href="#stripe">Stripe</a><a href="#github">GitHub</a>
       </div>
     </div>
+
+    <h2 class="section-h">Canonical types</h2>
+    <p class="section-p">Abstract primitives. Use them directly, or as targets for vendor extensions.</p>
+    
+  <section class="card" id="email">
+    <div class="card-head">
+      <div>
+        <div class="card-name">Email</div>
+        <div class="card-meta">
+          <span class="pill">email/mailbox</span>
+          ·
+          view: <span class="mono">EmailInbox</span>
+          
+        </div>
+        <div class="card-desc">Canonical mailbox — list of email messages.</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="col">
+        <div class="col-label">HTML — for humans, dashboards, scrubbers</div>
+        <div class="ws-list"><div class="ws-title">Inbox · 4 messages · 2 unread</div><ul><li class="ws-li">
+        <div class="ws-li-row">
+          <span class="ws-li-title">Invoice — overdue</span>
+          <span class="ws-badge">unread</span>
+        </div>
+        <div class="ws-li-sub">alice@vendor.com</div>
+        <div class="ws-li-detail">Past due, please confirm.</div>
+      </li><li class="ws-li">
+        <div class="ws-li-row">
+          <span class="ws-li-title">Quick question</span>
+          <span class="ws-badge">unread</span>
+        </div>
+        <div class="ws-li-sub">ceo@company.com</div>
+        <div class="ws-li-detail">Got a sec?</div>
+      </li><li class="ws-li">
+        <div class="ws-li-row">
+          <span class="ws-li-title">Payout completed: $1,200</span>
+          
+        </div>
+        <div class="ws-li-sub">alerts@stripe.com</div>
+        <div class="ws-li-detail">Your payout has been deposited.</div>
+      </li><li class="ws-li">
+        <div class="ws-li-row">
+          <span class="ws-li-title">Morning briefing</span>
+          
+        </div>
+        <div class="ws-li-sub">newsletter@nyt.com</div>
+        <div class="ws-li-detail">Top stories…</div>
+      </li></ul></div>
+      </div>
+      <div class="col">
+        <div class="col-label">Markdown — for LLM context (token-efficient)</div>
+        <pre class="md-pre"><b>Inbox (4 messages, 2 unread)</b>
+
+• <b>Invoice — overdue</b> — from alice@vendor.com · unread
+• <b>Quick question</b> — from ceo@company.com · unread
+• <b>Payout completed: $1,200</b> — from alerts@stripe.com
+• <b>Morning briefing</b> — from newsletter@nyt.com</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="message">
+    <div class="card-head">
+      <div>
+        <div class="card-name">Message</div>
+        <div class="card-meta">
+          <span class="pill">message/channels</span>
+          ·
+          view: <span class="mono">MessagingActivity</span>
+          
+        </div>
+        <div class="card-desc">Canonical messaging — channels + messages.</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="col">
+        <div class="col-label">HTML — for humans, dashboards, scrubbers</div>
+        <div class="ws-list"><div class="ws-title">Recent activity</div><ul><li class="ws-li">
+        <div class="ws-li-row">
+          <span class="ws-li-title">#engineering</span>
+          
+        </div>
+        <div class="ws-li-sub">2 messages</div>
+        <div class="ws-li-detail">bob: Looks good — bumping to 25%.</div>
+      </li><li class="ws-li">
+        <div class="ws-li-row">
+          <span class="ws-li-title">#marketing</span>
+          
+        </div>
+        <div class="ws-li-sub">1 message</div>
+        <div class="ws-li-detail">carol: Paused c-retain. CPA was high.</div>
+      </li></ul></div>
+      </div>
+      <div class="col">
+        <div class="col-label">Markdown — for LLM context (token-efficient)</div>
+        <pre class="md-pre"><b>#engineering</b> (2 messages)
+&gt; alice: Deploy is green; canary at 5%.
+&gt; bob: Looks good — bumping to 25%.
+
+<b>#marketing</b> (1 messages)
+&gt; carol: Paused c-retain. CPA was high.</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="contact">
+    <div class="card-head">
+      <div>
+        <div class="card-name">Contact</div>
+        <div class="card-meta">
+          <span class="pill">contact/list</span>
+          ·
+          view: <span class="mono">ContactList</span>
+          
+        </div>
+        <div class="card-desc">Canonical contact list — people with email, phone, role.</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="col">
+        <div class="col-label">HTML — for humans, dashboards, scrubbers</div>
+        <div class="ws-table"><div class="ws-title">3 contacts</div><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Title</th><th>Company</th></tr></thead><tbody><tr><td>Jordan Lee</td><td>jordan@acme.com</td><td>+1-555-0101</td><td>Director of Ops</td><td>Acme</td></tr><tr><td>Maria Santos</td><td>maria@brightwave.com</td><td>+1-555-0182</td><td>VP Marketing</td><td>Brightwave</td></tr><tr><td>Aiden Park</td><td>aiden@meridian.com</td><td>+1-555-0301</td><td>CEO</td><td>Meridian</td></tr></tbody></table></div>
+      </div>
+      <div class="col">
+        <div class="col-label">Markdown — for LLM context (token-efficient)</div>
+        <pre class="md-pre"><b>Contacts</b>
+
+| Name | Email | Title |
+| --- | --- | --- |
+| Jordan Lee | jordan@acme.com | Director of Ops |
+| Maria Santos | maria@brightwave.com | VP Marketing |
+| Aiden Park | aiden@meridian.com | CEO |</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="event">
+    <div class="card-head">
+      <div>
+        <div class="card-name">Event</div>
+        <div class="card-meta">
+          <span class="pill">event/calendar</span>
+          ·
+          view: <span class="mono">UpcomingEvents</span>
+          
+        </div>
+        <div class="card-desc">Canonical calendar events — what&#39;s scheduled.</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="col">
+        <div class="col-label">HTML — for humans, dashboards, scrubbers</div>
+        <div class="ws-cal"><div class="ws-title">Upcoming</div><div class="ws-cal-row">
+        <div class="ws-cal-time">May 2 at 10:00 AM → 10:15 AM</div>
+        <div class="ws-cal-body">
+          <div class="ws-cal-title">Daily standup</div>
+          
+          <div class="ws-cal-att">alice@team, bob@team</div>
+        </div>
+      </div><div class="ws-cal-row">
+        <div class="ws-cal-time">May 2 at 1:00 PM → 2:00 PM</div>
+        <div class="ws-cal-body">
+          <div class="ws-cal-title">Sales review · Q2</div>
+          <div class="ws-cal-loc">📍 Conf Room 3</div>
+          
+        </div>
+      </div><div class="ws-cal-row">
+        <div class="ws-cal-time">May 2 at 3:30 PM → 4:00 PM</div>
+        <div class="ws-cal-body">
+          <div class="ws-cal-title">Customer call</div>
+          <div class="ws-cal-loc">📍 Zoom</div>
+          
+        </div>
+      </div><div class="ws-cal-row">
+        <div class="ws-cal-time">May 4, 2026</div>
+        <div class="ws-cal-body">
+          <div class="ws-cal-title">Off-site</div>
+          
+          
+        </div>
+      </div></div>
+      </div>
+      <div class="col">
+        <div class="col-label">Markdown — for LLM context (token-efficient)</div>
+        <pre class="md-pre"><b>Upcoming</b>
+
+• <b>May 2 at 10:00 AM → 10:15 AM</b> — Daily standup
+• <b>May 2 at 1:00 PM → 2:00 PM</b> — Sales review · Q2 · Conf Room 3
+• <b>May 2 at 3:30 PM → 4:00 PM</b> — Customer call · Zoom
+• <b>May 4, 2026</b> — Off-site</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="task">
+    <div class="card-head">
+      <div>
+        <div class="card-name">Task</div>
+        <div class="card-meta">
+          <span class="pill">task/list</span>
+          ·
+          view: <span class="mono">TaskBoard</span>
+          
+        </div>
+        <div class="card-desc">Canonical task list — work items with status + assignee.</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="col">
+        <div class="col-label">HTML — for humans, dashboards, scrubbers</div>
+        <div class="ws-grid-3">
+      <div class="ws-metric">
+      <div class="ws-metric-value">1</div>
+      <div class="ws-metric-label">In progress</div>
+      
+    </div>
+      <div class="ws-metric">
+      <div class="ws-metric-value">1</div>
+      <div class="ws-metric-label">Done</div>
+      
+    </div>
+      <div class="ws-metric">
+      <div class="ws-metric-value">1</div>
+      <div class="ws-metric-label">Blocked</div>
+      
+    </div>
+    </div>
+    <div class="ws-table"><div class="ws-title">Tasks</div><table><thead><tr><th>Title</th><th>Status</th><th>Assignee</th><th>Priority</th></tr></thead><tbody><tr><td>Wire up scene-bench AB adapter</td><td>done</td><td>alice</td><td>high</td></tr><tr><td>Add canonical types to scene-state</td><td>in_progress</td><td>bob</td><td>high</td></tr><tr><td>Land daslab.dev/labs page</td><td>todo</td><td>alice</td><td>medium</td></tr><tr><td>iOS scene viewer: image card aspect bug</td><td>blocked</td><td>carol</td><td>medium</td></tr></tbody></table></div>
+      </div>
+      <div class="col">
+        <div class="col-label">Markdown — for LLM context (token-efficient)</div>
+        <pre class="md-pre"><b>Tasks</b>
+
+| Title | Status | Assignee |
+| --- | --- | --- |
+| Wire up scene-bench AB adapter | done | alice |
+| Add canonical types to scene-state | in_progress | bob |
+| Land daslab.dev/labs page | todo | alice |
+| iOS scene viewer: image card aspect bug | blocked | carol |</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="document">
+    <div class="card-head">
+      <div>
+        <div class="card-name">Document</div>
+        <div class="card-meta">
+          <span class="pill">document/collection</span>
+          ·
+          view: <span class="mono">FeaturedDocument</span>
+          
+        </div>
+        <div class="card-desc">Canonical document collection — pages with title + body.</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="col">
+        <div class="col-label">HTML — for humans, dashboards, scrubbers</div>
+        <div class="ws-doc">
+      <div class="ws-doc-title">Q2 launch plan</div>
+      <div class="ws-doc-byline">ops team</div>
+      <div class="ws-doc-meta">modified 2026-04-30</div>
+      <div class="ws-doc-body">Overview
+
+We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench integration to production with belief-vs-truth scoring.</div>
+      <div class="ws-doc-stats">39 words · ~1 min read</div>
+    </div>
+      </div>
+      <div class="col">
+        <div class="col-label">Markdown — for LLM context (token-efficient)</div>
+        <pre class="md-pre"><span class="h">### Q2 launch plan _(2026-04-30)_</span>
+
+Overview
+
+We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench integration …
+
+<span class="h">### On-call runbook _(2026-04-29)_</span>
+
+Step 1: check the on-call dashboard. Step 2: ……
+
+<span class="h">### Customer feedback · April _(2026-04-28)_</span>
+
+Top themes from this month&#39;s calls……</pre>
+      </div>
+    </div>
+  </section>
+
+
+    <h2 class="section-h">Vendor implementations</h2>
+    <p class="section-p">Vendor-specific shapes that extend (where applicable) one or more canonical types.</p>
     
   <section class="card" id="gmail">
     <div class="card-head">
@@ -143,6 +444,7 @@ footer a { color: var(--muted); }
           <span class="pill">gmail/account</span>
           ·
           view: <span class="mono">GmailInbox</span>
+          · extends: <span class="mono ext-pill">email/mailbox</span>
         </div>
         <div class="card-desc">A Gmail mailbox — inbox, drafts, threads, labels.</div>
       </div>
@@ -208,6 +510,7 @@ footer a { color: var(--muted); }
           <span class="pill">salesforce/account</span>
           ·
           view: <span class="mono">SalesforcePipeline</span>
+          · extends: <span class="mono ext-pill">contact/list</span>
         </div>
         <div class="card-desc">Salesforce CRM — contacts, opportunities, cases, accounts.</div>
       </div>
@@ -251,6 +554,7 @@ footer a { color: var(--muted); }
           <span class="pill">slack/workspace</span>
           ·
           view: <span class="mono">SlackActivity</span>
+          · extends: <span class="mono ext-pill">message/channels</span>
         </div>
         <div class="card-desc">Slack workspace — channels, messages, DMs, threads.</div>
       </div>
@@ -306,6 +610,7 @@ footer a { color: var(--muted); }
           <span class="pill">google_sheets/account</span>
           ·
           view: <span class="mono">SheetsOverview</span>
+          
         </div>
         <div class="card-desc">Google Sheets — spreadsheets, worksheets, rows.</div>
       </div>
@@ -347,6 +652,7 @@ footer a { color: var(--muted); }
           <span class="pill">google_calendar/account</span>
           ·
           view: <span class="mono">CalendarNextUp</span>
+          · extends: <span class="mono ext-pill">event/calendar</span>
         </div>
         <div class="card-desc">Google Calendar — events, attendees, locations.</div>
       </div>
@@ -420,6 +726,7 @@ footer a { color: var(--muted); }
           <span class="pill">airtable/account</span>
           ·
           view: <span class="mono">AirtableRecords</span>
+          · extends: <span class="mono ext-pill">contact/list</span>
         </div>
         <div class="card-desc">Airtable — bases, tables, records.</div>
       </div>
@@ -457,6 +764,7 @@ footer a { color: var(--muted); }
           <span class="pill">jira/site</span>
           ·
           view: <span class="mono">JiraSprintBoard</span>
+          · extends: <span class="mono ext-pill">task/list</span>
         </div>
         <div class="card-desc">Jira — projects, issues, sprints.</div>
       </div>
@@ -508,6 +816,7 @@ footer a { color: var(--muted); }
           <span class="pill">notion/workspace</span>
           ·
           view: <span class="mono">NotionRecentPages</span>
+          · extends: <span class="mono ext-pill">document/collection</span>
         </div>
         <div class="card-desc">Notion — pages, databases, blocks.</div>
       </div>
@@ -574,6 +883,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
           <span class="pill">stripe/account</span>
           ·
           view: <span class="mono">StripePayments</span>
+          
         </div>
         <div class="card-desc">Stripe — charges, payouts, customers.</div>
       </div>
@@ -615,6 +925,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
           <span class="pill">github/repository</span>
           ·
           view: <span class="mono">GitHubRepo</span>
+          · extends: <span class="mono ext-pill">task/list</span>
         </div>
         <div class="card-desc">GitHub — repo, PRs, issues, CI.</div>
       </div>
@@ -683,7 +994,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
 
   </main>
   <footer>
-    scene-state · MIT · <a href="https://github.com/daslabhq/scene-state">github.com/daslabhq/scene-state</a> · 10 assets shown
+    scene-state · MIT · <a href="https://github.com/daslabhq/scene-state">github.com/daslabhq/scene-state</a> · 6 canonical · 10 vendors
   </footer>
 </body>
 </html>

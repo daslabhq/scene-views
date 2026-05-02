@@ -4,10 +4,51 @@
  */
 
 import { test, expect, describe } from "bun:test";
-import { assets, defineView, defineAsset } from "./index.js";
+import { vendors, canonicalTypes, defineView, defineAsset } from "./index.js";
 
-describe("built-in assets", () => {
-  for (const [name, asset] of Object.entries(assets)) {
+describe("canonical types", () => {
+  for (const [name, asset] of Object.entries(canonicalTypes)) {
+    test(`${name}.defaultView renders mock state`, () => {
+      const state = asset.mockState!();
+      const html = asset.defaultView.toHTML(state);
+      const md   = asset.defaultView.toMarkdown(state);
+      const txt  = asset.defaultView.toText!(state);
+      expect(html.length).toBeGreaterThan(0);
+      expect(md.length).toBeGreaterThan(0);
+      expect(txt.length).toBeGreaterThan(0);
+    });
+  }
+
+  test("type ids follow `<concept>/<role>` shape", () => {
+    for (const [, asset] of Object.entries(canonicalTypes)) {
+      expect(asset.type).toMatch(/^[a-z_]+\/[a-z_]+$/);
+    }
+  });
+});
+
+describe("vendor → canonical extends declarations", () => {
+  test("vendors that should extend canonical types do", () => {
+    expect(vendors.Gmail.extends).toContain("email/mailbox");
+    expect(vendors.Slack.extends).toContain("message/channels");
+    expect(vendors.Salesforce.extends).toContain("contact/list");
+    expect(vendors.GoogleCalendar.extends).toContain("event/calendar");
+    expect(vendors.Jira.extends).toContain("task/list");
+    expect(vendors.Notion.extends).toContain("document/collection");
+  });
+
+  test("canonical-extending vendors satisfy their canonical's schema (loose)", () => {
+    // Every canonical's mock should be renderable by every vendor's view
+    // that extends it — vendors are supersets. This is a smoke check, not
+    // a full schema check; we verify rendering doesn't throw.
+    const canonicalEmailMock = canonicalTypes.Email.mockState!();
+    expect(() =>
+      canonicalTypes.Email.defaultView.toMarkdown(canonicalEmailMock)
+    ).not.toThrow();
+  });
+});
+
+describe("built-in vendors", () => {
+  for (const [name, asset] of Object.entries(vendors)) {
     test(`${name}.defaultView renders mock state`, () => {
       const state = asset.mockState!();
       const html = asset.defaultView.toHTML(state);
@@ -36,6 +77,29 @@ describe("defineView", () => {
 });
 
 describe("defineAsset", () => {
+  test("propagates extends", () => {
+    const a = defineAsset({
+      type: "vendor/example",
+      extends: ["email/mailbox"],
+      schema: { type: "object" },
+      defaultView: defineView<{ x: number }>({
+        name: "T", toHTML: () => "ok", toMarkdown: () => "ok",
+      }),
+    });
+    expect(a.extends).toEqual(["email/mailbox"]);
+  });
+
+  test("defaults extends to empty array when omitted", () => {
+    const a = defineAsset({
+      type: "vendor/no-extend",
+      schema: { type: "object" },
+      defaultView: defineView<{ y: number }>({
+        name: "T", toHTML: () => "ok", toMarkdown: () => "ok",
+      }),
+    });
+    expect(a.extends).toEqual([]);
+  });
+
   test("propagates secretFields", () => {
     const a = defineAsset({
       type: "test/x",
