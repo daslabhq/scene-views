@@ -249,8 +249,31 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .ws-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
 
 .ws-list ul { margin: 0; padding: 0; list-style: none; }
+.ws-list--grid-2 ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 14px;
+}
+.ws-list--grid-2 .ws-li {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+}
+.ws-list--grid-2 .ws-li:last-child { border-bottom: 1px solid var(--border); }
 .ws-li { padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
 .ws-li:last-child { border-bottom: none; }
+
+/* Stack widget — header bar + body content */
+.ws-stack { display: flex; flex-direction: column; gap: 10px; }
+.ws-stack-head {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600;
+}
+.ws-stack-head .ws-app-tile--chip { flex-shrink: 0; }
+.ws-stack-title { font-weight: 600; }
+.ws-stack-meta { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: auto; }
+.ws-stack--grid-2 .ws-stack-body { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .ws-li-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .ws-li-title { font-size: 14px; font-weight: 500; }
 .ws-li-sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }

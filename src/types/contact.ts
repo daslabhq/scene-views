@@ -6,9 +6,9 @@
  */
 
 import { defineAsset } from "../asset.js";
-import { defineView, escapeHtml } from "../view.js";
-import { appIcon, appIconChip, ICONS } from "../views/heroicons.js";
-import { TableView } from "../views/primitives.js";
+import { defineView } from "../view.js";
+import { ICONS } from "../views/heroicons.js";
+import type { WidgetData } from "../widgets.js";
 
 export interface ContactRecord {
   id:        string;
@@ -27,63 +27,54 @@ export interface ContactsState {
 const ContactListView = defineView<ContactsState>({
   name: "ContactList",
   sizes: {
-    icon: (s) => ({
-      html: appIcon({ name: "Contacts", glyph: ICONS.users, color: "purple", badge: s.contacts.length || undefined }),
-      markdown: `👤 Contacts · ${s.contacts.length}`,
+    icon: (s): WidgetData => ({
+      type: "icon",
+      glyph: ICONS.users,
+      color: "purple",
+      label: "Contacts",
+      badge: s.contacts.length || undefined,
     }),
-    small: (s) => {
+
+    small: (s): WidgetData => {
       const top = s.contacts[0];
       return {
-        html: `<div class="ws-small">
-          <div class="ws-small-head">${appIconChip({ glyph: ICONS.users, color: "purple" })}<span>${s.contacts.length} contacts</span></div>
-          ${top ? `<div class="ws-small-body">
-            <div class="ws-small-title">${escapeHtml(top.firstName + " " + top.lastName)}</div>
-            <div class="ws-small-sub">${escapeHtml(top.title ?? top.company ?? top.email ?? "")}</div>
-          </div>` : ""}
-        </div>`,
-        markdown: `**Contacts** · ${s.contacts.length}${top ? `\n_first:_ ${top.firstName} ${top.lastName}${top.title ? ` (${top.title})` : ""}` : ""}`,
+        type: "stack",
+        header: { glyph: ICONS.users, color: "purple", title: `${s.contacts.length} contacts` },
+        body: top ? [{
+          type: "list",
+          items: [{
+            title: `${top.firstName} ${top.lastName}`,
+            subtitle: top.title ?? top.company ?? top.email ?? "",
+          }],
+        }] : [{ type: "empty", message: "no contacts" }],
       };
     },
-    medium: (s) => ({
-      html: TableView.toHTML({
-        title: `${s.contacts.length} contacts`,
+
+    medium: (s): WidgetData => ({
+      type: "stack",
+      header: { glyph: ICONS.users, color: "purple", title: "Contacts", meta: `${s.contacts.length}` },
+      body: [{
+        type: "table",
         columns: ["Name", "Email", "Title"],
         rows: s.contacts.slice(0, 5).map(c => ({
           Name:  `${c.firstName} ${c.lastName}`,
           Email: c.email ?? "",
           Title: c.title ?? "",
         })),
-      }),
-      markdown: TableView.toMarkdown({
-        title: "Contacts",
-        rows: s.contacts.slice(0, 5).map(c => ({
-          Name:  `${c.firstName} ${c.lastName}`,
-          Title: c.title ?? "",
-          Email: c.email ?? "",
-        })),
-      }),
+      }],
     }),
-    large: (s) => ({
-      html: TableView.toHTML({
-        title: `${s.contacts.length} contacts`,
-        columns: ["Name", "Email", "Phone", "Title", "Company"],
-        rows: s.contacts.map(c => ({
-          Name:    `${c.firstName} ${c.lastName}`,
-          Email:   c.email ?? "",
-          Phone:   c.phone ?? "",
-          Title:   c.title ?? "",
-          Company: c.company ?? "",
-        })),
-      }),
-      markdown: TableView.toMarkdown({
-        title: "Contacts",
-        rows: s.contacts.map(c => ({
-          Name:    `${c.firstName} ${c.lastName}`,
-          Email:   c.email ?? "",
-          Title:   c.title ?? "",
-          Company: c.company ?? "",
-        })),
-      }),
+
+    large: (s): WidgetData => ({
+      type: "table",
+      title: `${s.contacts.length} contacts`,
+      columns: ["Name", "Email", "Phone", "Title", "Company"],
+      rows: s.contacts.map(c => ({
+        Name:    `${c.firstName} ${c.lastName}`,
+        Email:   c.email ?? "",
+        Phone:   c.phone ?? "",
+        Title:   c.title ?? "",
+        Company: c.company ?? "",
+      })),
     }),
   },
 });

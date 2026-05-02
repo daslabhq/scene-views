@@ -6,9 +6,9 @@
  */
 
 import { defineAsset } from "../asset.js";
-import { defineView, escapeHtml } from "../view.js";
-import { appIcon, appIconChip, ICONS } from "../views/heroicons.js";
-import { TableView, MetricView } from "../views/primitives.js";
+import { defineView } from "../view.js";
+import { ICONS } from "../views/heroicons.js";
+import type { WidgetData } from "../widgets.js";
 
 export interface TaskRecord {
   id:         string;
@@ -35,66 +35,75 @@ function counts(s: TasksState) {
 const TaskBoardView = defineView<TasksState>({
   name: "TaskBoard",
   sizes: {
-    icon: (s) => {
+    icon: (s): WidgetData => {
       const c = counts(s);
-      const open = c.todo + c.in_progress;
       return {
-        html: appIcon({ name: "Tasks", glyph: ICONS.checkCircle, color: "orange", badge: open || undefined }),
-        markdown: `✓ Tasks · ${open} open`,
+        type: "icon",
+        glyph: ICONS.checkCircle,
+        color: "orange",
+        label: "Tasks",
+        badge: (c.todo + c.in_progress) || undefined,
       };
     },
-    small: (s) => {
+
+    small: (s): WidgetData => {
       const c = counts(s);
       return {
-        html: `<div class="ws-small">
-          <div class="ws-small-head">${appIconChip({ glyph: ICONS.checkCircle, color: "orange" })}<span>Tasks</span></div>
-          <div class="ws-small-body">
-            <div class="ws-small-title">${c.in_progress} in progress · ${c.done} done</div>
-            ${c.blocked ? `<div class="ws-small-sub" style="color:var(--red,#ef4444)">${c.blocked} blocked</div>` : `<div class="ws-small-sub">${c.todo} to do</div>`}
-          </div>
-        </div>`,
-        markdown: `**Tasks** · ${c.in_progress} in progress · ${c.done} done${c.blocked ? ` · ⚠️ ${c.blocked} blocked` : ""}`,
+        type: "stack",
+        header: { glyph: ICONS.checkCircle, color: "orange", title: "Tasks" },
+        body: [{
+          type: "list",
+          items: [{
+            title: `${c.in_progress} in progress · ${c.done} done`,
+            subtitle: c.blocked ? `⚠️ ${c.blocked} blocked` : `${c.todo} to do`,
+          }],
+        }],
       };
     },
-    medium: (s) => {
+
+    medium: (s): WidgetData => {
       const c = counts(s);
       return {
-        html: `<div class="ws-grid-3">
-          ${MetricView.toHTML({ value: c.in_progress, label: "In progress" })}
-          ${MetricView.toHTML({ value: c.done,        label: "Done" })}
-          ${MetricView.toHTML({ value: c.blocked,     label: "Blocked", trend: c.blocked > 0 ? "down" : "flat" })}
-        </div>
-        ${TableView.toHTML({
-          rows: s.tasks.slice(0, 4).map(t => ({
-            Title: t.title, Status: t.status, Assignee: t.assignee ?? "—",
-          })),
-        })}`,
-        markdown: TableView.toMarkdown({
-          title: "Tasks",
-          rows: s.tasks.slice(0, 6).map(t => ({ Title: t.title, Status: t.status, Assignee: t.assignee ?? "—" })),
-        }),
+        type: "stack",
+        header: { glyph: ICONS.checkCircle, color: "orange", title: "Sprint board" },
+        body: [
+          { type: "metric_grid", metrics: [
+            { type: "metric", value: c.in_progress, label: "In progress" },
+            { type: "metric", value: c.done,        label: "Done" },
+            { type: "metric", value: c.blocked,     label: "Blocked",
+              trend: c.blocked > 0 ? "down" : "flat" },
+          ]},
+          { type: "table",
+            columns: ["Title", "Status", "Assignee"],
+            rows: s.tasks.slice(0, 4).map(t => ({
+              Title: t.title, Status: t.status, Assignee: t.assignee ?? "—",
+            })),
+          },
+        ],
       };
     },
-    large: (s) => {
+
+    large: (s): WidgetData => {
       const c = counts(s);
       return {
-        html: `<div class="ws-grid-3">
-          ${MetricView.toHTML({ value: c.in_progress, label: "In progress" })}
-          ${MetricView.toHTML({ value: c.done,        label: "Done" })}
-          ${MetricView.toHTML({ value: c.blocked,     label: "Blocked", trend: c.blocked > 0 ? "down" : "flat" })}
-        </div>
-        ${TableView.toHTML({
-          title: "Tasks",
-          columns: ["Title", "Status", "Assignee", "Priority"],
-          rows: s.tasks.map(t => ({
-            Title: t.title, Status: t.status,
-            Assignee: t.assignee ?? "—", Priority: t.priority ?? "—",
-          })),
-        })}`,
-        markdown: TableView.toMarkdown({
-          title: "Tasks",
-          rows: s.tasks.map(t => ({ Title: t.title, Status: t.status, Assignee: t.assignee ?? "—" })),
-        }),
+        type: "stack",
+        header: { glyph: ICONS.checkCircle, color: "orange", title: "Sprint board" },
+        body: [
+          { type: "metric_grid", metrics: [
+            { type: "metric", value: c.in_progress, label: "In progress" },
+            { type: "metric", value: c.done,        label: "Done" },
+            { type: "metric", value: c.blocked,     label: "Blocked",
+              trend: c.blocked > 0 ? "down" : "flat" },
+          ]},
+          { type: "table",
+            title: "Tasks",
+            columns: ["Title", "Status", "Assignee", "Priority"],
+            rows: s.tasks.map(t => ({
+              Title: t.title, Status: t.status,
+              Assignee: t.assignee ?? "—", Priority: t.priority ?? "—",
+            })),
+          },
+        ],
       };
     },
   },

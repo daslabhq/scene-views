@@ -22,6 +22,10 @@
  * the ladder: icon→small→medium, large→medium, xlarge→large→medium.
  */
 
+import { renderHTML }     from "./render/html.js";
+import { renderMarkdown } from "./render/markdown.js";
+import { renderText }     from "./render/text.js";
+
 export type JSONSchema = Record<string, unknown>;
 
 /** Five-tier size system — matches Apple WidgetKit + Daslab WidgetSize. */
@@ -54,7 +58,18 @@ export interface ViewDef<TState = unknown> {
 // Sized builder — declarative authoring with auto-fallback
 // ---------------------------------------------------------------------------
 
-/** A renderer at a single size returns both formats inline. */
+/**
+ * A renderer at a single size — preferred form. Returns WidgetData JSON;
+ * the framework converts to HTML / Markdown / Text via the renderers in
+ * `src/render/`. View authors don't write parallel HTML and Markdown.
+ */
+export type WidgetSizedRenderer<TState> = (state: TState) => import("./widgets.js").WidgetData;
+
+/**
+ * Legacy form — author returns HTML + Markdown strings directly. Kept as
+ * an escape hatch for views the WidgetData union can't express. Prefer
+ * the WidgetData form unless you have a specific reason.
+ */
 export interface SizedRender {
   html:     string;
   markdown: string;
@@ -63,16 +78,16 @@ export interface SizedRender {
 
 export type SizedRenderer<TState> = (state: TState) => SizedRender;
 
-/** Per-size renderer map — implement only the sizes you want. */
-export type SizedMap<TState> = Partial<Record<ViewSize, SizedRenderer<TState>>>;
+/** Per-size map — values can be WidgetData renderers OR legacy {html,markdown} renderers. */
+export type SizedMap<TState> = Partial<Record<ViewSize, WidgetSizedRenderer<TState> | SizedRenderer<TState>>>;
 
 export interface ViewDefConfig<TState> {
   name: string;
   description?: string;
   schema?: JSONSchema;
-  /** Per-size renderers (declarative). One of `sizes` or explicit toHTML/toMarkdown is required. */
+  /** Per-size renderers — preferred form. Values return WidgetData; framework renders. */
   sizes?: SizedMap<TState>;
-  /** Single-size renderer (escape hatch when you want full control). */
+  /** Single-size renderer (full custom escape hatch). */
   toHTML?: (state: TState, opts?: ViewOpts) => string;
   toMarkdown?: (state: TState, opts?: ViewOpts) => string;
   toText?: (state: TState, opts?: ViewOpts) => string;
@@ -104,8 +119,7 @@ export function defineView<TState = unknown>(config: ViewDefConfig<TState>): Vie
   const { sizes } = config;
 
   if (sizes) {
-    const resolveSize = (size: ViewSize): SizedRenderer<TState> | undefined => {
-      // Fallback ladder — try requested, then walk down to medium.
+    const resolveSize = (size: ViewSize): WidgetSizedRenderer<TState> | SizedRenderer<TState> | undefined => {
       const ladder: ViewSize[] = (() => {
         switch (size) {
           case "icon":   return ["icon", "small", "medium"];
@@ -118,22 +132,36 @@ export function defineView<TState = unknown>(config: ViewDefConfig<TState>): Vie
       for (const s of ladder) {
         if (sizes[s]) return sizes[s];
       }
-      // Last resort — pick any defined size.
       return Object.values(sizes).find(Boolean);
     };
 
+    const callSized = (state: TState, opts: ViewOpts | undefined): { kind: "widget"; data: any } | { kind: "legacy"; out: SizedRender } | null => {
+      const fn = resolveSize(opts?.size ?? "medium");
+      if (!fn) return null;
+      const out = fn(state) as any;
+      // WidgetData has a `type` discriminator that's a known string; SizedRender
+      // has html + markdown fields. Distinguish.
+      if (out && typeof out === "object" && typeof out.type === "string" && !("html" in out)) {
+        return { kind: "widget", data: out };
+      }
+      return { kind: "legacy", out: out as SizedRender };
+    };
+
     const toHTML = (state: TState, opts?: ViewOpts) => {
-      const r = resolveSize(opts?.size ?? "medium");
-      return r ? r(state).html : "";
+      const c = callSized(state, opts);
+      if (!c) return "";
+      return c.kind === "widget" ? renderHTML(c.data) : c.out.html;
     };
     const toMarkdown = (state: TState, opts?: ViewOpts) => {
-      const r = resolveSize(opts?.size ?? "medium");
-      return r ? r(state).markdown : "";
+      const c = callSized(state, opts);
+      if (!c) return "";
+      return c.kind === "widget" ? renderMarkdown(c.data) : c.out.markdown;
     };
     const toText = (state: TState, opts?: ViewOpts) => {
-      const r = resolveSize(opts?.size ?? "medium");
-      const out = r ? r(state) : { html: "", markdown: "" };
-      return out.text ?? stripTags(out.html);
+      const c = callSized(state, opts);
+      if (!c) return "";
+      if (c.kind === "widget") return renderText(c.data);
+      return c.out.text ?? stripTags(c.out.html);
     };
 
     return {
@@ -146,7 +174,6 @@ export function defineView<TState = unknown>(config: ViewDefConfig<TState>): Vie
     };
   }
 
-  // No sizes map — use explicit functions.
   if (!config.toHTML || !config.toMarkdown) {
     throw new Error(`defineView(${config.name}): provide either \`sizes\` or both \`toHTML\` and \`toMarkdown\``);
   }

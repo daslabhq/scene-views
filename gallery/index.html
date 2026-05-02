@@ -184,8 +184,31 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .ws-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
 
 .ws-list ul { margin: 0; padding: 0; list-style: none; }
+.ws-list--grid-2 ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 14px;
+}
+.ws-list--grid-2 .ws-li {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+}
+.ws-list--grid-2 .ws-li:last-child { border-bottom: 1px solid var(--border); }
 .ws-li { padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
 .ws-li:last-child { border-bottom: none; }
+
+/* Stack widget — header bar + body content */
+.ws-stack { display: flex; flex-direction: column; gap: 10px; }
+.ws-stack-head {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600;
+}
+.ws-stack-head .ws-app-tile--chip { flex-shrink: 0; }
+.ws-stack-title { font-weight: 600; }
+.ws-stack-meta { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: auto; }
+.ws-stack--grid-2 .ws-stack-body { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .ws-li-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .ws-li-title { font-size: 14px; font-weight: 500; }
 .ws-li-sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
@@ -331,44 +354,53 @@ footer a { color: var(--muted); }
     <div class="split">
       <div class="col">
         <div class="col-label">HTML · medium</div>
-        <div class="ws-list"><div class="ws-title">Inbox · 4 messages · 2 unread</div><ul><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Invoice — overdue</span>
-          <span class="ws-badge">unread</span>
-        </div>
-        <div class="ws-li-sub">alice@vendor.com</div>
+        <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#0a84ff 0%,#0040dd 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Inbox</span>
+      <span class="ws-stack-meta">4 · 2 unread</span>
+    </div><div class="ws-stack-body"><div class="ws-list ws-list--grid-2"><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Invoice — overdue</span>
+        <span class="ws-badge">unread</span>
+      </div>
+      <div class="ws-li-sub">alice@vendor.com</div>
+      
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Quick question</span>
+        <span class="ws-badge">unread</span>
+      </div>
+      <div class="ws-li-sub">ceo@company.com</div>
+      
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Payout completed: $1,200</span>
         
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Quick question</span>
-          <span class="ws-badge">unread</span>
-        </div>
-        <div class="ws-li-sub">ceo@company.com</div>
+      </div>
+      <div class="ws-li-sub">alerts@stripe.com</div>
+      
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Morning briefing</span>
         
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Payout completed: $1,200</span>
-          
-        </div>
-        <div class="ws-li-sub">alerts@stripe.com</div>
-        
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Morning briefing</span>
-          
-        </div>
-        <div class="ws-li-sub">newsletter@nyt.com</div>
-        
-      </li></ul></div>
+      </div>
+      <div class="ws-li-sub">newsletter@nyt.com</div>
+      
+    </li></ul></div></div></div>
       </div>
       <div class="col">
-        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~47 tokens</span></div>
-        <pre class="md-pre"><b>Inbox (4 msgs, 2 unread)</b>
+        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~40 tokens</span></div>
+        <pre class="md-pre"><b>Inbox</b> · 4 · 2 unread
 
-• <b>Invoice — overdue</b> — from alice@vendor.com · unread
-• <b>Quick question</b> — from ceo@company.com · unread
-• <b>Payout completed: $1,200</b> — from alerts@stripe.com
-• <b>Morning briefing</b> — from newsletter@nyt.com</pre>
+• <b>Invoice — overdue</b> <code>unread</code> — alice@vendor.com
+• <b>Quick question</b> <code>unread</code> — ceo@company.com
+• <b>Payout completed: $1,200</b> — alerts@stripe.com
+• <b>Morning briefing</b> — newsletter@nyt.com</pre>
       </div>
     </div>
     <div class="card-head" style="border-top:1px solid var(--border);border-bottom:none;background:var(--bg)">
@@ -380,7 +412,7 @@ footer a { color: var(--muted); }
   <div class="size-cell icon">
     <div class="size-label">
       <span>icon</span>
-      <span class="size-tokens">~7 tokens</span>
+      <span class="size-tokens">~5 tokens</span>
     </div>
     <div class="ws-app-icon">
     <div class="ws-app-tile" style="background:linear-gradient(160deg,#0a84ff 0%,#0040dd 100%);color:#fff">
@@ -391,111 +423,127 @@ footer a { color: var(--muted); }
     </div>
     <div class="ws-app-name">Email</div>
   </div>
-    <div class="md-mini" style="margin-top:8px">📧 Email · 2 unread</div>
+    <div class="md-mini" style="margin-top:8px">🔵 <b>Email</b> · 2</div>
   </div>
 
   <div class="size-cell small">
     <div class="size-label">
       <span>small</span>
-      <span class="size-tokens">~13 tokens</span>
+      <span class="size-tokens">~15 tokens</span>
     </div>
-    <div class="ws-small">
-          <div class="ws-small-head"><div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#0a84ff 0%,#0040dd 100%);color:#fff">
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#0a84ff 0%,#0040dd 100%);color:#fff">
     <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
     </svg></div>
-  </div><span>Inbox</span> <span class="ws-small-num">2 unread</span></div>
-          <div class="ws-small-body">
-            <div class="ws-small-title">Invoice — overdue</div>
-            <div class="ws-small-sub">alice@vendor.com</div>
-          </div>
-        </div>
+  </div>
+      <span class="ws-stack-title">Inbox</span>
+      <span class="ws-stack-meta">2 unread</span>
+    </div><div class="ws-stack-body"><div class="ws-list ws-list--vertical"><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Invoice — overdue</span>
+        <span class="ws-badge">unread</span>
+      </div>
+      <div class="ws-li-sub">alice@vendor.com</div>
+      
+    </li></ul></div></div></div>
     <div class="md-mini" style="margin-top:8px"><b>Inbox</b> · 2 unread
-_latest:_ &quot;Invoice — overdue&quot; — alice@vendor.com</div>
+
+• <b>Invoice — overdue</b> <code>unread</code> — alice@vendor.com</div>
   </div>
 
   <div class="size-cell medium">
     <div class="size-label">
       <span>medium</span>
-      <span class="size-tokens">~47 tokens</span>
+      <span class="size-tokens">~40 tokens</span>
     </div>
-    <div class="ws-list"><div class="ws-title">Inbox · 4 messages · 2 unread</div><ul><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Invoice — overdue</span>
-          <span class="ws-badge">unread</span>
-        </div>
-        <div class="ws-li-sub">alice@vendor.com</div>
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#0a84ff 0%,#0040dd 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Inbox</span>
+      <span class="ws-stack-meta">4 · 2 unread</span>
+    </div><div class="ws-stack-body"><div class="ws-list ws-list--grid-2"><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Invoice — overdue</span>
+        <span class="ws-badge">unread</span>
+      </div>
+      <div class="ws-li-sub">alice@vendor.com</div>
+      
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Quick question</span>
+        <span class="ws-badge">unread</span>
+      </div>
+      <div class="ws-li-sub">ceo@company.com</div>
+      
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Payout completed: $1,200</span>
         
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Quick question</span>
-          <span class="ws-badge">unread</span>
-        </div>
-        <div class="ws-li-sub">ceo@company.com</div>
+      </div>
+      <div class="ws-li-sub">alerts@stripe.com</div>
+      
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Morning briefing</span>
         
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Payout completed: $1,200</span>
-          
-        </div>
-        <div class="ws-li-sub">alerts@stripe.com</div>
-        
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Morning briefing</span>
-          
-        </div>
-        <div class="ws-li-sub">newsletter@nyt.com</div>
-        
-      </li></ul></div>
-    <div class="md-mini" style="margin-top:8px"><b>Inbox (4 msgs, 2 unread)</b>
+      </div>
+      <div class="ws-li-sub">newsletter@nyt.com</div>
+      
+    </li></ul></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>Inbox</b> · 4 · 2 unread
 
-• <b>Invoice — overdue</b> — from alice@vendor.com · unread
-• <b>Quick question</b> — from ceo@company.com · unread
-• <b>Payout completed: $1,200</b> — from alerts@stripe.com
-• <b>Morning briefing</b> — from newsletter@nyt…</div>
+• <b>Invoice — overdue</b> <code>unread</code> — alice@vendor.com
+• <b>Quick question</b> <code>unread</code> — ceo@company.com
+• <b>Payout completed: $1,200</b> — alerts@stripe.com
+• <b>Morning briefing</b> — newsletter@nyt.com</div>
   </div>
 
   <div class="size-cell large">
     <div class="size-label">
       <span>large</span>
-      <span class="size-tokens">~47 tokens</span>
+      <span class="size-tokens">~41 tokens</span>
     </div>
-    <div class="ws-list"><div class="ws-title">Inbox · 4 messages · 2 unread</div><ul><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Invoice — overdue</span>
-          <span class="ws-badge">unread</span>
-        </div>
-        <div class="ws-li-sub">alice@vendor.com</div>
-        <div class="ws-li-detail">Past due, please confirm.</div>
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Quick question</span>
-          <span class="ws-badge">unread</span>
-        </div>
-        <div class="ws-li-sub">ceo@company.com</div>
-        <div class="ws-li-detail">Got a sec?</div>
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Payout completed: $1,200</span>
-          
-        </div>
-        <div class="ws-li-sub">alerts@stripe.com</div>
-        <div class="ws-li-detail">Your payout has been deposited.</div>
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">Morning briefing</span>
-          
-        </div>
-        <div class="ws-li-sub">newsletter@nyt.com</div>
-        <div class="ws-li-detail">Top stories…</div>
-      </li></ul></div>
-    <div class="md-mini" style="margin-top:8px"><b>Inbox (4 msgs, 2 unread)</b>
+    <div class="ws-list ws-list--vertical"><div class="ws-title">Inbox · 4 messages · 2 unread</div><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Invoice — overdue</span>
+        <span class="ws-badge">unread</span>
+      </div>
+      <div class="ws-li-sub">alice@vendor.com</div>
+      <div class="ws-li-detail">Past due, please confirm.</div>
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Quick question</span>
+        <span class="ws-badge">unread</span>
+      </div>
+      <div class="ws-li-sub">ceo@company.com</div>
+      <div class="ws-li-detail">Got a sec?</div>
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Payout completed: $1,200</span>
+        
+      </div>
+      <div class="ws-li-sub">alerts@stripe.com</div>
+      <div class="ws-li-detail">Your payout has been deposited.</div>
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Morning briefing</span>
+        
+      </div>
+      <div class="ws-li-sub">newsletter@nyt.com</div>
+      <div class="ws-li-detail">Top stories…</div>
+    </li></ul></div>
+    <div class="md-mini" style="margin-top:8px"><b>Inbox · 4 messages · 2 unread</b>
 
-• <b>Invoice — overdue</b> — from alice@vendor.com · unread
-• <b>Quick question</b> — from ceo@company.com · unread
-• <b>Payout completed: $1,200</b> — from alerts@stripe.com
-• <b>Morning briefing</b> — from newsletter@nyt…</div>
+• <b>Invoice — overdue</b> <code>unread</code> — alice@vendor.com
+• <b>Quick question</b> <code>unread</code> — ceo@company.com
+• <b>Payout completed: $1,200</b> — alerts@stripe.com
+• <b>Morning briefing</b> — newsletter@nyt.com</div>
   </div>
 
       </div>
@@ -518,30 +566,37 @@ _latest:_ &quot;Invoice — overdue&quot; — alice@vendor.com</div>
     <div class="split">
       <div class="col">
         <div class="col-label">HTML · medium</div>
-        <div class="ws-list"><div class="ws-title">Recent activity</div><ul><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">#engineering</span>
-          
-        </div>
-        <div class="ws-li-sub">2 messages</div>
-        <div class="ws-li-detail">bob: Looks good — bumping to 25%.</div>
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">#marketing</span>
-          
-        </div>
-        <div class="ws-li-sub">1 message</div>
-        <div class="ws-li-detail">carol: Paused c-retain. CPA was high.</div>
-      </li></ul></div>
+        <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#34c759 0%,#1ca647 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Recent activity</span>
+      <span class="ws-stack-meta">2 channels</span>
+    </div><div class="ws-stack-body"><div class="ws-list ws-list--vertical"><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">#engineering</span>
+        
+      </div>
+      <div class="ws-li-sub">2 messages</div>
+      <div class="ws-li-detail">bob: Looks good — bumping to 25%.</div>
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">#marketing</span>
+        
+      </div>
+      <div class="ws-li-sub">1 message</div>
+      <div class="ws-li-detail">carol: Paused c-retain. CPA was high.</div>
+    </li></ul></div></div></div>
       </div>
       <div class="col">
-        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~39 tokens</span></div>
-        <pre class="md-pre"><b>#engineering</b> (2 messages)
-&gt; alice: Deploy is green; canary at 5%.
-&gt; bob: Looks good — bumping to 25%.
+        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~20 tokens</span></div>
+        <pre class="md-pre"><b>Recent activity</b> · 2 channels
 
-<b>#marketing</b> (1 messages)
-&gt; carol: Paused c-retain. CPA was high.</pre>
+• <b>#engineering</b> — 2 messages
+• <b>#marketing</b> — 1 message</pre>
       </div>
     </div>
     <div class="card-head" style="border-top:1px solid var(--border);border-bottom:none;background:var(--bg)">
@@ -553,7 +608,7 @@ _latest:_ &quot;Invoice — overdue&quot; — alice@vendor.com</div>
   <div class="size-cell icon">
     <div class="size-label">
       <span>icon</span>
-      <span class="size-tokens">~7 tokens</span>
+      <span class="size-tokens">~5 tokens</span>
     </div>
     <div class="ws-app-icon">
     <div class="ws-app-tile" style="background:linear-gradient(160deg,#34c759 0%,#1ca647 100%);color:#fff">
@@ -564,83 +619,104 @@ _latest:_ &quot;Invoice — overdue&quot; — alice@vendor.com</div>
     </div>
     <div class="ws-app-name">Chat</div>
   </div>
-    <div class="md-mini" style="margin-top:8px">💬 Chat · 3 messages</div>
+    <div class="md-mini" style="margin-top:8px">🟢 <b>Chat</b> · 3</div>
   </div>
 
   <div class="size-cell small">
     <div class="size-label">
       <span>small</span>
-      <span class="size-tokens">~12 tokens</span>
+      <span class="size-tokens">~11 tokens</span>
     </div>
-    <div class="ws-small">
-          <div class="ws-small-head"><div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#34c759 0%,#1ca647 100%);color:#fff">
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#34c759 0%,#1ca647 100%);color:#fff">
     <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/>
     </svg></div>
-  </div><span>2 active channels</span></div>
-          <div class="ws-small-body">
-            <div class="ws-small-title">#engineering</div>
-            <div class="ws-small-sub">2 messages</div>
-          </div>
-        </div>
-    <div class="md-mini" style="margin-top:8px"><b>Chat</b> · 2 channels active
-_top:_ #engineering (2 msgs)</div>
+  </div>
+      <span class="ws-stack-title">2 channels active</span>
+      
+    </div><div class="ws-stack-body"><div class="ws-list ws-list--vertical"><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">#engineering</span>
+        
+      </div>
+      <div class="ws-li-sub">2 messages</div>
+      
+    </li></ul></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>2 channels active</b>
+
+• <b>#engineering</b> — 2 messages</div>
   </div>
 
   <div class="size-cell medium">
     <div class="size-label">
       <span>medium</span>
-      <span class="size-tokens">~39 tokens</span>
+      <span class="size-tokens">~20 tokens</span>
     </div>
-    <div class="ws-list"><div class="ws-title">Recent activity</div><ul><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">#engineering</span>
-          
-        </div>
-        <div class="ws-li-sub">2 messages</div>
-        <div class="ws-li-detail">bob: Looks good — bumping to 25%.</div>
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">#marketing</span>
-          
-        </div>
-        <div class="ws-li-sub">1 message</div>
-        <div class="ws-li-detail">carol: Paused c-retain. CPA was high.</div>
-      </li></ul></div>
-    <div class="md-mini" style="margin-top:8px"><b>#engineering</b> (2 messages)
-&gt; alice: Deploy is green; canary at 5%.
-&gt; bob: Looks good — bumping to 25%.
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#34c759 0%,#1ca647 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Recent activity</span>
+      <span class="ws-stack-meta">2 channels</span>
+    </div><div class="ws-stack-body"><div class="ws-list ws-list--vertical"><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">#engineering</span>
+        
+      </div>
+      <div class="ws-li-sub">2 messages</div>
+      <div class="ws-li-detail">bob: Looks good — bumping to 25%.</div>
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">#marketing</span>
+        
+      </div>
+      <div class="ws-li-sub">1 message</div>
+      <div class="ws-li-detail">carol: Paused c-retain. CPA was high.</div>
+    </li></ul></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>Recent activity</b> · 2 channels
 
-<b>#marketing</b> (1 messages)
-&gt; carol: Paused c-retain. CPA was high.</div>
+• <b>#engineering</b> — 2 messages
+• <b>#marketing</b> — 1 message</div>
   </div>
 
   <div class="size-cell large">
     <div class="size-label">
       <span>large</span>
-      <span class="size-tokens">~39 tokens</span>
+      <span class="size-tokens">~20 tokens</span>
     </div>
-    <div class="ws-list"><div class="ws-title">Recent activity</div><ul><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">#engineering</span>
-          
-        </div>
-        <div class="ws-li-sub">2 messages</div>
-        <div class="ws-li-detail">bob: Looks good — bumping to 25%.</div>
-      </li><li class="ws-li">
-        <div class="ws-li-row">
-          <span class="ws-li-title">#marketing</span>
-          
-        </div>
-        <div class="ws-li-sub">1 message</div>
-        <div class="ws-li-detail">carol: Paused c-retain. CPA was high.</div>
-      </li></ul></div>
-    <div class="md-mini" style="margin-top:8px"><b>#engineering</b> (2 messages)
-&gt; alice: Deploy is green; canary at 5%.
-&gt; bob: Looks good — bumping to 25%.
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#34c759 0%,#1ca647 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Recent activity</span>
+      <span class="ws-stack-meta">2 channels</span>
+    </div><div class="ws-stack-body"><div class="ws-list ws-list--vertical"><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">#engineering</span>
+        
+      </div>
+      <div class="ws-li-sub">2 messages</div>
+      <div class="ws-li-detail">bob: Looks good — bumping to 25%.</div>
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">#marketing</span>
+        
+      </div>
+      <div class="ws-li-sub">1 message</div>
+      <div class="ws-li-detail">carol: Paused c-retain. CPA was high.</div>
+    </li></ul></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>Recent activity</b> · 2 channels
 
-<b>#marketing</b> (1 messages)
-&gt; carol: Paused c-retain. CPA was high.</div>
+• <b>#engineering</b> — 2 messages
+• <b>#marketing</b> — 1 message</div>
   </div>
 
       </div>
@@ -663,17 +739,26 @@ _top:_ #engineering (2 msgs)</div>
     <div class="split">
       <div class="col">
         <div class="col-label">HTML · medium</div>
-        <div class="ws-table"><div class="ws-title">3 contacts</div><table><thead><tr><th>Name</th><th>Email</th><th>Title</th></tr></thead><tbody><tr><td>Jordan Lee</td><td>jordan@acme.com</td><td>Director of Ops</td></tr><tr><td>Maria Santos</td><td>maria@brightwave.com</td><td>VP Marketing</td></tr><tr><td>Aiden Park</td><td>aiden@meridian.com</td><td>CEO</td></tr></tbody></table></div>
+        <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#af52de 0%,#7e3fb1 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Contacts</span>
+      <span class="ws-stack-meta">3</span>
+    </div><div class="ws-stack-body"><div class="ws-table"><table><thead><tr><th>Name</th><th>Email</th><th>Title</th></tr></thead><tbody><tr><td>Jordan Lee</td><td>jordan@acme.com</td><td>Director of Ops</td></tr><tr><td>Maria Santos</td><td>maria@brightwave.com</td><td>VP Marketing</td></tr><tr><td>Aiden Park</td><td>aiden@meridian.com</td><td>CEO</td></tr></tbody></table></div></div></div>
       </div>
       <div class="col">
-        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~56 tokens</span></div>
-        <pre class="md-pre"><b>Contacts</b>
+        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~59 tokens</span></div>
+        <pre class="md-pre"><b>Contacts</b> · 3
 
-| Name | Title | Email |
+| Name | Email | Title |
 | --- | --- | --- |
-| Jordan Lee | Director of Ops | jordan@acme.com |
-| Maria Santos | VP Marketing | maria@brightwave.com |
-| Aiden Park | CEO | aiden@meridian.com |</pre>
+| Jordan Lee | jordan@acme.com | Director of Ops |
+| Maria Santos | maria@brightwave.com | VP Marketing |
+| Aiden Park | aiden@meridian.com | CEO |</pre>
       </div>
     </div>
     <div class="card-head" style="border-top:1px solid var(--border);border-bottom:none;background:var(--bg)">
@@ -696,7 +781,7 @@ _top:_ #engineering (2 msgs)</div>
     </div>
     <div class="ws-app-name">Contacts</div>
   </div>
-    <div class="md-mini" style="margin-top:8px">👤 Contacts · 3</div>
+    <div class="md-mini" style="margin-top:8px">🟣 <b>Contacts</b> · 3</div>
   </div>
 
   <div class="size-cell small">
@@ -704,49 +789,64 @@ _top:_ #engineering (2 msgs)</div>
       <span>small</span>
       <span class="size-tokens">~12 tokens</span>
     </div>
-    <div class="ws-small">
-          <div class="ws-small-head"><div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#af52de 0%,#7e3fb1 100%);color:#fff">
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#af52de 0%,#7e3fb1 100%);color:#fff">
     <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/>
     </svg></div>
-  </div><span>3 contacts</span></div>
-          <div class="ws-small-body">
-            <div class="ws-small-title">Jordan Lee</div>
-            <div class="ws-small-sub">Director of Ops</div>
-          </div>
-        </div>
-    <div class="md-mini" style="margin-top:8px"><b>Contacts</b> · 3
-_first:_ Jordan Lee (Director of Ops)</div>
+  </div>
+      <span class="ws-stack-title">3 contacts</span>
+      
+    </div><div class="ws-stack-body"><div class="ws-list ws-list--vertical"><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Jordan Lee</span>
+        
+      </div>
+      <div class="ws-li-sub">Director of Ops</div>
+      
+    </li></ul></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>3 contacts</b>
+
+• <b>Jordan Lee</b> — Director of Ops</div>
   </div>
 
   <div class="size-cell medium">
     <div class="size-label">
       <span>medium</span>
-      <span class="size-tokens">~56 tokens</span>
+      <span class="size-tokens">~59 tokens</span>
     </div>
-    <div class="ws-table"><div class="ws-title">3 contacts</div><table><thead><tr><th>Name</th><th>Email</th><th>Title</th></tr></thead><tbody><tr><td>Jordan Lee</td><td>jordan@acme.com</td><td>Director of Ops</td></tr><tr><td>Maria Santos</td><td>maria@brightwave.com</td><td>VP Marketing</td></tr><tr><td>Aiden Park</td><td>aiden@meridian.com</td><td>CEO</td></tr></tbody></table></div>
-    <div class="md-mini" style="margin-top:8px"><b>Contacts</b>
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#af52de 0%,#7e3fb1 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Contacts</span>
+      <span class="ws-stack-meta">3</span>
+    </div><div class="ws-stack-body"><div class="ws-table"><table><thead><tr><th>Name</th><th>Email</th><th>Title</th></tr></thead><tbody><tr><td>Jordan Lee</td><td>jordan@acme.com</td><td>Director of Ops</td></tr><tr><td>Maria Santos</td><td>maria@brightwave.com</td><td>VP Marketing</td></tr><tr><td>Aiden Park</td><td>aiden@meridian.com</td><td>CEO</td></tr></tbody></table></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>Contacts</b> · 3
 
-| Name | Title | Email |
+| Name | Email | Title |
 | --- | --- | --- |
-| Jordan Lee | Director of Ops | jordan@acme.com |
-| Maria Santos | VP Marketing | maria@brightwave.com |
-| Aiden Park | CEO | aiden@meridian.com |</div>
+| Jordan Lee | jordan@acme.com | Director of Ops |
+| Maria Santos | maria@brightwave.com | VP Marketing |
+| Aiden Park | aiden@meridian.com | CEO |</div>
   </div>
 
   <div class="size-cell large">
     <div class="size-label">
       <span>large</span>
-      <span class="size-tokens">~69 tokens</span>
+      <span class="size-tokens">~84 tokens</span>
     </div>
     <div class="ws-table"><div class="ws-title">3 contacts</div><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Title</th><th>Company</th></tr></thead><tbody><tr><td>Jordan Lee</td><td>jordan@acme.com</td><td>+1-555-0101</td><td>Director of Ops</td><td>Acme</td></tr><tr><td>Maria Santos</td><td>maria@brightwave.com</td><td>+1-555-0182</td><td>VP Marketing</td><td>Brightwave</td></tr><tr><td>Aiden Park</td><td>aiden@meridian.com</td><td>+1-555-0301</td><td>CEO</td><td>Meridian</td></tr></tbody></table></div>
-    <div class="md-mini" style="margin-top:8px"><b>Contacts</b>
+    <div class="md-mini" style="margin-top:8px"><b>3 contacts</b>
 
-| Name | Email | Title | Company |
-| --- | --- | --- | --- |
-| Jordan Lee | jordan@acme.com | Director of Ops | Acme |
-| Maria Santos | maria@brightwave.com | VP Marketing | Brightwave |
-| Aiden Park | aiden@meridian.com | CEO…</div>
+| Name | Email | Phone | Title | Company |
+| --- | --- | --- | --- | --- |
+| Jordan Lee | jordan@acme.com | +1-555-0101 | Director of Ops | Acme |
+| Maria Santos | maria@brightwave.com | +1-555-0182 | VP Marketing | Brightwa…</div>
   </div>
 
       </div>
@@ -769,44 +869,53 @@ _first:_ Jordan Lee (Director of Ops)</div>
     <div class="split">
       <div class="col">
         <div class="col-label">HTML · medium</div>
-        <div class="ws-cal"><div class="ws-title">Upcoming</div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 2 at 10:00 AM → 10:15 AM</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Daily standup</div>
-          
-          
-        </div>
-      </div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 2 at 1:00 PM → 2:00 PM</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Sales review · Q2</div>
-          <div class="ws-cal-loc">📍 Conf Room 3</div>
-          
-        </div>
-      </div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 2 at 3:30 PM → 4:00 PM</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Customer call</div>
-          <div class="ws-cal-loc">📍 Zoom</div>
-          
-        </div>
-      </div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 4, 2026</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Off-site</div>
-          
-          
-        </div>
-      </div></div>
+        <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ff3b30 0%,#d92520 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Upcoming</span>
+      <span class="ws-stack-meta">4 events</span>
+    </div><div class="ws-stack-body"><div class="ws-cal"><div class="ws-cal-row">
+      <div class="ws-cal-time">May 2 at 10:00 AM → 10:15 AM</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Daily standup</div>
+        
+        
+      </div>
+    </div><div class="ws-cal-row">
+      <div class="ws-cal-time">May 2 at 1:00 PM → 2:00 PM</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Sales review · Q2</div>
+        <div class="ws-cal-loc">📍 Conf Room 3</div>
+        
+      </div>
+    </div><div class="ws-cal-row">
+      <div class="ws-cal-time">May 2 at 3:30 PM → 4:00 PM</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Customer call</div>
+        <div class="ws-cal-loc">📍 Zoom</div>
+        
+      </div>
+    </div><div class="ws-cal-row">
+      <div class="ws-cal-time">May 4, 2026</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Off-site</div>
+        
+        
+      </div>
+    </div></div></div></div>
       </div>
       <div class="col">
-        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~68 tokens</span></div>
-        <pre class="md-pre"><b>Upcoming</b>
+        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~59 tokens</span></div>
+        <pre class="md-pre"><b>Upcoming</b> · 4 events
 
-• <b>May 2 at 10:00 AM → 10:15 AM</b> — Daily standup
-• <b>May 2 at 1:00 PM → 2:00 PM</b> — Sales review · Q2 · Conf Room 3
-• <b>May 2 at 3:30 PM → 4:00 PM</b> — Customer call · Zoom
-• <b>May 4, 2026</b> — Off-site</pre>
+• <b>May 2 at 10:00 AM</b> — Daily standup
+• <b>May 2 at 1:00 PM</b> — Sales review · Q2 · Conf Room 3
+• <b>May 2 at 3:30 PM</b> — Customer call · Zoom
+• <b>May 4</b> — Off-site</pre>
       </div>
     </div>
     <div class="card-head" style="border-top:1px solid var(--border);border-bottom:none;background:var(--bg)">
@@ -818,7 +927,7 @@ _first:_ Jordan Lee (Director of Ops)</div>
   <div class="size-cell icon">
     <div class="size-label">
       <span>icon</span>
-      <span class="size-tokens">~7 tokens</span>
+      <span class="size-tokens">~5 tokens</span>
     </div>
     <div class="ws-app-icon">
     <div class="ws-app-tile" style="background:linear-gradient(160deg,#ff3b30 0%,#d92520 100%);color:#fff">
@@ -829,7 +938,7 @@ _first:_ Jordan Lee (Director of Ops)</div>
     </div>
     <div class="ws-app-name">Events</div>
   </div>
-    <div class="md-mini" style="margin-top:8px">📅 Events · 4 upcoming</div>
+    <div class="md-mini" style="margin-top:8px">🔴 <b>Events</b> · 4</div>
   </div>
 
   <div class="size-cell small">
@@ -837,102 +946,119 @@ _first:_ Jordan Lee (Director of Ops)</div>
       <span>small</span>
       <span class="size-tokens">~9 tokens</span>
     </div>
-    <div class="ws-small">
-          <div class="ws-small-head"><div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ff3b30 0%,#d92520 100%);color:#fff">
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ff3b30 0%,#d92520 100%);color:#fff">
     <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>
     </svg></div>
-  </div><span>Next up</span></div>
-          <div class="ws-small-body">
-            <div class="ws-small-title">Off-site</div>
-            <div class="ws-small-sub">all day</div>
-          </div>
-        </div>
-    <div class="md-mini" style="margin-top:8px"><b>Next event</b> — 7:00 AM · <b>Off-site</b></div>
+  </div>
+      <span class="ws-stack-title">Next up</span>
+      
+    </div><div class="ws-stack-body"><div class="ws-list ws-list--vertical"><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Off-site</span>
+        
+      </div>
+      <div class="ws-li-sub">all day</div>
+      
+    </li></ul></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>Next up</b>
+
+• <b>Off-site</b> — all day</div>
   </div>
 
   <div class="size-cell medium">
     <div class="size-label">
       <span>medium</span>
-      <span class="size-tokens">~68 tokens</span>
+      <span class="size-tokens">~59 tokens</span>
     </div>
-    <div class="ws-cal"><div class="ws-title">Upcoming</div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 2 at 10:00 AM → 10:15 AM</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Daily standup</div>
-          
-          
-        </div>
-      </div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 2 at 1:00 PM → 2:00 PM</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Sales review · Q2</div>
-          <div class="ws-cal-loc">📍 Conf Room 3</div>
-          
-        </div>
-      </div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 2 at 3:30 PM → 4:00 PM</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Customer call</div>
-          <div class="ws-cal-loc">📍 Zoom</div>
-          
-        </div>
-      </div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 4, 2026</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Off-site</div>
-          
-          
-        </div>
-      </div></div>
-    <div class="md-mini" style="margin-top:8px"><b>Upcoming</b>
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ff3b30 0%,#d92520 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Upcoming</span>
+      <span class="ws-stack-meta">4 events</span>
+    </div><div class="ws-stack-body"><div class="ws-cal"><div class="ws-cal-row">
+      <div class="ws-cal-time">May 2 at 10:00 AM → 10:15 AM</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Daily standup</div>
+        
+        
+      </div>
+    </div><div class="ws-cal-row">
+      <div class="ws-cal-time">May 2 at 1:00 PM → 2:00 PM</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Sales review · Q2</div>
+        <div class="ws-cal-loc">📍 Conf Room 3</div>
+        
+      </div>
+    </div><div class="ws-cal-row">
+      <div class="ws-cal-time">May 2 at 3:30 PM → 4:00 PM</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Customer call</div>
+        <div class="ws-cal-loc">📍 Zoom</div>
+        
+      </div>
+    </div><div class="ws-cal-row">
+      <div class="ws-cal-time">May 4, 2026</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Off-site</div>
+        
+        
+      </div>
+    </div></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>Upcoming</b> · 4 events
 
-• <b>May 2 at 10:00 AM → 10:15 AM</b> — Daily standup
-• <b>May 2 at 1:00 PM → 2:00 PM</b> — Sales review · Q2 · Conf Room 3
-• <b>May 2 at 3:30 PM → 4:00 PM</b> — Customer call · Zoom
-• <b>May 4, 2026</b> — Off-site</div>
+• <b>May 2 at 10:00 AM</b> — Daily standup
+• <b>May 2 at 1:00 PM</b> — Sales review · Q2 · Conf Room 3
+• <b>May 2 at 3:30 PM</b> — Customer call · Zoom
+• <b>May 4</b> — Off-site</div>
   </div>
 
   <div class="size-cell large">
     <div class="size-label">
       <span>large</span>
-      <span class="size-tokens">~68 tokens</span>
+      <span class="size-tokens">~55 tokens</span>
     </div>
     <div class="ws-cal"><div class="ws-title">Upcoming</div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 2 at 10:00 AM → 10:15 AM</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Daily standup</div>
-          
-          <div class="ws-cal-att">alice@team, bob@team</div>
-        </div>
-      </div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 2 at 1:00 PM → 2:00 PM</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Sales review · Q2</div>
-          <div class="ws-cal-loc">📍 Conf Room 3</div>
-          
-        </div>
-      </div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 2 at 3:30 PM → 4:00 PM</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Customer call</div>
-          <div class="ws-cal-loc">📍 Zoom</div>
-          
-        </div>
-      </div><div class="ws-cal-row">
-        <div class="ws-cal-time">May 4, 2026</div>
-        <div class="ws-cal-body">
-          <div class="ws-cal-title">Off-site</div>
-          
-          
-        </div>
-      </div></div>
+      <div class="ws-cal-time">May 2 at 10:00 AM → 10:15 AM</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Daily standup</div>
+        
+        <div class="ws-cal-att">alice@team, bob@team</div>
+      </div>
+    </div><div class="ws-cal-row">
+      <div class="ws-cal-time">May 2 at 1:00 PM → 2:00 PM</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Sales review · Q2</div>
+        <div class="ws-cal-loc">📍 Conf Room 3</div>
+        
+      </div>
+    </div><div class="ws-cal-row">
+      <div class="ws-cal-time">May 2 at 3:30 PM → 4:00 PM</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Customer call</div>
+        <div class="ws-cal-loc">📍 Zoom</div>
+        
+      </div>
+    </div><div class="ws-cal-row">
+      <div class="ws-cal-time">May 4, 2026</div>
+      <div class="ws-cal-body">
+        <div class="ws-cal-title">Off-site</div>
+        
+        
+      </div>
+    </div></div>
     <div class="md-mini" style="margin-top:8px"><b>Upcoming</b>
 
-• <b>May 2 at 10:00 AM → 10:15 AM</b> — Daily standup
-• <b>May 2 at 1:00 PM → 2:00 PM</b> — Sales review · Q2 · Conf Room 3
-• <b>May 2 at 3:30 PM → 4:00 PM</b> — Customer call · Zoom
-• <b>May 4, 2026</b> — Off-site</div>
+• <b>May 2 at 10:00 AM</b> — Daily standup
+• <b>May 2 at 1:00 PM</b> — Sales review · Q2 · Conf Room 3
+• <b>May 2 at 3:30 PM</b> — Customer call · Zoom
+• <b>May 4</b> — Off-site</div>
   </div>
 
       </div>
@@ -955,28 +1081,34 @@ _first:_ Jordan Lee (Director of Ops)</div>
     <div class="split">
       <div class="col">
         <div class="col-label">HTML · medium</div>
-        <div class="ws-grid-3">
-          <div class="ws-metric">
-      <div class="ws-metric-value">1</div>
-      <div class="ws-metric-label">In progress</div>
+        <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ff9500 0%,#e07700 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Sprint board</span>
       
-    </div>
-          <div class="ws-metric">
-      <div class="ws-metric-value">1</div>
-      <div class="ws-metric-label">Done</div>
-      
-    </div>
-          <div class="ws-metric">
-      <div class="ws-metric-value">1</div>
-      <div class="ws-metric-label">Blocked</div>
-      
-    </div>
-        </div>
-        <div class="ws-table"><table><thead><tr><th>Title</th><th>Status</th><th>Assignee</th></tr></thead><tbody><tr><td>Wire up scene-bench AB adapter</td><td>done</td><td>alice</td></tr><tr><td>Add canonical types to scene-state</td><td>in_progress</td><td>bob</td></tr><tr><td>Land daslab.dev/labs page</td><td>todo</td><td>alice</td></tr><tr><td>iOS scene viewer: image card aspect bug</td><td>blocked</td><td>carol</td></tr></tbody></table></div>
+    </div><div class="ws-stack-body"><div class="ws-grid-3"><div class="ws-metric">
+    <div class="ws-metric-value">1</div>
+    <div class="ws-metric-label">In progress</div>
+    
+  </div><div class="ws-metric">
+    <div class="ws-metric-value">1</div>
+    <div class="ws-metric-label">Done</div>
+    
+  </div><div class="ws-metric">
+    <div class="ws-metric-value">1</div>
+    <div class="ws-metric-label">Blocked</div>
+    
+  </div></div><div class="ws-table"><table><thead><tr><th>Title</th><th>Status</th><th>Assignee</th></tr></thead><tbody><tr><td>Wire up scene-bench AB adapter</td><td>done</td><td>alice</td></tr><tr><td>Add canonical types to scene-state</td><td>in_progress</td><td>bob</td></tr><tr><td>Land daslab.dev/labs page</td><td>todo</td><td>alice</td></tr><tr><td>iOS scene viewer: image card aspect bug</td><td>blocked</td><td>carol</td></tr></tbody></table></div></div></div>
       </div>
       <div class="col">
-        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~79 tokens</span></div>
-        <pre class="md-pre"><b>Tasks</b>
+        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~92 tokens</span></div>
+        <pre class="md-pre"><b>Sprint board</b>
+
+<b>In progress</b>: 1 · <b>Done</b>: 1 · <b>Blocked</b>: 1
 
 | Title | Status | Assignee |
 | --- | --- | --- |
@@ -995,7 +1127,7 @@ _first:_ Jordan Lee (Director of Ops)</div>
   <div class="size-cell icon">
     <div class="size-label">
       <span>icon</span>
-      <span class="size-tokens">~7 tokens</span>
+      <span class="size-tokens">~5 tokens</span>
     </div>
     <div class="ws-app-icon">
     <div class="ws-app-tile" style="background:linear-gradient(160deg,#ff9500 0%,#e07700 100%);color:#fff">
@@ -1006,7 +1138,7 @@ _first:_ Jordan Lee (Director of Ops)</div>
     </div>
     <div class="ws-app-name">Tasks</div>
   </div>
-    <div class="md-mini" style="margin-top:8px">✓ Tasks · 2 open</div>
+    <div class="md-mini" style="margin-top:8px">🟠 <b>Tasks</b> · 2</div>
   </div>
 
   <div class="size-cell small">
@@ -1014,84 +1146,103 @@ _first:_ Jordan Lee (Director of Ops)</div>
       <span>small</span>
       <span class="size-tokens">~16 tokens</span>
     </div>
-    <div class="ws-small">
-          <div class="ws-small-head"><div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ff9500 0%,#e07700 100%);color:#fff">
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ff9500 0%,#e07700 100%);color:#fff">
     <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
     </svg></div>
-  </div><span>Tasks</span></div>
-          <div class="ws-small-body">
-            <div class="ws-small-title">1 in progress · 1 done</div>
-            <div class="ws-small-sub" style="color:var(--red,#ef4444)">1 blocked</div>
-          </div>
-        </div>
-    <div class="md-mini" style="margin-top:8px"><b>Tasks</b> · 1 in progress · 1 done · ⚠️ 1 blocked</div>
+  </div>
+      <span class="ws-stack-title">Tasks</span>
+      
+    </div><div class="ws-stack-body"><div class="ws-list ws-list--vertical"><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">1 in progress · 1 done</span>
+        
+      </div>
+      <div class="ws-li-sub">⚠️ 1 blocked</div>
+      
+    </li></ul></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>Tasks</b>
+
+• <b>1 in progress · 1 done</b> — ⚠️ 1 blocked</div>
   </div>
 
   <div class="size-cell medium">
     <div class="size-label">
       <span>medium</span>
-      <span class="size-tokens">~79 tokens</span>
+      <span class="size-tokens">~92 tokens</span>
     </div>
-    <div class="ws-grid-3">
-          <div class="ws-metric">
-      <div class="ws-metric-value">1</div>
-      <div class="ws-metric-label">In progress</div>
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ff9500 0%,#e07700 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Sprint board</span>
       
-    </div>
-          <div class="ws-metric">
-      <div class="ws-metric-value">1</div>
-      <div class="ws-metric-label">Done</div>
-      
-    </div>
-          <div class="ws-metric">
-      <div class="ws-metric-value">1</div>
-      <div class="ws-metric-label">Blocked</div>
-      
-    </div>
-        </div>
-        <div class="ws-table"><table><thead><tr><th>Title</th><th>Status</th><th>Assignee</th></tr></thead><tbody><tr><td>Wire up scene-bench AB adapter</td><td>done</td><td>alice</td></tr><tr><td>Add canonical types to scene-state</td><td>in_progress</td><td>bob</td></tr><tr><td>Land daslab.dev/labs page</td><td>todo</td><td>alice</td></tr><tr><td>iOS scene viewer: image card aspect bug</td><td>blocked</td><td>carol</td></tr></tbody></table></div>
-    <div class="md-mini" style="margin-top:8px"><b>Tasks</b>
+    </div><div class="ws-stack-body"><div class="ws-grid-3"><div class="ws-metric">
+    <div class="ws-metric-value">1</div>
+    <div class="ws-metric-label">In progress</div>
+    
+  </div><div class="ws-metric">
+    <div class="ws-metric-value">1</div>
+    <div class="ws-metric-label">Done</div>
+    
+  </div><div class="ws-metric">
+    <div class="ws-metric-value">1</div>
+    <div class="ws-metric-label">Blocked</div>
+    
+  </div></div><div class="ws-table"><table><thead><tr><th>Title</th><th>Status</th><th>Assignee</th></tr></thead><tbody><tr><td>Wire up scene-bench AB adapter</td><td>done</td><td>alice</td></tr><tr><td>Add canonical types to scene-state</td><td>in_progress</td><td>bob</td></tr><tr><td>Land daslab.dev/labs page</td><td>todo</td><td>alice</td></tr><tr><td>iOS scene viewer: image card aspect bug</td><td>blocked</td><td>carol</td></tr></tbody></table></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>Sprint board</b>
+
+<b>In progress</b>: 1 · <b>Done</b>: 1 · <b>Blocked</b>: 1
 
 | Title | Status | Assignee |
 | --- | --- | --- |
 | Wire up scene-bench AB adapter | done | alice |
 | Add canonical types to scene-state | in_progress | bob |
-| Land daslab.dev/labs page | todo | alice |
-| iOS scene viewer: image…</div>
+| Land dasla…</div>
   </div>
 
   <div class="size-cell large">
     <div class="size-label">
       <span>large</span>
-      <span class="size-tokens">~79 tokens</span>
+      <span class="size-tokens">~109 tokens</span>
     </div>
-    <div class="ws-grid-3">
-          <div class="ws-metric">
-      <div class="ws-metric-value">1</div>
-      <div class="ws-metric-label">In progress</div>
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ff9500 0%,#e07700 100%);color:#fff">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Sprint board</span>
       
-    </div>
-          <div class="ws-metric">
-      <div class="ws-metric-value">1</div>
-      <div class="ws-metric-label">Done</div>
-      
-    </div>
-          <div class="ws-metric">
-      <div class="ws-metric-value">1</div>
-      <div class="ws-metric-label">Blocked</div>
-      
-    </div>
-        </div>
-        <div class="ws-table"><div class="ws-title">Tasks</div><table><thead><tr><th>Title</th><th>Status</th><th>Assignee</th><th>Priority</th></tr></thead><tbody><tr><td>Wire up scene-bench AB adapter</td><td>done</td><td>alice</td><td>high</td></tr><tr><td>Add canonical types to scene-state</td><td>in_progress</td><td>bob</td><td>high</td></tr><tr><td>Land daslab.dev/labs page</td><td>todo</td><td>alice</td><td>medium</td></tr><tr><td>iOS scene viewer: image card aspect bug</td><td>blocked</td><td>carol</td><td>medium</td></tr></tbody></table></div>
-    <div class="md-mini" style="margin-top:8px"><b>Tasks</b>
+    </div><div class="ws-stack-body"><div class="ws-grid-3"><div class="ws-metric">
+    <div class="ws-metric-value">1</div>
+    <div class="ws-metric-label">In progress</div>
+    
+  </div><div class="ws-metric">
+    <div class="ws-metric-value">1</div>
+    <div class="ws-metric-label">Done</div>
+    
+  </div><div class="ws-metric">
+    <div class="ws-metric-value">1</div>
+    <div class="ws-metric-label">Blocked</div>
+    
+  </div></div><div class="ws-table"><div class="ws-title">Tasks</div><table><thead><tr><th>Title</th><th>Status</th><th>Assignee</th><th>Priority</th></tr></thead><tbody><tr><td>Wire up scene-bench AB adapter</td><td>done</td><td>alice</td><td>high</td></tr><tr><td>Add canonical types to scene-state</td><td>in_progress</td><td>bob</td><td>high</td></tr><tr><td>Land daslab.dev/labs page</td><td>todo</td><td>alice</td><td>medium</td></tr><tr><td>iOS scene viewer: image card aspect bug</td><td>blocked</td><td>carol</td><td>medium</td></tr></tbody></table></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>Sprint board</b>
 
-| Title | Status | Assignee |
-| --- | --- | --- |
-| Wire up scene-bench AB adapter | done | alice |
-| Add canonical types to scene-state | in_progress | bob |
-| Land daslab.dev/labs page | todo | alice |
-| iOS scene viewer: image…</div>
+<b>In progress</b>: 1 · <b>Done</b>: 1 · <b>Blocked</b>: 1
+
+<b>Tasks</b>
+
+| Title | Status | Assignee | Priority |
+| --- | --- | --- | --- |
+| Wire up scene-bench AB adapter | done | alice | high |
+| Add canonical types to scene-state…</div>
   </div>
 
       </div>
@@ -1114,19 +1265,30 @@ _first:_ Jordan Lee (Director of Ops)</div>
     <div class="split">
       <div class="col">
         <div class="col-label">HTML · medium</div>
-        <div class="ws-doc">
-      <div class="ws-doc-title">Q2 launch plan</div>
-      <div class="ws-doc-byline">ops team</div>
-      <div class="ws-doc-meta">modified 2026-04-30</div>
-      <div class="ws-doc-body">Overview
+        <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ffcc00 0%,#e0a800 100%);color:#3a2a00">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Featured page</span>
+      
+    </div><div class="ws-stack-body"><div class="ws-doc">
+    <div class="ws-doc-title">Q2 launch plan</div>
+    <div class="ws-doc-byline">ops team</div>
+    <div class="ws-doc-meta">modified 2026-04-30</div>
+    <div class="ws-doc-body">Overview
 
 We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench integration to production with belief-vs-truth scoring.</div>
-      <div class="ws-doc-stats">39 words · ~1 min read</div>
-    </div>
+    <div class="ws-doc-stats">39 words · ~1 min</div>
+  </div></div></div>
       </div>
       <div class="col">
-        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~60 tokens</span></div>
-        <pre class="md-pre"><span class="h">### Q2 launch plan</span>
+        <div class="col-label">Markdown · medium <span style="color:var(--accent);font-weight:500">~63 tokens</span></div>
+        <pre class="md-pre"><b>Featured page</b>
+
+<span class="h">### Q2 launch plan</span>
 
 _ops team_
 
@@ -1155,72 +1317,116 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
     </div>
     <div class="ws-app-name">Docs</div>
   </div>
-    <div class="md-mini" style="margin-top:8px">📓 Docs · 3</div>
+    <div class="md-mini" style="margin-top:8px">🟡 <b>Docs</b> · 3</div>
   </div>
 
   <div class="size-cell small">
     <div class="size-label">
       <span>small</span>
-      <span class="size-tokens">~12 tokens</span>
+      <span class="size-tokens">~11 tokens</span>
     </div>
-    <div class="ws-small">
-          <div class="ws-small-head"><div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ffcc00 0%,#e0a800 100%);color:#3a2a00">
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ffcc00 0%,#e0a800 100%);color:#3a2a00">
     <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/>
     </svg></div>
-  </div><span>3 pages</span></div>
-          <div class="ws-small-body">
-            <div class="ws-small-title">Q2 launch plan</div>
-            <div class="ws-small-sub">2026-04-30</div>
-          </div>
-        </div>
-    <div class="md-mini" style="margin-top:8px"><b>Docs</b> · 3 pages
-_latest:_ &quot;Q2 launch plan&quot; (2026-04-30)</div>
+  </div>
+      <span class="ws-stack-title">3 pages</span>
+      
+    </div><div class="ws-stack-body"><div class="ws-list ws-list--vertical"><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Q2 launch plan</span>
+        
+      </div>
+      <div class="ws-li-sub">2026-04-30</div>
+      
+    </li></ul></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>3 pages</b>
+
+• <b>Q2 launch plan</b> — 2026-04-30</div>
   </div>
 
   <div class="size-cell medium">
     <div class="size-label">
       <span>medium</span>
-      <span class="size-tokens">~60 tokens</span>
+      <span class="size-tokens">~63 tokens</span>
     </div>
-    <div class="ws-doc">
-      <div class="ws-doc-title">Q2 launch plan</div>
-      <div class="ws-doc-byline">ops team</div>
-      <div class="ws-doc-meta">modified 2026-04-30</div>
-      <div class="ws-doc-body">Overview
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ffcc00 0%,#e0a800 100%);color:#3a2a00">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Featured page</span>
+      
+    </div><div class="ws-stack-body"><div class="ws-doc">
+    <div class="ws-doc-title">Q2 launch plan</div>
+    <div class="ws-doc-byline">ops team</div>
+    <div class="ws-doc-meta">modified 2026-04-30</div>
+    <div class="ws-doc-body">Overview
 
 We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench integration to production with belief-vs-truth scoring.</div>
-      <div class="ws-doc-stats">39 words · ~1 min read</div>
-    </div>
-    <div class="md-mini" style="margin-top:8px"><span class="h">### Q2 launch plan</span>
+    <div class="ws-doc-stats">39 words · ~1 min</div>
+  </div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>Featured page</b>
+
+<span class="h">### Q2 launch plan</span>
 
 _ops team_
 
 Overview
 
-We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench integration to produ…</div>
+We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench i…</div>
   </div>
 
   <div class="size-cell large">
     <div class="size-label">
       <span>large</span>
-      <span class="size-tokens">~72 tokens</span>
+      <span class="size-tokens">~81 tokens</span>
     </div>
-    <div class="ws-doc">
-      <div class="ws-doc-title">Q2 launch plan</div>
-      <div class="ws-doc-byline">ops team</div>
-      <div class="ws-doc-meta">modified 2026-04-30</div>
-      <div class="ws-doc-body">Overview
+    <div class="ws-stack ws-stack--vertical">
+    <div class="ws-stack-head">
+      <div class="ws-app-tile ws-app-tile--chip" style="background:linear-gradient(160deg,#ffcc00 0%,#e0a800 100%);color:#3a2a00">
+    <div class="ws-app-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/>
+    </svg></div>
+  </div>
+      <span class="ws-stack-title">Featured page</span>
+      
+    </div><div class="ws-stack-body"><div class="ws-doc">
+    <div class="ws-doc-title">Q2 launch plan</div>
+    <div class="ws-doc-byline">ops team</div>
+    <div class="ws-doc-meta">modified 2026-04-30</div>
+    <div class="ws-doc-body">Overview
 
 We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench integration to production with belief-vs-truth scoring.</div>
-      <div class="ws-doc-stats">39 words · ~1 min read</div>
-    </div>
-        <div class="ws-list" style="margin-top:16px"><div class="ws-title">More pages</div><ul><li class="ws-li"><div class="ws-li-title">On-call runbook</div><div class="ws-li-sub">2026-04-29</div></li><li class="ws-li"><div class="ws-li-title">Customer feedback · April</div><div class="ws-li-sub">2026-04-28</div></li></ul></div>
-    <div class="md-mini" style="margin-top:8px"><span class="h">### Q2 launch plan</span>
+    <div class="ws-doc-stats">39 words · ~1 min</div>
+  </div><div class="ws-list ws-list--vertical"><div class="ws-title">More pages</div><ul><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">On-call runbook</span>
+        
+      </div>
+      <div class="ws-li-sub">2026-04-29</div>
+      
+    </li><li class="ws-li">
+      <div class="ws-li-row">
+        <span class="ws-li-title">Customer feedback · April</span>
+        
+      </div>
+      <div class="ws-li-sub">2026-04-28</div>
+      
+    </li></ul></div></div></div>
+    <div class="md-mini" style="margin-top:8px"><b>Featured page</b>
+
+<span class="h">### Q2 launch plan</span>
+
+_ops team_
 
 Overview
 
-We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench integration to production with b…</div>
+We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers the core SDK; phase 2 (May 20) adds the visual scrubber; phase 3 (June 3) brings the AutomationBench i…</div>
   </div>
 
       </div>

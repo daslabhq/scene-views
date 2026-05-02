@@ -6,9 +6,9 @@
  */
 
 import { defineAsset } from "../asset.js";
-import { CalendarView, type CalendarProps } from "../views/primitives.js";
-import { defineView, escapeHtml } from "../view.js";
-import { appIcon, appIconChip, ICONS } from "../views/heroicons.js";
+import { defineView } from "../view.js";
+import { ICONS } from "../views/heroicons.js";
+import type { WidgetData } from "../widgets.js";
 
 export interface CalendarEventRecord {
   id:         string;
@@ -41,51 +41,49 @@ function shortTime(iso: string): string {
 const UpcomingView = defineView<CalendarEventsState>({
   name: "UpcomingEvents",
   sizes: {
-    icon: (s) => ({
-      html: appIcon({ name: "Events", glyph: ICONS.calendar, color: "red", badge: s.events.length || undefined }),
-      markdown: `📅 Events · ${s.events.length} upcoming`,
+    icon: (s): WidgetData => ({
+      type: "icon",
+      glyph: ICONS.calendar,
+      color: "red",
+      label: "Events",
+      badge: s.events.length || undefined,
     }),
-    small: (s) => {
+
+    small: (s): WidgetData => {
       const next = nextEvent(s);
       return {
-        html: `<div class="ws-small">
-          <div class="ws-small-head">${appIconChip({ glyph: ICONS.calendar, color: "red" })}<span>Next up</span></div>
-          ${next ? `<div class="ws-small-body">
-            <div class="ws-small-title">${escapeHtml(next.title)}</div>
-            <div class="ws-small-sub">${escapeHtml(next.allDay ? "all day" : shortTime(next.startsAt))}${next.location ? ` · ${escapeHtml(next.location)}` : ""}</div>
-          </div>` : `<div class="ws-empty">no events</div>`}
-        </div>`,
-        markdown: next
-          ? `**Next event** — ${shortTime(next.startsAt)} · **${next.title}**${next.location ? ` (${next.location})` : ""}`
-          : "**No upcoming events**",
+        type: "stack",
+        header: { glyph: ICONS.calendar, color: "red", title: "Next up" },
+        body: next ? [{
+          type: "list",
+          items: [{
+            title: next.title,
+            subtitle: `${next.allDay ? "all day" : shortTime(next.startsAt)}${next.location ? ` · ${next.location}` : ""}`,
+          }],
+        }] : [{ type: "empty", message: "no events" }],
       };
     },
-    medium: (s) => {
-      const props: CalendarProps = {
-        title: "Upcoming",
+
+    medium: (s): WidgetData => ({
+      type: "stack",
+      header: { glyph: ICONS.calendar, color: "red", title: "Upcoming", meta: `${s.events.length} events` },
+      body: [{
+        type: "calendar",
         events: s.events.slice(0, 4).map(e => ({
-          title: e.title, start: e.startsAt, end: e.endsAt,
+          title: e.title, startsAt: e.startsAt, endsAt: e.endsAt,
           location: e.location, allDay: e.allDay,
         })),
-      };
-      return {
-        html: CalendarView.toHTML(props),
-        markdown: CalendarView.toMarkdown(props),
-      };
-    },
-    large: (s) => {
-      const props: CalendarProps = {
-        title: "Upcoming",
-        events: s.events.map(e => ({
-          title: e.title, start: e.startsAt, end: e.endsAt,
-          location: e.location, attendees: e.attendees, allDay: e.allDay,
-        })),
-      };
-      return {
-        html: CalendarView.toHTML(props),
-        markdown: CalendarView.toMarkdown(props),
-      };
-    },
+      }],
+    }),
+
+    large: (s): WidgetData => ({
+      type: "calendar",
+      title: "Upcoming",
+      events: s.events.map(e => ({
+        title: e.title, startsAt: e.startsAt, endsAt: e.endsAt,
+        location: e.location, attendees: e.attendees, allDay: e.allDay,
+      })),
+    }),
   },
 });
 

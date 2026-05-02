@@ -5,9 +5,9 @@
  */
 
 import { defineAsset } from "../asset.js";
-import { defineView, escapeHtml, truncate } from "../view.js";
-import { ListView } from "../views/primitives.js";
-import { appIcon, appIconChip, ICONS } from "../views/heroicons.js";
+import { defineView, truncate } from "../view.js";
+import { ICONS } from "../views/heroicons.js";
+import type { WidgetData } from "../widgets.js";
 
 export interface ChatMessage {
   id:        string;
@@ -31,43 +31,43 @@ function groupByChannel(s: MessageState): Map<string, ChatMessage[]> {
 const ActivityView = defineView<MessageState>({
   name: "MessagingActivity",
   sizes: {
-    icon: (s) => {
-      const total = s.messages.length;
-      return {
-        html: appIcon({ name: "Chat", glyph: ICONS.chat, color: "green", badge: total || undefined }),
-        markdown: `💬 Chat · ${total} message${total === 1 ? "" : "s"}`,
-      };
-    },
-    small: (s) => {
+    icon: (s): WidgetData => ({
+      type: "icon",
+      glyph: ICONS.chat,
+      color: "green",
+      label: "Chat",
+      badge: s.messages.length || undefined,
+    }),
+
+    small: (s): WidgetData => {
       const grouped = groupByChannel(s);
       const top = [...grouped.entries()][0];
       return {
-        html: `<div class="ws-small">
-          <div class="ws-small-head">${appIconChip({ glyph: ICONS.chat, color: "green" })}<span>${grouped.size} active channel${grouped.size === 1 ? "" : "s"}</span></div>
-          ${top ? `<div class="ws-small-body">
-            <div class="ws-small-title">#${escapeHtml(top[0])}</div>
-            <div class="ws-small-sub">${top[1].length} message${top[1].length === 1 ? "" : "s"}</div>
-          </div>` : ""}
-        </div>`,
-        markdown: `**Chat** · ${grouped.size} channel${grouped.size === 1 ? "" : "s"} active${top ? `\n_top:_ #${top[0]} (${top[1].length} msgs)` : ""}`,
+        type: "stack",
+        header: { glyph: ICONS.chat, color: "green", title: `${grouped.size} channel${grouped.size === 1 ? "" : "s"} active` },
+        body: top ? [{
+          type: "list",
+          items: [{ title: `#${top[0]}`, subtitle: `${top[1].length} message${top[1].length === 1 ? "" : "s"}` }],
+        }] : [{ type: "empty", message: "no messages" }],
       };
     },
-    medium: (s) => {
+
+    medium: (s): WidgetData => {
       const grouped = groupByChannel(s);
-      const items = [...grouped.entries()].map(([ch, msgs]) => {
-        const last = msgs[msgs.length - 1];
-        return {
-          title: `#${ch}`,
-          subtitle: `${msgs.length} message${msgs.length === 1 ? "" : "s"}`,
-          detail: last ? `${last.sender}: ${truncate(last.body, 110)}` : "",
-        };
-      });
       return {
-        html: ListView.toHTML({ title: "Recent activity", items }),
-        markdown: [...grouped.entries()].map(([ch, msgs]) =>
-          `**#${ch}** (${msgs.length} messages)\n` +
-          msgs.slice(-2).map(m => `> ${m.sender}: ${truncate(m.body, 100)}`).join("\n")
-        ).join("\n\n"),
+        type: "stack",
+        header: { glyph: ICONS.chat, color: "green", title: "Recent activity", meta: `${grouped.size} channels` },
+        body: [{
+          type: "list",
+          items: [...grouped.entries()].slice(0, 6).map(([ch, msgs]) => {
+            const last = msgs[msgs.length - 1];
+            return {
+              title: `#${ch}`,
+              subtitle: `${msgs.length} message${msgs.length === 1 ? "" : "s"}`,
+              detail: last ? `${last.sender}: ${truncate(last.body, 110)}` : "",
+            };
+          }),
+        }],
       };
     },
   },

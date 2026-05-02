@@ -3,12 +3,15 @@
  *
  * Vendor implementations declare `extends: ["email/mailbox"]`:
  *   Gmail, Outlook, ProtonMail, Fastmail, …
+ *
+ * Each size returns a WidgetData JSON; the framework converts it to
+ * HTML / Markdown / Text. Authors don't write parallel rendering code.
  */
 
 import { defineAsset } from "../asset.js";
-import { defineView, escapeHtml, truncate } from "../view.js";
-import { ListView } from "../views/primitives.js";
-import { appIcon, appIconChip, ICONS } from "../views/heroicons.js";
+import { defineView, truncate } from "../view.js";
+import { ICONS } from "../views/heroicons.js";
+import type { WidgetData } from "../widgets.js";
 
 export interface EmailMessage {
   id:         string;
@@ -29,66 +32,59 @@ const unreadCount = (s: EmailMailboxState) => s.messages.filter(m => m.unread).l
 const InboxView = defineView<EmailMailboxState>({
   name: "EmailInbox",
   sizes: {
-    icon: (s) => {
-      const u = unreadCount(s);
-      return {
-        html: appIcon({ name: "Email", glyph: ICONS.envelope, color: "blue", badge: u || undefined }),
-        markdown: `📧 Email${u ? ` · ${u} unread` : ""}`,
-      };
-    },
-    small: (s) => {
+    icon: (s): WidgetData => ({
+      type: "icon",
+      glyph: ICONS.envelope,
+      color: "blue",
+      label: "Email",
+      badge: unreadCount(s) || undefined,
+    }),
+
+    small: (s): WidgetData => {
       const u = unreadCount(s);
       const top = s.messages.find(m => m.unread) ?? s.messages[0];
       return {
-        html: `<div class="ws-small">
-          <div class="ws-small-head">${appIconChip({ glyph: ICONS.envelope, color: "blue" })}<span>Inbox</span> <span class="ws-small-num">${u} unread</span></div>
-          ${top ? `<div class="ws-small-body">
-            <div class="ws-small-title">${escapeHtml(truncate(top.subject || "(no subject)", 40))}</div>
-            <div class="ws-small-sub">${escapeHtml(top.from)}</div>
-          </div>` : ""}
-        </div>`,
-        markdown: `**Inbox** · ${u} unread${top ? `\n_latest:_ "${truncate(top.subject || "(no subject)", 60)}" — ${top.from}` : ""}`,
+        type: "stack",
+        header: { glyph: ICONS.envelope, color: "blue", title: "Inbox", meta: u ? `${u} unread` : undefined },
+        body: top ? [{
+          type: "list",
+          items: [{
+            title: truncate(top.subject || "(no subject)", 40),
+            subtitle: top.from,
+            badge: top.unread ? "unread" : undefined,
+          }],
+        }] : [{ type: "empty", message: "no messages" }],
       };
     },
-    medium: (s) => {
+
+    medium: (s): WidgetData => {
       const u = unreadCount(s);
       return {
-        html: ListView.toHTML({
-          title: `Inbox · ${s.messages.length} messages${u ? ` · ${u} unread` : ""}`,
-          items: s.messages.slice(0, 6).map(m => ({
-            title: m.subject || "(no subject)",
+        type: "stack",
+        header: { glyph: ICONS.envelope, color: "blue", title: "Inbox", meta: `${s.messages.length} · ${u} unread` },
+        body: [{
+          type: "list",
+          layout: "grid-2",
+          items: s.messages.slice(0, 4).map(m => ({
+            title: truncate(m.subject || "(no subject)", 32),
             subtitle: m.from,
             badge: m.unread ? "unread" : undefined,
           })),
-        }),
-        markdown: ListView.toMarkdown({
-          title: `Inbox (${s.messages.length} msgs, ${u} unread)`,
-          items: s.messages.slice(0, 6).map(m => ({
-            title: m.subject || "(no subject)",
-            subtitle: `from ${m.from}${m.unread ? " · unread" : ""}`,
-          })),
-        }),
+        }],
       };
     },
-    large: (s) => {
+
+    large: (s): WidgetData => {
       const u = unreadCount(s);
       return {
-        html: ListView.toHTML({
-          title: `Inbox · ${s.messages.length} messages${u ? ` · ${u} unread` : ""}`,
-          items: s.messages.slice(0, 20).map(m => ({
-            title: m.subject || "(no subject)",
-            subtitle: m.from,
-            detail: truncate(m.body ?? "", 140),
-            badge: m.unread ? "unread" : undefined,
-          })),
-        }),
-        markdown: ListView.toMarkdown({
-          title: `Inbox (${s.messages.length} msgs, ${u} unread)`,
-          items: s.messages.slice(0, 20).map(m => ({
-            title: m.subject || "(no subject)",
-            subtitle: `from ${m.from}${m.unread ? " · unread" : ""}`,
-          })),
-        }),
+        type: "list",
+        title: `Inbox · ${s.messages.length} messages${u ? ` · ${u} unread` : ""}`,
+        items: s.messages.slice(0, 20).map(m => ({
+          title: m.subject || "(no subject)",
+          subtitle: m.from,
+          detail: truncate(m.body ?? "", 140),
+          badge: m.unread ? "unread" : undefined,
+        })),
       };
     },
   },

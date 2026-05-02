@@ -6,9 +6,9 @@
  */
 
 import { defineAsset } from "../asset.js";
-import { defineView, escapeHtml, truncate } from "../view.js";
-import { appIcon, appIconChip, ICONS } from "../views/heroicons.js";
-import { DocumentView } from "../views/primitives.js";
+import { defineView, truncate } from "../view.js";
+import { ICONS } from "../views/heroicons.js";
+import type { WidgetData } from "../widgets.js";
 
 export interface DocumentRecord {
   id:         string;
@@ -31,55 +31,68 @@ function featured(s: DocumentState): DocumentRecord | undefined {
 const FeaturedDocumentView = defineView<DocumentState>({
   name: "FeaturedDocument",
   sizes: {
-    icon: (s) => ({
-      html: appIcon({ name: "Docs", glyph: ICONS.documentText, color: "yellow", badge: s.documents.length || undefined }),
-      markdown: `📓 Docs · ${s.documents.length}`,
+    icon: (s): WidgetData => ({
+      type: "icon",
+      glyph: ICONS.documentText,
+      color: "yellow",
+      label: "Docs",
+      badge: s.documents.length || undefined,
     }),
-    small: (s) => {
+
+    small: (s): WidgetData => {
       const f = featured(s);
       return {
-        html: `<div class="ws-small">
-          <div class="ws-small-head">${appIconChip({ glyph: ICONS.documentText, color: "yellow" })}<span>${s.documents.length} pages</span></div>
-          ${f ? `<div class="ws-small-body">
-            <div class="ws-small-title">${escapeHtml(truncate(f.title, 36))}</div>
-            <div class="ws-small-sub">${escapeHtml(f.modifiedAt ?? "")}</div>
-          </div>` : ""}
-        </div>`,
-        markdown: f
-          ? `**Docs** · ${s.documents.length} pages\n_latest:_ "${truncate(f.title, 50)}"${f.modifiedAt ? ` (${f.modifiedAt})` : ""}`
-          : `**Docs** · empty`,
+        type: "stack",
+        header: { glyph: ICONS.documentText, color: "yellow", title: `${s.documents.length} pages` },
+        body: f ? [{
+          type: "list",
+          items: [{ title: truncate(f.title, 36), subtitle: f.modifiedAt ?? "" }],
+        }] : [{ type: "empty", message: "no documents" }],
       };
     },
-    medium: (s) => {
+
+    medium: (s): WidgetData => {
       const f = featured(s);
-      if (!f) return { html: `<div class="ws-empty">no documents</div>`, markdown: "(no docs)" };
+      if (!f) return { type: "empty", message: "no documents" };
       return {
-        html: DocumentView.toHTML({
+        type: "stack",
+        header: { glyph: ICONS.documentText, color: "yellow", title: "Featured page" },
+        body: [{
+          type: "document",
           title: f.title,
-          body:  truncate(f.body, 400),
+          body: truncate(f.body, 320),
           byline: f.byline,
-          meta:   f.modifiedAt ? `modified ${f.modifiedAt}` : "",
-        }),
-        markdown: `### ${f.title}\n\n${f.byline ? `_${f.byline}_\n\n` : ""}${truncate(f.body, 300)}`,
+          meta: f.modifiedAt ? `modified ${f.modifiedAt}` : "",
+        }],
       };
     },
-    large: (s) => {
-      const sorted = [...s.documents].sort((a, b) => (b.modifiedAt ?? "").localeCompare(a.modifiedAt ?? ""));
+
+    large: (s): WidgetData => {
+      const sorted = [...s.documents].sort((a, b) =>
+        (b.modifiedAt ?? "").localeCompare(a.modifiedAt ?? "")
+      );
       const f = sorted[0];
-      if (!f) return { html: `<div class="ws-empty">no documents</div>`, markdown: "(no docs)" };
-      const others = sorted.slice(1, 6).map(d =>
-        `<li class="ws-li"><div class="ws-li-title">${escapeHtml(d.title)}</div><div class="ws-li-sub">${escapeHtml(d.modifiedAt ?? "")}</div></li>`
-      ).join("");
+      if (!f) return { type: "empty", message: "no documents" };
       return {
-        html: `${DocumentView.toHTML({
-          title: f.title,
-          body:  f.body,
-          byline: f.byline,
-          meta:   f.modifiedAt ? `modified ${f.modifiedAt}` : "",
-        })}
-        ${others ? `<div class="ws-list" style="margin-top:16px"><div class="ws-title">More pages</div><ul>${others}</ul></div>` : ""}`,
-        markdown: `### ${f.title}\n\n${truncate(f.body, 600)}\n\n---\n\n` +
-          sorted.slice(1, 6).map(d => `- **${d.title}** _(${d.modifiedAt ?? ""})_`).join("\n"),
+        type: "stack",
+        header: { glyph: ICONS.documentText, color: "yellow", title: "Featured page" },
+        body: [
+          {
+            type: "document",
+            title: f.title,
+            body: f.body,
+            byline: f.byline,
+            meta: f.modifiedAt ? `modified ${f.modifiedAt}` : "",
+          },
+          {
+            type: "list",
+            title: "More pages",
+            items: sorted.slice(1, 6).map(d => ({
+              title: d.title,
+              subtitle: d.modifiedAt ?? "",
+            })),
+          },
+        ],
       };
     },
   },
