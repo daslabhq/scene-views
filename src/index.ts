@@ -19,7 +19,15 @@ export {
   escapeHtml,
   stripTags,
   truncate,
+  viewSizeGrid,
   type ViewDef,
+  type ViewDefConfig,
+  type ViewOpts,
+  type ViewSize,
+  type WidgetSize,
+  type SizedMap,
+  type SizedRender,
+  type SizedRenderer,
   type JSONSchema,
 } from "./view.js";
 

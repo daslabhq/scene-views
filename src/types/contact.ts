@@ -6,7 +6,7 @@
  */
 
 import { defineAsset } from "../asset.js";
-import { defineView } from "../view.js";
+import { defineView, escapeHtml } from "../view.js";
 import { TableView } from "../views/primitives.js";
 
 export interface ContactRecord {
@@ -25,28 +25,65 @@ export interface ContactsState {
 
 const ContactListView = defineView<ContactsState>({
   name: "ContactList",
-  toHTML(s) {
-    return TableView.toHTML({
-      title: `${s.contacts.length} contacts`,
-      columns: ["Name", "Email", "Phone", "Title", "Company"],
-      rows: s.contacts.map(c => ({
-        Name:    `${c.firstName} ${c.lastName}`,
-        Email:   c.email ?? "",
-        Phone:   c.phone ?? "",
-        Title:   c.title ?? "",
-        Company: c.company ?? "",
-      })),
-    });
-  },
-  toMarkdown(s) {
-    return TableView.toMarkdown({
-      title: "Contacts",
-      rows: s.contacts.map(c => ({
-        Name:  `${c.firstName} ${c.lastName}`,
-        Email: c.email ?? "",
-        Title: c.title ?? "",
-      })),
-    });
+  sizes: {
+    icon: (s) => ({
+      html: `<div class="ws-app-icon"><div class="ws-app-emoji">👤</div><div class="ws-app-name">Contacts</div>${s.contacts.length ? `<div class="ws-app-badge">${s.contacts.length}</div>` : ""}</div>`,
+      markdown: `👤 Contacts · ${s.contacts.length}`,
+    }),
+    small: (s) => {
+      const top = s.contacts[0];
+      return {
+        html: `<div class="ws-small">
+          <div class="ws-small-head">👤 ${s.contacts.length} contacts</div>
+          ${top ? `<div class="ws-small-body">
+            <div class="ws-small-title">${escapeHtml(top.firstName + " " + top.lastName)}</div>
+            <div class="ws-small-sub">${escapeHtml(top.title ?? top.company ?? top.email ?? "")}</div>
+          </div>` : ""}
+        </div>`,
+        markdown: `**Contacts** · ${s.contacts.length}${top ? `\n_first:_ ${top.firstName} ${top.lastName}${top.title ? ` (${top.title})` : ""}` : ""}`,
+      };
+    },
+    medium: (s) => ({
+      html: TableView.toHTML({
+        title: `${s.contacts.length} contacts`,
+        columns: ["Name", "Email", "Title"],
+        rows: s.contacts.slice(0, 5).map(c => ({
+          Name:  `${c.firstName} ${c.lastName}`,
+          Email: c.email ?? "",
+          Title: c.title ?? "",
+        })),
+      }),
+      markdown: TableView.toMarkdown({
+        title: "Contacts",
+        rows: s.contacts.slice(0, 5).map(c => ({
+          Name:  `${c.firstName} ${c.lastName}`,
+          Title: c.title ?? "",
+          Email: c.email ?? "",
+        })),
+      }),
+    }),
+    large: (s) => ({
+      html: TableView.toHTML({
+        title: `${s.contacts.length} contacts`,
+        columns: ["Name", "Email", "Phone", "Title", "Company"],
+        rows: s.contacts.map(c => ({
+          Name:    `${c.firstName} ${c.lastName}`,
+          Email:   c.email ?? "",
+          Phone:   c.phone ?? "",
+          Title:   c.title ?? "",
+          Company: c.company ?? "",
+        })),
+      }),
+      markdown: TableView.toMarkdown({
+        title: "Contacts",
+        rows: s.contacts.map(c => ({
+          Name:    `${c.firstName} ${c.lastName}`,
+          Email:   c.email ?? "",
+          Title:   c.title ?? "",
+          Company: c.company ?? "",
+        })),
+      }),
+    }),
   },
 });
 

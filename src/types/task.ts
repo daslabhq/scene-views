@@ -6,7 +6,7 @@
  */
 
 import { defineAsset } from "../asset.js";
-import { defineView } from "../view.js";
+import { defineView, escapeHtml } from "../view.js";
 import { TableView, MetricView } from "../views/primitives.js";
 
 export interface TaskRecord {
@@ -22,35 +22,80 @@ export interface TasksState {
   tasks: TaskRecord[];
 }
 
+function counts(s: TasksState) {
+  return {
+    todo:        s.tasks.filter(t => t.status === "todo").length,
+    in_progress: s.tasks.filter(t => t.status === "in_progress").length,
+    done:        s.tasks.filter(t => t.status === "done").length,
+    blocked:     s.tasks.filter(t => t.status === "blocked").length,
+  };
+}
+
 const TaskBoardView = defineView<TasksState>({
   name: "TaskBoard",
-  toHTML(s) {
-    const counts = {
-      todo:        s.tasks.filter(t => t.status === "todo").length,
-      in_progress: s.tasks.filter(t => t.status === "in_progress").length,
-      done:        s.tasks.filter(t => t.status === "done").length,
-      blocked:     s.tasks.filter(t => t.status === "blocked").length,
-    };
-    return `<div class="ws-grid-3">
-      ${MetricView.toHTML({ value: counts.in_progress, label: "In progress" })}
-      ${MetricView.toHTML({ value: counts.done,        label: "Done" })}
-      ${MetricView.toHTML({ value: counts.blocked,     label: "Blocked",
-                            trend: counts.blocked > 0 ? "down" : "flat" })}
-    </div>
-    ${TableView.toHTML({
-      title: "Tasks",
-      columns: ["Title", "Status", "Assignee", "Priority"],
-      rows: s.tasks.map(t => ({
-        Title: t.title, Status: t.status,
-        Assignee: t.assignee ?? "—", Priority: t.priority ?? "—",
-      })),
-    })}`;
-  },
-  toMarkdown(s) {
-    return TableView.toMarkdown({
-      title: "Tasks",
-      rows: s.tasks.map(t => ({ Title: t.title, Status: t.status, Assignee: t.assignee ?? "—" })),
-    });
+  sizes: {
+    icon: (s) => {
+      const c = counts(s);
+      const open = c.todo + c.in_progress;
+      return {
+        html: `<div class="ws-app-icon"><div class="ws-app-emoji">✓</div><div class="ws-app-name">Tasks</div>${open ? `<div class="ws-app-badge">${open}</div>` : ""}</div>`,
+        markdown: `✓ Tasks · ${open} open`,
+      };
+    },
+    small: (s) => {
+      const c = counts(s);
+      return {
+        html: `<div class="ws-small">
+          <div class="ws-small-head">✓ Tasks</div>
+          <div class="ws-small-body">
+            <div class="ws-small-title">${c.in_progress} in progress · ${c.done} done</div>
+            ${c.blocked ? `<div class="ws-small-sub" style="color:var(--red,#ef4444)">${c.blocked} blocked</div>` : `<div class="ws-small-sub">${c.todo} to do</div>`}
+          </div>
+        </div>`,
+        markdown: `**Tasks** · ${c.in_progress} in progress · ${c.done} done${c.blocked ? ` · ⚠️ ${c.blocked} blocked` : ""}`,
+      };
+    },
+    medium: (s) => {
+      const c = counts(s);
+      return {
+        html: `<div class="ws-grid-3">
+          ${MetricView.toHTML({ value: c.in_progress, label: "In progress" })}
+          ${MetricView.toHTML({ value: c.done,        label: "Done" })}
+          ${MetricView.toHTML({ value: c.blocked,     label: "Blocked", trend: c.blocked > 0 ? "down" : "flat" })}
+        </div>
+        ${TableView.toHTML({
+          rows: s.tasks.slice(0, 4).map(t => ({
+            Title: t.title, Status: t.status, Assignee: t.assignee ?? "—",
+          })),
+        })}`,
+        markdown: TableView.toMarkdown({
+          title: "Tasks",
+          rows: s.tasks.slice(0, 6).map(t => ({ Title: t.title, Status: t.status, Assignee: t.assignee ?? "—" })),
+        }),
+      };
+    },
+    large: (s) => {
+      const c = counts(s);
+      return {
+        html: `<div class="ws-grid-3">
+          ${MetricView.toHTML({ value: c.in_progress, label: "In progress" })}
+          ${MetricView.toHTML({ value: c.done,        label: "Done" })}
+          ${MetricView.toHTML({ value: c.blocked,     label: "Blocked", trend: c.blocked > 0 ? "down" : "flat" })}
+        </div>
+        ${TableView.toHTML({
+          title: "Tasks",
+          columns: ["Title", "Status", "Assignee", "Priority"],
+          rows: s.tasks.map(t => ({
+            Title: t.title, Status: t.status,
+            Assignee: t.assignee ?? "—", Priority: t.priority ?? "—",
+          })),
+        })}`,
+        markdown: TableView.toMarkdown({
+          title: "Tasks",
+          rows: s.tasks.map(t => ({ Title: t.title, Status: t.status, Assignee: t.assignee ?? "—" })),
+        }),
+      };
+    },
   },
 });
 

@@ -7,7 +7,7 @@
 
 import { defineAsset } from "../asset.js";
 import { CalendarView, type CalendarProps } from "../views/primitives.js";
-import { defineView } from "../view.js";
+import { defineView, escapeHtml } from "../view.js";
 
 export interface CalendarEventRecord {
   id:         string;
@@ -23,26 +23,68 @@ export interface CalendarEventsState {
   events: CalendarEventRecord[];
 }
 
+function nextEvent(s: CalendarEventsState): CalendarEventRecord | undefined {
+  const now = Date.now();
+  return [...s.events]
+    .filter(e => new Date(e.startsAt).getTime() >= now)
+    .sort((a, b) => a.startsAt.localeCompare(b.startsAt))[0]
+    ?? s.events[0];
+}
+
+function shortTime(iso: string): string {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+}
+
 const UpcomingView = defineView<CalendarEventsState>({
   name: "UpcomingEvents",
-  toHTML(s) {
-    const props: CalendarProps = {
-      title: "Upcoming",
-      events: s.events.map(e => ({
-        title: e.title, start: e.startsAt, end: e.endsAt,
-        location: e.location, attendees: e.attendees, allDay: e.allDay,
-      })),
-    };
-    return CalendarView.toHTML(props);
-  },
-  toMarkdown(s) {
-    return CalendarView.toMarkdown({
-      title: "Upcoming",
-      events: s.events.map(e => ({
-        title: e.title, start: e.startsAt, end: e.endsAt,
-        location: e.location, attendees: e.attendees, allDay: e.allDay,
-      })),
-    });
+  sizes: {
+    icon: (s) => ({
+      html: `<div class="ws-app-icon"><div class="ws-app-emoji">📅</div><div class="ws-app-name">Events</div>${s.events.length ? `<div class="ws-app-badge">${s.events.length}</div>` : ""}</div>`,
+      markdown: `📅 Events · ${s.events.length} upcoming`,
+    }),
+    small: (s) => {
+      const next = nextEvent(s);
+      return {
+        html: `<div class="ws-small">
+          <div class="ws-small-head">📅 Next up</div>
+          ${next ? `<div class="ws-small-body">
+            <div class="ws-small-title">${escapeHtml(next.title)}</div>
+            <div class="ws-small-sub">${escapeHtml(next.allDay ? "all day" : shortTime(next.startsAt))}${next.location ? ` · ${escapeHtml(next.location)}` : ""}</div>
+          </div>` : `<div class="ws-empty">no events</div>`}
+        </div>`,
+        markdown: next
+          ? `**Next event** — ${shortTime(next.startsAt)} · **${next.title}**${next.location ? ` (${next.location})` : ""}`
+          : "**No upcoming events**",
+      };
+    },
+    medium: (s) => {
+      const props: CalendarProps = {
+        title: "Upcoming",
+        events: s.events.slice(0, 4).map(e => ({
+          title: e.title, start: e.startsAt, end: e.endsAt,
+          location: e.location, allDay: e.allDay,
+        })),
+      };
+      return {
+        html: CalendarView.toHTML(props),
+        markdown: CalendarView.toMarkdown(props),
+      };
+    },
+    large: (s) => {
+      const props: CalendarProps = {
+        title: "Upcoming",
+        events: s.events.map(e => ({
+          title: e.title, start: e.startsAt, end: e.endsAt,
+          location: e.location, attendees: e.attendees, allDay: e.allDay,
+        })),
+      };
+      return {
+        html: CalendarView.toHTML(props),
+        markdown: CalendarView.toMarkdown(props),
+      };
+    },
   },
 });
 

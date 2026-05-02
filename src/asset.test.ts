@@ -4,7 +4,78 @@
  */
 
 import { test, expect, describe } from "bun:test";
-import { vendors, canonicalTypes, defineView, defineAsset } from "./index.js";
+import { vendors, canonicalTypes, defineView, defineAsset, viewSizeGrid, type ViewSize } from "./index.js";
+
+describe("view sizes", () => {
+  const SIZES: ViewSize[] = ["icon", "small", "medium", "large", "xlarge"];
+
+  for (const [name, asset] of Object.entries(canonicalTypes)) {
+    test(`${name} renders all 5 sizes without throwing`, () => {
+      const state = asset.mockState!();
+      for (const size of SIZES) {
+        expect(() => asset.defaultView.toHTML(state, { size })).not.toThrow();
+        expect(() => asset.defaultView.toMarkdown(state, { size })).not.toThrow();
+      }
+    });
+
+    test(`${name} renders icon < small < medium in token weight`, () => {
+      const state = asset.mockState!();
+      const icon   = asset.defaultView.toMarkdown(state, { size: "icon" });
+      const small  = asset.defaultView.toMarkdown(state, { size: "small" });
+      const medium = asset.defaultView.toMarkdown(state, { size: "medium" });
+      expect(icon.length).toBeLessThanOrEqual(small.length);
+      expect(small.length).toBeLessThanOrEqual(medium.length);
+    });
+  }
+
+  test("xlarge falls back to large or medium when not implemented", () => {
+    // None of our canonicals implement xlarge yet — should not throw.
+    for (const [, asset] of Object.entries(canonicalTypes)) {
+      const state = asset.mockState!();
+      const xlarge = asset.defaultView.toHTML(state, { size: "xlarge" });
+      expect(xlarge.length).toBeGreaterThan(0);
+    }
+  });
+
+  test("viewSizeGrid returns Apple WidgetKit dimensions", () => {
+    expect(viewSizeGrid("icon")).toEqual({ cols: 1, rows: 1 });
+    expect(viewSizeGrid("small")).toEqual({ cols: 2, rows: 2 });
+    expect(viewSizeGrid("medium")).toEqual({ cols: 4, rows: 2 });
+    expect(viewSizeGrid("large")).toEqual({ cols: 4, rows: 4 });
+    expect(viewSizeGrid("xlarge")).toEqual({ cols: 8, rows: 4 });
+  });
+});
+
+describe("defineView with sizes builder", () => {
+  test("uses requested size when implemented", () => {
+    const v = defineView<{ n: number }>({
+      name: "T",
+      sizes: {
+        icon:   (s) => ({ html: `i${s.n}`, markdown: `i${s.n}` }),
+        medium: (s) => ({ html: `m${s.n}`, markdown: `m${s.n}` }),
+      },
+    });
+    expect(v.toHTML({ n: 1 }, { size: "icon" })).toBe("i1");
+    expect(v.toHTML({ n: 1 }, { size: "medium" })).toBe("m1");
+    expect(v.toHTML({ n: 1 })).toBe("m1");                    // default = medium
+  });
+
+  test("falls back through ladder when size not implemented", () => {
+    const v = defineView<{ n: number }>({
+      name: "T",
+      sizes: {
+        medium: (s) => ({ html: `m${s.n}`, markdown: `m${s.n}` }),
+      },
+    });
+    expect(v.toHTML({ n: 1 }, { size: "icon" })).toBe("m1");   // icon → small → medium
+    expect(v.toHTML({ n: 1 }, { size: "large" })).toBe("m1");  // large → medium
+    expect(v.toHTML({ n: 1 }, { size: "xlarge" })).toBe("m1"); // xlarge → large → medium
+  });
+
+  test("errors helpfully if neither sizes nor toHTML/toMarkdown given", () => {
+    expect(() => defineView({ name: "Bad" })).toThrow(/sizes/);
+  });
+});
 
 describe("canonical types", () => {
   for (const [name, asset] of Object.entries(canonicalTypes)) {
