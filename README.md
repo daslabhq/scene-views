@@ -23,7 +23,7 @@ Ships with **7 canonical types** in core — abstract primitives any vendor can 
 
 The **Mesh** type is the spatial seam — domain extensions like `protein/structure`, `robot/arm`, `printable/object`, `lab/labware` all `extends: ["mesh/file"]` and inherit format-discriminated rendering (`<model-viewer>` for glb/gltf/usdz today; Mol*, urdf-loader, three-stl-loader to follow). Same multi-target pipeline as Email — agents reason about a 3D asset in the same compact Markdown summary they use for everything else.
 
-**Vendor extensions ship with benchmarks, not core.** Gmail, Slack, Salesforce, SAP S/4HANA — these live in **benchmark-scoped repos** like [`scenebench`](https://github.com/daslabhq/scenebench), which delivers scenecast extensions for every vendor in its benchmark domain. Each benchmark gets a magnet URL on `daslab.dev` (e.g. `daslab.dev/labs/automationbench`, `daslab.dev/s4bench`) showing its tasks, vendor schemas, and a leaderboard — scrubbable and scored.
+**Vendor extensions ship with benchmarks, not core.** Gmail, Slack, Salesforce, SAP S/4HANA — these live in **benchmark-scoped repos** like [`scenebench`](https://github.com/daslabhq/scenebench), which delivers scenecast extensions for every vendor in its benchmark domain.
 
 Vendor types declare `extends: ["email/mailbox"]` etc. — tools that consume canonical types work uniformly across all vendors that implement them.
 
