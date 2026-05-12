@@ -111,7 +111,7 @@ function buildBundle(a: BundleArgs): string {
 <title>${escapeHtml(a.title)}</title>${modelViewerScript}
 <style>
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our <style>. */
@@ -123,7 +123,7 @@ function buildBundle(a: BundleArgs): string {
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   ${WIDGETS_CSS}
   ${a.extraCss}

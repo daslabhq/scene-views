@@ -208,6 +208,10 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px;
+  /* Gallery is light-themed; force the lit renderer's CSS to render
+   * in light mode regardless of OS preference. color-scheme inherits
+   * into the component's shadow DOM. */
+  color-scheme: light;
 }
 .a2ui-host[data-mounted="0"]::after {
   content: "loading @a2ui/lit from esm.sh…";
@@ -292,6 +296,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   border: 0;
   border-radius: 8px;
   background: white;
+  color-scheme: light;
 }
 .mcp-attribution {
   font-size: 11px; color: var(--muted); margin-top: 8px;
@@ -590,7 +595,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Email · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -602,7 +607,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -997,7 +1002,7 @@ footer a { color: var(--muted); }
 <title>Email · medium</title>
 <style>
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our <style>. */
@@ -1009,7 +1014,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -1339,7 +1344,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Email · icon&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -1351,7 +1356,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -1662,7 +1667,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Email · small&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -1674,7 +1679,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -2036,7 +2041,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Email · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -2048,7 +2053,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -2479,7 +2484,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Email · large&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -2491,7 +2496,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -2971,7 +2976,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Email · xlarge&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -2983,7 +2988,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -3324,7 +3329,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Message · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -3336,7 +3341,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -3690,7 +3695,7 @@ footer a { color: var(--muted); }
 <title>Message · medium</title>
 <style>
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our <style>. */
@@ -3702,7 +3707,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -4018,7 +4023,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Message · icon&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -4030,7 +4035,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -4338,7 +4343,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Message · small&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -4350,7 +4355,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -4685,7 +4690,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Message · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -4697,7 +4702,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -5039,7 +5044,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Message · large&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -5051,7 +5056,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -5393,7 +5398,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Message · xlarge&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -5405,7 +5410,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -5699,7 +5704,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Contact · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -5711,7 +5716,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -6042,7 +6047,7 @@ footer a { color: var(--muted); }
 <title>Contact · medium</title>
 <style>
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our <style>. */
@@ -6054,7 +6059,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -6356,7 +6361,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Contact · icon&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -6368,7 +6373,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -6677,7 +6682,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Contact · small&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -6689,7 +6694,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -7015,7 +7020,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Contact · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -7027,7 +7032,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -7335,7 +7340,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Contact · large&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -7347,7 +7352,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -7646,7 +7651,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Contact · xlarge&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -7658,7 +7663,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -7929,7 +7934,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Event · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -7941,7 +7946,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -8337,7 +8342,7 @@ footer a { color: var(--muted); }
 <title>Event · medium</title>
 <style>
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our <style>. */
@@ -8349,7 +8354,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -8679,7 +8684,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Event · icon&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -8691,7 +8696,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -9000,7 +9005,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Event · small&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -9012,7 +9017,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -9375,7 +9380,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Event · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -9387,7 +9392,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -9756,7 +9761,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Event · large&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -9768,7 +9773,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -10128,7 +10133,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Event · xlarge&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -10140,7 +10145,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -10439,7 +10444,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Task · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -10451,7 +10456,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -10836,7 +10841,7 @@ footer a { color: var(--muted); }
 <title>Task · medium</title>
 <style>
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our <style>. */
@@ -10848,7 +10853,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -11162,7 +11167,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Task · icon&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -11174,7 +11179,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -11482,7 +11487,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Task · small&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -11494,7 +11499,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -11862,7 +11867,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Task · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -11874,7 +11879,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -12255,7 +12260,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Task · large&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -12267,7 +12272,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -12648,7 +12653,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Task · xlarge&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -12660,7 +12665,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -12952,7 +12957,7 @@ footer a { color: var(--muted); }
 &lt;title&gt;Document · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -12964,7 +12969,7 @@ footer a { color: var(--muted); }
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -13298,7 +13303,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
 <title>Document · medium</title>
 <style>
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our <style>. */
@@ -13310,7 +13315,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -13620,7 +13625,7 @@ We&amp;#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) co
 &lt;title&gt;Document · icon&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -13632,7 +13637,7 @@ We&amp;#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) co
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -13941,7 +13946,7 @@ We&amp;#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) co
 &lt;title&gt;Document · small&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -13953,7 +13958,7 @@ We&amp;#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) co
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -14274,7 +14279,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
 &lt;title&gt;Document · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -14286,7 +14291,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -14643,7 +14648,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
 &lt;title&gt;Document · large&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -14655,7 +14660,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -15026,7 +15031,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
 &lt;title&gt;Document · xlarge&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -15038,7 +15043,7 @@ We&#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) covers
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -15341,7 +15346,7 @@ We&amp;#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) co
 &lt;script type=&quot;module&quot; src=&quot;https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js&quot;&gt;&lt;/script&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -15353,7 +15358,7 @@ We&amp;#39;re shipping the new agent runtime in three phases. Phase 1 (May 6) co
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -15699,7 +15704,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 <script type=&quot;module&quot; src=&quot;https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js&quot;></script>
 <style>
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our <style>. */
@@ -15711,7 +15716,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -16021,7 +16026,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 &lt;title&gt;Mesh · icon&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -16033,7 +16038,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -16341,7 +16346,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 &lt;title&gt;Mesh · small&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -16353,7 +16358,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -16685,7 +16690,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 &lt;script type=&quot;module&quot; src=&quot;https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js&quot;&gt;&lt;/script&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -16697,7 +16702,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -17031,7 +17036,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 &lt;script type=&quot;module&quot; src=&quot;https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js&quot;&gt;&lt;/script&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -17043,7 +17048,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -17377,7 +17382,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 &lt;script type=&quot;module&quot; src=&quot;https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js&quot;&gt;&lt;/script&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -17389,7 +17394,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -17678,7 +17683,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 &lt;title&gt;Feed · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -17690,7 +17695,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -18060,7 +18065,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 <title>Feed · medium</title>
 <style>
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our <style>. */
@@ -18072,7 +18077,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -18395,7 +18400,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 &lt;title&gt;Feed · icon&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -18407,7 +18412,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -18717,7 +18722,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 &lt;title&gt;Feed · small&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -18729,7 +18734,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -19073,7 +19078,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 &lt;title&gt;Feed · medium&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -19085,7 +19090,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -19674,7 +19679,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 &lt;title&gt;Feed · large&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -19686,7 +19691,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css
@@ -20359,7 +20364,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
 &lt;title&gt;Feed · xlarge&lt;/title&gt;
 &lt;style&gt;
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     /* CSS variables that widgets.css consumes — set sensible defaults
      * here so the bundle renders standalone. Hosts can override these
      * by injecting their own :root rule before our &lt;style&gt;. */
@@ -20371,7 +20376,7 @@ KhronosGroup&#39;s reference glTF model — battle-tested across every glTF rend
     --green:   #10b981;
     --red:     #ef4444;
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: transparent; color: var(--fg); }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, &quot;Helvetica Neue&quot;, Arial, sans-serif; background: white; color: var(--fg); }
   #scenecast-root { padding: 16px; }
   /**
  * scenecast/styles/widgets.css

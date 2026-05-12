@@ -286,6 +286,10 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px;
+  /* Gallery is light-themed; force the lit renderer's CSS to render
+   * in light mode regardless of OS preference. color-scheme inherits
+   * into the component's shadow DOM. */
+  color-scheme: light;
 }
 .a2ui-host[data-mounted="0"]::after {
   content: "loading @a2ui/lit from esm.sh…";
@@ -370,6 +374,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   border: 0;
   border-radius: 8px;
   background: white;
+  color-scheme: light;
 }
 .mcp-attribution {
   font-size: 11px; color: var(--muted); margin-top: 8px;
