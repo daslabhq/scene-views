@@ -7,3 +7,6 @@ bun.lock
 # Generated reader preview and iteration screenshots
 scripts/reader-preview.html
 scripts/screenshots/
+
+# Gallery theme verification artifacts (regenerate with `bun verify:gallery`)
+gallery/verify/

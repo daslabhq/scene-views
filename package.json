@@ -25,7 +25,8 @@
   ],
   "scripts": {
     "test": "bun test src/",
-    "build:gallery": "bun gallery/build.ts"
+    "build:gallery": "bun gallery/build.ts",
+    "verify:gallery": "bun gallery/verify-themes.ts"
   },
   "keywords": [
     "agent",

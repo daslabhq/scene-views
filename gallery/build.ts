@@ -87,25 +87,68 @@ const canonicalCards = buildCards(canonicalTypes);
 
 const css = `
 :root {
-  --fg: #0f172a; --muted: #64748b; --border: #e2e8f0; --bg: #f8fafc;
-  --accent: #6366f1; --amber: #f59e0b; --green: #10b981; --red: #ef4444;
-  --card-bg: #ffffff;
+  color-scheme: light dark;
+  --fg:             light-dark(#0f172a, #e2e8f0);
+  --muted:          light-dark(#64748b, #94a3b8);
+  --border:         light-dark(#e2e8f0, #334155);
+  --border-soft:    light-dark(#f1f5f9, #1e293b);
+  --bg:             light-dark(#f8fafc, #020617);
+  --card-bg:        light-dark(#ffffff, #0f172a);
+  --surface-2:      light-dark(#f8fafc, #1e293b);
+  --text-strong:    light-dark(#475569, #cbd5e1);
+  --accent:         #6366f1;
+  --accent-soft-bg: light-dark(#eef2ff, rgba(99,102,241,0.18));
+  --amber:          #f59e0b;
+  --green:          light-dark(#10b981, #34d399);
+  --red:            light-dark(#ef4444, #f87171);
 }
+/* Explicit overrides — set by the header toggle when not in auto. */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark; }
 * { box-sizing: border-box; }
 body { margin:0; font-family: ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif; color: var(--fg); background: var(--bg); }
 .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
-header { border-bottom: 1px solid var(--border); background: white; }
+header { border-bottom: 1px solid var(--border); background: var(--card-bg); }
 .header-inner { max-width: 1400px; margin: 0 auto; padding: 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap: wrap; }
 .brand { font-size: 22px; font-weight: 700; }
 .brand small { font-weight: 400; color: var(--muted); margin-left: 8px; }
 .subtitle { color: var(--muted); margin-top: 4px; font-size: 14px; }
 .gh-link { font-size: 14px; color: var(--muted); text-decoration: none; }
 .gh-link:hover { color: var(--fg); text-decoration: underline; }
+
+/* ----- Theme toggle (auto / light / dark) ----- */
+.theme-toggle {
+  display: inline-flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+  font-family: inherit;
+}
+.theme-toggle button {
+  appearance: none; border: none; background: transparent;
+  padding: 5px 12px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 999px;
+  transition: background 0.12s ease, color 0.12s ease;
+  font-family: inherit;
+}
+.theme-toggle button:hover { color: var(--fg); }
+.theme-toggle button[aria-pressed="true"] {
+  background: var(--card-bg);
+  color: var(--accent);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.header-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
-.intro { background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 32px; }
+.intro { background: var(--card-bg); padding: 24px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 32px; }
 .intro h2 { margin: 0 0 8px; font-size: 18px; }
 .intro p { margin: 6px 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
-.intro code { background: #eef2ff; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+.intro code { background: var(--accent-soft-bg); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
 .toc { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
 .toc a { padding: 4px 10px; background: var(--bg); border-radius: 999px; font-size: 12px; text-decoration: none; color: var(--fg); border: 1px solid var(--border); }
 .toc a:hover { background: var(--accent); color: white; border-color: var(--accent); }
@@ -113,7 +156,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .toc-section:first-child { margin-left: 0; }
 .section-h { margin-top: 36px; margin-bottom: 4px; font-size: 20px; }
 .section-p { color: var(--muted); margin: 0 0 18px; font-size: 14px; }
-.ext-pill { background: #f0fdf4; color: #166534; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+.ext-pill { background: light-dark(#f0fdf4, rgba(34,197,94,0.18)); color: light-dark(#166534, #86efac); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 
 /* ----- iOS home-screen mosaic ----- */
 .mosaic { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 28px; padding: 36px 40px; margin-bottom: 36px; }
@@ -157,9 +200,10 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   font-size: 11px;
   font-weight: 600;
   display: flex; align-items: center; justify-content: center;
-  border: 2px solid #fff;
+  border: 2px solid var(--card-bg);
   box-shadow: 0 1px 3px rgba(0,0,0,0.25);
 }
+/* Mosaic is always-dark (iOS home-screen mock); pin the badge ring there. */
 .mosaic-tile .ws-app-badge { border-color: #1e293b; }
 
 /* ----- Small widget (2×2) — Apple systemSmall vibe ----- */
@@ -167,7 +211,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   padding: 16px;
   height: 100%;
   display: flex; flex-direction: column;
-  background: white;
+  background: var(--card-bg);
   border-radius: 16px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
@@ -199,7 +243,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 }
 .format-tabs button:hover { color: var(--fg); }
 .format-tabs button.active {
-  background: white;
+  background: var(--card-bg);
   color: var(--accent);
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
@@ -251,7 +295,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .size-cell.icon .cell-html > * { width: auto; overflow: visible; }
 .cell-md, .cell-json, .cell-a2ui, .cell-mcp {
   display: none;
-  background: white;
+  background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 12px;
@@ -261,9 +305,9 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   color: var(--fg);
   overflow: auto;
 }
-.cell-json  { color: #475569; }
-.cell-a2ui  { color: #1e293b; }
-.cell-mcp   { color: #334155; }
+.cell-json  { color: var(--text-strong); }
+.cell-a2ui  { color: var(--fg); }
+.cell-mcp   { color: var(--text-strong); }
 .size-strip[data-format="markdown"] .cell-html  { display: none; }
 .size-strip[data-format="markdown"] .cell-md    { display: block; }
 .size-strip[data-format="json"]     .cell-html  { display: none; }
@@ -282,14 +326,10 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   min-height: 240px;
   max-height: 560px;
   overflow: auto;
-  background: var(--bg);
+  background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px;
-  /* Gallery is light-themed; force the lit renderer's CSS to render
-   * in light mode regardless of OS preference. color-scheme inherits
-   * into the component's shadow DOM. */
-  color-scheme: light;
 }
 .a2ui-host[data-mounted="0"]::after {
   content: "loading @a2ui/lit from esm.sh…";
@@ -304,7 +344,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   font-size: 11px; color: var(--muted); margin-top: 8px;
   display: flex; align-items: center; gap: 6px;
 }
-.a2ui-attribution code { background: #eef2ff; padding: 1px 6px; border-radius: 4px; font-size: 11px; color: var(--accent); }
+.a2ui-attribution code { background: var(--accent-soft-bg); padding: 1px 6px; border-radius: 4px; font-size: 11px; color: var(--accent); }
 
 /* ---------- "Compatible renderers" badge row ---------- */
 .compat-row {
@@ -334,12 +374,12 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   font-family: inherit;
 }
 .open-in button:hover, .open-in a:hover { background: var(--accent); color: white; border-color: var(--accent); }
-.open-in .copied { background: #ecfdf5; color: #065f46; border-color: #10b981; }
+.open-in .copied { background: light-dark(#ecfdf5, rgba(16,185,129,0.18)); color: light-dark(#065f46, #6ee7b7); border-color: var(--green); }
 .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 28px; overflow: hidden; }
 .card-head { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .card-name { font-size: 18px; font-weight: 600; }
 .card-meta { font-size: 12px; color: var(--muted); }
-.card-meta .pill { background: #eef2ff; color: var(--accent); padding: 2px 8px; border-radius: 999px; font-weight: 500; }
+.card-meta .pill { background: var(--accent-soft-bg); color: var(--accent); padding: 2px 8px; border-radius: 999px; font-weight: 500; }
 .card-desc { color: var(--muted); font-size: 14px; margin-top: 4px; flex-basis: 100%; }
 .split { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; }
 @media (max-width: 1400px) { .split { grid-template-columns: 1fr 1fr; } }
@@ -373,14 +413,15 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   min-height: 240px;
   border: 0;
   border-radius: 8px;
-  background: white;
-  color-scheme: light;
+  /* The iframe's own document sets color-scheme: light dark; we propagate
+   * the gallery's explicit theme via postMessage (see init script below). */
+  background: var(--card-bg);
 }
 .mcp-attribution {
   font-size: 11px; color: var(--muted); margin-top: 8px;
   display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
 }
-.mcp-attribution code { background: #fef3c7; padding: 1px 6px; border-radius: 4px; font-size: 11px; color: #92400e; }
+.mcp-attribution code { background: light-dark(#fef3c7, rgba(245,158,11,0.2)); padding: 1px 6px; border-radius: 4px; font-size: 11px; color: light-dark(#92400e, #fcd34d); }
 .col-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
 .col-label::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .md-pre { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; overflow-x: auto; max-height: 560px; }
@@ -403,7 +444,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   border-bottom: 1px solid var(--border);
   vertical-align: top;
 }
-.md-table th { color: var(--muted); font-weight: 500; background: var(--bg); }
+.md-table th { color: var(--muted); font-weight: 500; background: var(--surface-2); }
 .md-table tr:last-child td { border-bottom: none; }
 .md-pre .md-table { font-size: 12px; }
 
@@ -413,11 +454,11 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .ws-more { color: var(--muted); font-style: italic; font-size: 12px; padding: 6px 0; }
 
 .ws-table table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.ws-table th { text-align: left; padding: 8px 10px; background: var(--bg); border-bottom: 1px solid var(--border); font-weight: 500; color: var(--muted); font-size: 12px; }
-.ws-table td { padding: 8px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+.ws-table th { text-align: left; padding: 8px 10px; background: var(--surface-2); border-bottom: 1px solid var(--border); font-weight: 500; color: var(--muted); font-size: 12px; }
+.ws-table td { padding: 8px 10px; border-bottom: 1px solid var(--border-soft); vertical-align: top; }
 .ws-table tr:last-child td { border-bottom: none; }
 
-.ws-metric { text-align: left; padding: 14px; background: var(--bg); border-radius: 8px; }
+.ws-metric { text-align: left; padding: 14px; background: var(--surface-2); border-radius: 8px; }
 .ws-metric-value { font-size: 26px; font-weight: 700; line-height: 1.1; }
 .ws-metric-value .ws-unit { font-size: 14px; font-weight: 400; color: var(--muted); margin-left: 4px; }
 .ws-metric-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
@@ -439,10 +480,10 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
   padding: 8px 10px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: white;
+  background: var(--card-bg);
 }
 .ws-list--grid-2 .ws-li:last-child { border-bottom: 1px solid var(--border); }
-.ws-li { padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+.ws-li { padding: 10px 0; border-bottom: 1px solid var(--border-soft); }
 .ws-li:last-child { border-bottom: none; }
 
 /* Stack widget — header bar + body content */
@@ -458,25 +499,25 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .ws-li-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .ws-li-title { font-size: 14px; font-weight: 500; }
 .ws-li-sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
-.ws-li-detail { font-size: 12.5px; color: #475569; margin-top: 4px; }
+.ws-li-detail { font-size: 12.5px; color: var(--text-strong); margin-top: 4px; }
 .ws-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; background: var(--accent); color: white; padding: 2px 8px; border-radius: 999px; }
 
-.ws-kv-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+.ws-kv-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-soft); font-size: 13px; }
 .ws-kv-row:last-child { border-bottom: none; }
 .ws-kv-key { color: var(--muted); }
 .ws-kv-val { font-weight: 500; }
 
 .ws-cal { display: flex; flex-direction: column; gap: 8px; }
-.ws-cal-row { display: grid; grid-template-columns: 220px 1fr; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+.ws-cal-row { display: grid; grid-template-columns: 220px 1fr; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border-soft); }
 .ws-cal-row:last-child { border-bottom: none; }
 .ws-cal-time { color: var(--muted); font-size: 12.5px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
 .ws-cal-title { font-size: 14px; font-weight: 500; }
 .ws-cal-loc, .ws-cal-att { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
 .ws-status { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border-radius: 8px; }
-.ws-status-ok { background: #ecfdf5; color: #065f46; }
-.ws-status-warn { background: #fffbeb; color: #78350f; }
-.ws-status-fail { background: #fef2f2; color: #7f1d1d; }
+.ws-status-ok   { background: light-dark(#ecfdf5, rgba(16,185,129,0.15));  color: light-dark(#065f46, #6ee7b7); }
+.ws-status-warn { background: light-dark(#fffbeb, rgba(245,158,11,0.15));  color: light-dark(#78350f, #fcd34d); }
+.ws-status-fail { background: light-dark(#fef2f2, rgba(239,68,68,0.15));   color: light-dark(#7f1d1d, #fca5a5); }
 .ws-status-icon { font-size: 22px; font-weight: 700; }
 .ws-status-msg { font-weight: 500; font-size: 14px; }
 .ws-status-details { font-size: 12px; margin-top: 6px; }
@@ -498,7 +539,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 .ws-model3d model-viewer {
   flex: 1; min-height: 200px;
   width: 100%;
-  background: #f1f5f9;
+  background: var(--surface-2);
   border-radius: 8px;
 }
 .ws-model3d-meta {
@@ -507,15 +548,15 @@ main { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
 }
 .ws-model3d-fallback {
   display: grid; grid-template-columns: 64px 1fr; gap: 12px;
-  padding: 12px; background: var(--bg);
+  padding: 12px; background: var(--surface-2);
   border: 1px solid var(--border); border-radius: 8px;
 }
 .ws-model3d-poster {
   width: 64px; height: 64px;
   display: flex; align-items: center; justify-content: center;
-  background: #e2e8f0; border-radius: 8px;
+  background: light-dark(#e2e8f0, #334155); border-radius: 8px;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 11px; font-weight: 700; color: #475569;
+  font-size: 11px; font-weight: 700; color: var(--text-strong);
   letter-spacing: 0.04em;
 }
 .ws-model3d-poster img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
@@ -666,6 +707,19 @@ const html = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>scenecast · view gallery</title>
+  <!-- Apply persisted theme before first paint to avoid a flash of the
+       wrong color scheme. Reads "scenecast:theme" from localStorage —
+       set by the toggle below. Values: "light" | "dark" | (absent = auto). -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("scenecast:theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) { /* private mode etc. — fall through to auto */ }
+    })();
+  </script>
   <!-- Google's <model-viewer> for glb/gltf/usdz cells. Loaded once at the
        page level — multiple ES module imports of the same URL are deduped. -->
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
@@ -678,7 +732,14 @@ const html = `<!DOCTYPE html>
         <div class="brand">scenecast <small>· view gallery</small></div>
         <div class="subtitle">One asset definition · five rendering targets · both agent-UI standards covered.</div>
       </div>
-      <a class="gh-link" href="https://github.com/daslabhq/scenecast">GitHub →</a>
+      <div class="header-right">
+        <div class="theme-toggle" role="group" aria-label="Theme">
+          <button type="button" data-theme-set="auto"  aria-pressed="true">Auto</button>
+          <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+          <button type="button" data-theme-set="dark"  aria-pressed="false">Dark</button>
+        </div>
+        <a class="gh-link" href="https://github.com/daslabhq/scenecast">GitHub →</a>
+      </div>
     </div>
   </header>
   <main>
@@ -728,6 +789,57 @@ const html = `<!DOCTYPE html>
     scenecast · MIT · <a href="https://github.com/daslabhq/scenecast">github.com/daslabhq/scenecast</a> · ${canonicalCards.length} canonical types
   </footer>
   <script type="module">
+    // ----- Theme toggle (auto / light / dark) -----
+    // Auto = no data-theme attribute (color-scheme: light dark on :root,
+    // browser picks via prefers-color-scheme). Light/dark = explicit
+    // override saved to localStorage and broadcast to MCP iframes so the
+    // sandboxed renders match the gallery's chrome.
+    const THEME_KEY = 'scenecast:theme';
+    function currentTheme() {
+      return document.documentElement.getAttribute('data-theme') || 'auto';
+    }
+    function broadcastTheme(theme) {
+      document.querySelectorAll('.mcp-host iframe').forEach(f => {
+        try {
+          f.contentWindow && f.contentWindow.postMessage(
+            { jsonrpc: '2.0', method: 'scenecast/set-theme', params: { theme } },
+            '*',
+          );
+        } catch (err) { /* iframe not ready yet — load handler will retry */ }
+      });
+    }
+    function applyTheme(theme) {
+      if (theme === 'light' || theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', theme);
+        try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        try { localStorage.removeItem(THEME_KEY); } catch (e) {}
+      }
+      document.querySelectorAll('.theme-toggle button[data-theme-set]').forEach(b => {
+        b.setAttribute('aria-pressed', b.dataset.themeSet === theme ? 'true' : 'false');
+      });
+      broadcastTheme(theme);
+    }
+    // Sync the toggle's pressed state with whatever the pre-paint script applied.
+    applyTheme(currentTheme());
+    document.querySelectorAll('.theme-toggle button[data-theme-set]').forEach(b => {
+      b.addEventListener('click', () => applyTheme(b.dataset.themeSet));
+    });
+    // Each MCP iframe needs the current theme as soon as it finishes loading,
+    // because the bundle's script only listens once it's parsed.
+    document.querySelectorAll('.mcp-host iframe').forEach(f => {
+      f.addEventListener('load', () => {
+        const t = currentTheme();
+        try {
+          f.contentWindow && f.contentWindow.postMessage(
+            { jsonrpc: '2.0', method: 'scenecast/set-theme', params: { theme: t } },
+            '*',
+          );
+        } catch (err) {}
+      });
+    });
+
     // ----- Format tabs — flip data-format on the strip below each tabs control
     document.querySelectorAll('.format-tabs[data-tabs]').forEach(tabs => {
       tabs.addEventListener('click', e => {

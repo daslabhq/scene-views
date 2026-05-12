@@ -111,19 +111,23 @@ function buildBundle(a: BundleArgs): string {
 <title>${escapeHtml(a.title)}</title>${modelViewerScript}
 <style>
   :root {
-    color-scheme: light;
-    /* CSS variables that widgets.css consumes — set sensible defaults
-     * here so the bundle renders standalone. Hosts can override these
-     * by injecting their own :root rule before our <style>. */
-    --fg:      #0f172a;
-    --muted:   #64748b;
-    --border:  #e2e8f0;
-    --bg:      #f8fafc;
+    color-scheme: light dark;
+    /* CSS variables that widgets.css consumes. light-dark() resolves
+     * to the first arg when color-scheme is light, second when dark, so
+     * the same declaration adapts to whichever mode the host applies.
+     * Hosts can override these by injecting their own :root rule. */
+    --fg:      light-dark(#0f172a, #e2e8f0);
+    --muted:   light-dark(#64748b, #94a3b8);
+    --border:  light-dark(#e2e8f0, #334155);
+    --bg:      light-dark(#f8fafc, #020617);
     --accent:  #6366f1;
-    --green:   #10b981;
-    --red:     #ef4444;
+    --green:   light-dark(#10b981, #34d399);
+    --red:     light-dark(#ef4444, #f87171);
   }
-  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif; background: white; color: var(--fg); }
+  /* Explicit overrides — used when the embedding page postMessages a theme. */
+  :root[data-theme="light"] { color-scheme: light; }
+  :root[data-theme="dark"]  { color-scheme: dark; }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif; background: light-dark(#ffffff, #0f172a); color: var(--fg); }
   #scenecast-root { padding: 16px; }
   ${WIDGETS_CSS}
   ${a.extraCss}
@@ -179,6 +183,17 @@ function buildBundle(a: BundleArgs): string {
       if (next) {
         window.scenecast.initialState = next;
         window.dispatchEvent(new CustomEvent("scenecast:state", { detail: next }));
+      }
+    }
+    // Optional theme override — the scenecast gallery and other embedding
+    // pages use this to keep the iframe's color-scheme in sync with the
+    // page's user-selected theme. Values: "light" | "dark" | "auto".
+    if (msg.method === "scenecast/set-theme") {
+      const t = msg.params && msg.params.theme;
+      if (t === "light" || t === "dark") {
+        document.documentElement.setAttribute("data-theme", t);
+      } else {
+        document.documentElement.removeAttribute("data-theme");
       }
     }
   });

@@ -10,6 +10,13 @@
  *
  * Variables it expects (set on :root or a parent):
  *   --fg, --muted, --border, --bg, --accent, --green, --red
+ *
+ * Dark mode: this stylesheet uses the CSS light-dark() function for any
+ * non-variable color literal, so a consumer that declares
+ *   :root { color-scheme: light dark; }
+ * gets correct rendering in both light and dark mode automatically.
+ * Consumers that don't declare color-scheme effectively get light mode
+ * (which is light-dark()'s default).
  */
 
 /* ---------------------------------------------------------------------------
@@ -36,7 +43,7 @@
   border-radius: 999px; background: #ff3b30; color: white;
   font-size: 11px; font-weight: 600;
   display: flex; align-items: center; justify-content: center;
-  border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  border: 2px solid light-dark(#fff, #0f172a); box-shadow: 0 1px 3px rgba(0,0,0,0.25);
 }
 
 /* ---------------------------------------------------------------------------
@@ -56,13 +63,13 @@
 
 .ws-list ul { margin: 0; padding: 0; list-style: none; }
 .ws-list--grid-2 ul { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
-.ws-list--grid-2 .ws-li { padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: white; }
-.ws-li { padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+.ws-list--grid-2 .ws-li { padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: light-dark(#fff, #0f172a); }
+.ws-li { padding: 10px 0; border-bottom: 1px solid light-dark(#f1f5f9, #1e293b); }
 .ws-li:last-child { border-bottom: none; }
 .ws-li-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .ws-li-title { font-size: 14px; font-weight: 500; }
 .ws-li-sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
-.ws-li-detail { font-size: 12.5px; color: #475569; margin-top: 4px; }
+.ws-li-detail { font-size: 12.5px; color: light-dark(#475569, #cbd5e1); margin-top: 4px; }
 .ws-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; background: var(--accent); color: white; padding: 2px 8px; border-radius: 999px; }
 .ws-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
 .ws-empty { color: var(--muted); font-style: italic; padding: 12px; }
@@ -73,15 +80,15 @@
  * --------------------------------------------------------------------------- */
 
 .ws-table table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.ws-table th { text-align: left; padding: 8px 10px; background: var(--bg); border-bottom: 1px solid var(--border); font-weight: 500; color: var(--muted); font-size: 12px; }
-.ws-table td { padding: 8px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+.ws-table th { text-align: left; padding: 8px 10px; background: light-dark(#f8fafc, #1e293b); border-bottom: 1px solid var(--border); font-weight: 500; color: var(--muted); font-size: 12px; }
+.ws-table td { padding: 8px 10px; border-bottom: 1px solid light-dark(#f1f5f9, #1e293b); vertical-align: top; }
 .ws-table tr:last-child td { border-bottom: none; }
 
 /* ---------------------------------------------------------------------------
  * Metric widget
  * --------------------------------------------------------------------------- */
 
-.ws-metric { text-align: left; padding: 14px; background: var(--bg); border-radius: 8px; }
+.ws-metric { text-align: left; padding: 14px; background: light-dark(#f8fafc, #1e293b); border-radius: 8px; }
 .ws-metric-value { font-size: 26px; font-weight: 700; line-height: 1.1; }
 .ws-metric-value .ws-unit { font-size: 14px; font-weight: 400; color: var(--muted); margin-left: 4px; }
 .ws-metric-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
@@ -96,7 +103,7 @@
  * KeyValue widget
  * --------------------------------------------------------------------------- */
 
-.ws-kv-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; gap: 12px; }
+.ws-kv-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid light-dark(#f1f5f9, #1e293b); font-size: 13px; gap: 12px; }
 .ws-kv-row:last-child { border-bottom: none; }
 .ws-kv-key { color: var(--muted); }
 .ws-kv-val { font-weight: 500; text-align: right; }
@@ -106,9 +113,9 @@
  * --------------------------------------------------------------------------- */
 
 .ws-status { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border-radius: 8px; }
-.ws-status-ok   { background: #ecfdf5; color: #065f46; }
-.ws-status-warn { background: #fffbeb; color: #78350f; }
-.ws-status-fail { background: #fef2f2; color: #7f1d1d; }
+.ws-status-ok   { background: light-dark(#ecfdf5, rgba(16,185,129,0.15));  color: light-dark(#065f46, #6ee7b7); }
+.ws-status-warn { background: light-dark(#fffbeb, rgba(245,158,11,0.15));  color: light-dark(#78350f, #fcd34d); }
+.ws-status-fail { background: light-dark(#fef2f2, rgba(239,68,68,0.15));   color: light-dark(#7f1d1d, #fca5a5); }
 .ws-status-icon { font-size: 22px; font-weight: 700; }
 .ws-status-msg  { font-weight: 500; font-size: 14px; }
 .ws-status-details { font-size: 12px; margin-top: 6px; }
@@ -128,7 +135,7 @@
  * --------------------------------------------------------------------------- */
 
 .ws-cal { display: flex; flex-direction: column; gap: 8px; }
-.ws-cal-row { display: grid; grid-template-columns: 220px 1fr; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+.ws-cal-row { display: grid; grid-template-columns: 220px 1fr; gap: 12px; padding: 8px 0; border-bottom: 1px solid light-dark(#f1f5f9, #1e293b); }
 .ws-cal-row:last-child { border-bottom: none; }
 .ws-cal-time  { color: var(--muted); font-size: 12.5px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
 .ws-cal-title { font-size: 14px; font-weight: 500; }
@@ -160,19 +167,19 @@
  * --------------------------------------------------------------------------- */
 
 .ws-model3d { display: flex; flex-direction: column; gap: 6px; width: 100%; height: 100%; min-height: 200px; }
-.ws-model3d model-viewer { flex: 1; min-height: 200px; width: 100%; background: #f1f5f9; border-radius: 8px; }
+.ws-model3d model-viewer { flex: 1; min-height: 200px; width: 100%; background: light-dark(#f1f5f9, #1e293b); border-radius: 8px; }
 .ws-model3d-meta { font-size: 11px; color: var(--muted); text-align: center; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
 .ws-model3d-fallback {
   display: grid; grid-template-columns: 64px 1fr; gap: 12px;
-  padding: 12px; background: var(--bg);
+  padding: 12px; background: light-dark(#f8fafc, #1e293b);
   border: 1px solid var(--border); border-radius: 8px;
 }
 .ws-model3d-poster {
   width: 64px; height: 64px;
   display: flex; align-items: center; justify-content: center;
-  background: #e2e8f0; border-radius: 8px;
+  background: light-dark(#e2e8f0, #334155); border-radius: 8px;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 11px; font-weight: 700; color: #475569; letter-spacing: 0.04em;
+  font-size: 11px; font-weight: 700; color: light-dark(#475569, #cbd5e1); letter-spacing: 0.04em;
 }
 .ws-model3d-poster img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
 .ws-model3d-name { font-size: 14px; font-weight: 600; }
