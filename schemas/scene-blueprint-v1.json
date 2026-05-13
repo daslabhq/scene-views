@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://daslab.dev/schemas/scene-blueprint-v1.json",
+  "title": "Scene Blueprint v1",
+  "description": "Declarative blueprint for a Daslab scene tree — typed slots, recurring agent tasks, evaluable scenarios, access grants. The blueprint is itself a scene-block: flat identity + content fields, with recursive `scenes[]` for children. v1 applier implements scene/assets/linkedAssets/schedules/members; other fields (inputs, secrets, extends, tasks, hooks, outputs) are reserved.",
+  "type": "object",
+  "$ref": "#/$defs/sceneBlock",
+
+  "$defs": {
+    "sceneBlock": {
+      "type": "object",
+      "required": ["id", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "$schema": { "type": "string" },
+        "version": { "const": 1 },
+
+        "id":          { "type": "string", "pattern": "^scn_[A-Za-z0-9_-]+$|^[0-9a-f-]{36}$", "description": "DB scene id, stable across applies. Either prefixed (scn_*) or a UUID for legacy roots." },
+        "parentId":    { "type": ["string", "null"], "description": "Parent scene id. When this block is nested under another scene's `scenes[]`, the applier sets parentId from context; explicit value overrides." },
+        "slug":        { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "name":        { "type": "string" },
+        "icon":        { "type": "string", "description": "SF Symbol name." },
+        "tint":        { "type": "string", "pattern": "^#?[0-9A-Fa-f]{6}$" },
+
+        "settings": {
+          "description": "User-editable scene settings (matches the iOS scene-settings sheet). Description is here, not at the top, because it's a configurable label not an identity field.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "description":         { "type": "string", "description": "Subtitle / blurb shown in scene settings." },
+            "featureFlags":        { "type": "object", "additionalProperties": { "type": "boolean" }, "description": "Per-scene feature toggles (webViewChat, debugLogging, experimental, …)." },
+            "welcomeSuggestions":  {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["label", "prompt"],
+                "properties": {
+                  "label":  { "type": "string" },
+                  "prompt": { "type": "string" }
+                }
+              },
+              "description": "Starter prompts shown above the input in iOS. Takes precedence over auto-defaults."
+            },
+            "notifyOnComplete":    { "type": "boolean", "description": "Push notifications on job completion. Defaults to true." }
+          }
+        },
+
+        "inputs": {
+          "description": "(v1 stub — reserved) Parameterization for blueprint reuse.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type":     { "enum": ["string", "number", "boolean"] },
+              "default":  {},
+              "required": { "type": "boolean" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+
+        "secrets": {
+          "description": "(v1 stub — reserved) Secret references resolved via vault/env.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["from"],
+            "properties": { "from": { "type": "string" } }
+          }
+        },
+
+        "extends": {
+          "description": "(v1 stub — reserved) Base blueprint(s) this one extends.",
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ]
+        },
+
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "type", "name"],
+            "additionalProperties": false,
+            "properties": {
+              "id":           { "type": "string", "description": "Plan-local handle; doubles as default externalId. Applier derives DB id via assetId(sceneId, type, externalId)." },
+              "type":         { "type": "string" },
+              "name":         { "type": "string" },
+              "externalId":   { "type": "string", "description": "Provider's native id. Stored on assets.external_id." },
+              "externalUrl":  { "type": "string" },
+              "assetOwnerId": { "type": "string", "description": "DB id of the parent account asset (reference to a row outside the blueprint)." },
+              "fields":       { "type": "object" },
+              "layout": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "sortOrder": { "type": "number" },
+                  "size":      { "enum": ["icon", "row", "small", "medium", "large", "xlarge"] }
+                }
+              },
+              "pinned": {
+                "description": "(v1 stub — reserved) Field paths the plan always owns; user edits get discarded on re-apply.",
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        },
+
+        "linkedAssets": {
+          "description": "Pin existing rows (accounts, github repos, slack channels, SAP entities, or any pre-existing asset) to this scene. Two ref forms: direct DB id, or (type, externalId) resolved via assetId(rootSceneId, type, externalId). Optionally edits the row's name/fields in place — the existing DB row stays the same id, only its content changes. Use this when you want to evolve a row's contents while keeping its identity stable across blueprints and scenes.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "required": ["id"] },
+              { "required": ["type", "externalId"] }
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id":          { "type": "string" },
+              "type":        { "type": "string" },
+              "externalId":  { "type": "string" },
+              "name":        { "type": "string", "description": "When set, UPDATE the existing row's name." },
+              "externalUrl": { "type": "string", "description": "When set, UPDATE the existing row's external_url." },
+              "fields":      { "type": "object", "description": "When set, UPDATE the existing row's fields. The DB id stays the same; only content changes." },
+              "layout": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "sortOrder": { "type": "number" },
+                  "size":      { "enum": ["icon", "row", "small", "medium", "large", "xlarge"] }
+                }
+              }
+            }
+          }
+        },
+
+        "schedules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "title", "cron", "prompt"],
+            "additionalProperties": false,
+            "properties": {
+              "id":         { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+              "title":      { "type": "string" },
+              "cron":       { "type": "string" },
+              "prompt":     { "type": "string" },
+              "assetIds":   { "type": "array", "items": { "type": "string" } },
+              "enabled":    { "type": "boolean", "default": true },
+              "checks":     { "type": "array", "items": { "$ref": "#/$defs/check" } }
+            }
+          }
+        },
+
+        "tasks": {
+          "description": "Scenebench-shaped runnable scenarios. Each task is an initialState + prompt + check rubric, executed against an ephemeral scene fork by the task runner.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "prompt"],
+            "additionalProperties": false,
+            "properties": {
+              "id":     { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+              "name":   { "type": "string" },
+              "prompt": {
+                "oneOf": [
+                  { "type": "string" },
+                  { "type": "array", "items": { "type": "object", "required": ["role", "content"], "properties": { "role": { "enum": ["system", "user", "assistant"] }, "content": { "type": "string" } } } }
+                ]
+              },
+              "initialState": { "type": "object" },
+              "tools": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "allow":    { "type": "array", "items": { "type": "string" } },
+                  "deny":     { "type": "array", "items": { "type": "string" } },
+                  "expected": { "type": "array", "items": { "type": "string" } }
+                }
+              },
+              "checks":  { "type": "array", "items": { "$ref": "#/$defs/check" } },
+              "run":     { "enum": ["ephemeral", "in_place"], "default": "ephemeral" }
+            }
+          }
+        },
+
+        "hooks": {
+          "description": "(v1 stub — reserved) Scene-level lifecycle hooks.",
+          "type": "object",
+          "additionalProperties": { "type": "array", "items": { "type": "string" } }
+        },
+
+        "outputs": {
+          "description": "(v1 stub — reserved) Named projections from scene state.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["from"],
+            "properties": { "from": { "type": "string" } }
+          }
+        },
+
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["email", "role"],
+            "additionalProperties": false,
+            "properties": {
+              "email": { "type": "string", "format": "email" },
+              "role":  { "enum": ["owner", "editor", "viewer"] }
+            }
+          }
+        },
+
+        "scenes": {
+          "description": "Child scenes nested under this one. parentId is derived from context unless explicit on the child.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/sceneBlock" }
+        },
+
+        "meta": {
+          "description": "(v1 stub — reserved) Authorship + provenance.",
+          "type": "object",
+          "properties": {
+            "author":  { "type": "string" },
+            "license": { "type": "string" },
+            "source":  { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "check": {
+      "description": "autocheck expression. Returns { pass, gap, why } on evaluation.",
+      "type": "object",
+      "required": ["op"],
+      "properties": {
+        "op":         { "type": "string" },
+        "path":       { "type": "string" },
+        "value":      {},
+        "substring":  { "type": "string" },
+        "ci":         { "type": "boolean" },
+        "collection": { "type": "string" },
+        "where":      { "$ref": "#/$defs/check" },
+        "of":         { "type": "array", "items": { "$ref": "#/$defs/check" } },
+        "expose":     { "type": "boolean", "default": false },
+        "severity":   { "enum": ["info", "warn", "fail"], "default": "fail" },
+        "kill":       { "type": "boolean", "default": false },
+        "why":        { "type": "string" },
+        "meta": {
+          "type": "object",
+          "properties": {
+            "references": { "type": "array", "items": { "type": "string" } },
+            "tags":       { "type": "array", "items": { "type": "string" } },
+            "pack":       { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
