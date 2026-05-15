@@ -46,7 +46,7 @@
         },
 
         "inputs": {
-          "description": "(v1 stub — reserved) Parameterization for blueprint reuse.",
+          "description": "Parameterization for blueprint reuse. ${inputs.X} references are substituted across the document at apply time. CLI binds via --input X=Y; unbound + no default + required:true throws.",
           "type": "object",
           "additionalProperties": {
             "type": "object",
@@ -110,22 +110,25 @@
         },
 
         "linkedAssets": {
-          "description": "Pin existing rows (accounts, github repos, slack channels, SAP entities, or any pre-existing asset) to this scene. Two ref forms: direct DB id, or (type, externalId) resolved via assetId(rootSceneId, type, externalId). Optionally edits the row's name/fields in place — the existing DB row stays the same id, only its content changes. Use this when you want to evolve a row's contents while keeping its identity stable across blueprints and scenes.",
+          "description": "Pin existing rows to this scene. Three ref shapes: (a) direct DB id; (b) (type, externalId) resolved via assetId(rootSceneId, type, externalId); (c) (slot, accepts) — user-picked at apply time, materializes as a daslab/placeholder if not bound. Optional name/fields/externalUrl edit-in-place when a row resolves.",
           "type": "array",
           "items": {
             "type": "object",
             "oneOf": [
               { "required": ["id"] },
-              { "required": ["type", "externalId"] }
+              { "required": ["type", "externalId"] },
+              { "required": ["slot", "accepts"] }
             ],
             "additionalProperties": false,
             "properties": {
               "id":          { "type": "string" },
               "type":        { "type": "string" },
               "externalId":  { "type": "string" },
-              "name":        { "type": "string", "description": "When set, UPDATE the existing row's name." },
-              "externalUrl": { "type": "string", "description": "When set, UPDATE the existing row's external_url." },
-              "fields":      { "type": "object", "description": "When set, UPDATE the existing row's fields. The DB id stays the same; only content changes." },
+              "slot":        { "type": "string", "pattern": "^[a-z0-9_-]+$", "description": "Plan-local slot name. Forks: user picks a workspace asset of `accepts` type; placeholder otherwise." },
+              "accepts":     { "type": "string", "description": "Asset type the slot accepts (e.g. 'github/account', 'salesforce/contact'). Applier resolves to a workspace row of this type, or materializes a daslab/placeholder." },
+              "name":        { "type": "string", "description": "When set + resolved, UPDATE the existing row's name." },
+              "externalUrl": { "type": "string", "description": "When set + resolved, UPDATE the existing row's external_url." },
+              "fields":      { "type": "object", "description": "When set + resolved, UPDATE the existing row's fields." },
               "layout": {
                 "type": "object",
                 "additionalProperties": false,
