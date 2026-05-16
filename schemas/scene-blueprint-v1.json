@@ -78,6 +78,38 @@
           ]
         },
 
+        "layers": {
+          "description": "Logical partitions of scene state with independent commit chains. Assets reference these by `slug` via their `layer` field. If omitted, an implicit `default` layer holds all assets (v1.0 behavior preserved).",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["slug", "name"],
+            "additionalProperties": false,
+            "properties": {
+              "slug":        { "type": "string", "pattern": "^[a-z0-9-]+$" },
+              "name":        { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+
+        "roles": {
+          "description": "Custom roles with per-layer read/write permissions. Built-in roles (owner|editor|viewer) remain available and cannot be shadowed.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["slug", "name"],
+            "additionalProperties": false,
+            "properties": {
+              "slug":   { "type": "string", "pattern": "^(?!(owner|editor|viewer)$)[a-z0-9-]+$" },
+              "name":   { "type": "string" },
+              "public": { "type": "boolean", "description": "When true, anonymous viewers assume this role. At most one role per scene can be public. Should declare only `read[]` (no `write[]`)." },
+              "read":   { "type": "array", "items": { "type": "string" } },
+              "write":  { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+
         "assets": {
           "type": "array",
           "items": {
@@ -88,6 +120,7 @@
               "id":           { "type": "string", "description": "Plan-local handle; doubles as default externalId. Applier derives DB id via assetId(sceneId, type, externalId)." },
               "type":         { "type": "string" },
               "name":         { "type": "string" },
+              "layer":        { "type": "string", "description": "Layer slug. Must reference a declared layer in `layers[]` (or the implicit `default`). Defaults to `default`." },
               "externalId":   { "type": "string", "description": "Provider's native id. Stored on assets.external_id." },
               "externalUrl":  { "type": "string" },
               "assetOwnerId": { "type": "string", "description": "DB id of the parent account asset (reference to a row outside the blueprint)." },
@@ -126,6 +159,7 @@
               "externalId":  { "type": "string" },
               "slot":        { "type": "string", "pattern": "^[a-z0-9_-]+$", "description": "Plan-local slot name. Forks: user picks a workspace asset of `accepts` type; placeholder otherwise." },
               "accepts":     { "type": "string", "description": "Asset type the slot accepts (e.g. 'github/account', 'salesforce/contact'). Applier resolves to a workspace row of this type, or materializes a daslab/placeholder." },
+              "layer":       { "type": "string", "description": "Layer slug for this scene's link. Defaults to `default`. Does not affect the underlying assets row." },
               "name":        { "type": "string", "description": "When set + resolved, UPDATE the existing row's name." },
               "externalUrl": { "type": "string", "description": "When set + resolved, UPDATE the existing row's external_url." },
               "fields":      { "type": "object", "description": "When set + resolved, UPDATE the existing row's fields." },
@@ -153,6 +187,7 @@
               "cron":       { "type": "string" },
               "prompt":     { "type": "string" },
               "assetIds":   { "type": "array", "items": { "type": "string" } },
+              "runAs":      { "type": "string", "pattern": "^[a-z0-9_-]+$", "description": "Role slug to scope the run's layer permissions. References a `roles[]` slug or built-in (owner|editor|viewer). Defaults to owner-attribution." },
               "enabled":    { "type": "boolean", "default": true },
               "checks":     { "type": "array", "items": { "$ref": "#/$defs/check" } }
             }
@@ -186,7 +221,8 @@
                 }
               },
               "checks":  { "type": "array", "items": { "$ref": "#/$defs/check" } },
-              "run":     { "enum": ["ephemeral", "in_place"], "default": "ephemeral" }
+              "run":     { "enum": ["ephemeral", "in_place"], "default": "ephemeral" },
+              "runAs":   { "type": "string", "pattern": "^[a-z0-9_-]+$", "description": "Role slug to scope the run's layer permissions. References a `roles[]` slug or built-in (owner|editor|viewer). Defaults to owner-attribution." }
             }
           }
         },
@@ -211,11 +247,16 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["email", "role"],
+            "required": ["role"],
             "additionalProperties": false,
+            "oneOf": [
+              { "required": ["email"] },
+              { "required": ["device"] }
+            ],
             "properties": {
-              "email": { "type": "string", "format": "email" },
-              "role":  { "enum": ["owner", "editor", "viewer"] }
+              "email":  { "type": "string", "format": "email" },
+              "device": { "type": "string", "pattern": "^[a-z0-9_-]+$", "description": "Device slot slug. Provisioning binds physical devices to slots out-of-band (e.g. eFuse pubkey registration)." },
+              "role":   { "type": "string", "pattern": "^[a-z0-9_-]+$", "examples": ["owner", "editor", "viewer"], "description": "Built-in (owner|editor|viewer) or a custom role slug declared in `roles[]`. Anonymous public access is declared on the role itself via `roles[i].public: true`, not on a member entry." }
             }
           }
         },
