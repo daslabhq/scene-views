@@ -14,7 +14,13 @@
  * are shipped by benchmark-scoped repos like scenebench as scenecast
  * extensions for their domain — they live with the benchmarks they came from.
  *
- * Pairs with scene-otel for emission. Daslab platform builds on it.
+ * OTel emission (scene.set) and scene diffing are available via sub-exports:
+ *
+ *   import { scene } from 'scenecast/otel';   // needs @opentelemetry/api
+ *   import { sceneDiff } from 'scenecast/diff';
+ *
+ * The main export stays OTel-free for rendering-only consumers.
+ * Daslab platform builds on it.
  */
 
 // Core
