@@ -1,8 +1,14 @@
 # scenecast
 
-> One asset definition. One typed JSON shape. Many rendering targets. The agent's view of the world, cast onto any surface.
+> The scene SDK for AI agents. Capture what your agent knows, render it anywhere.
 
-Typed asset shapes + visual + headless **views** for AI agents. Authors return **WidgetData** JSON per size; the framework converts:
+**scenecast** is three things in one package:
+
+1. **Emit** — `scene.set("inbox", emails)` snapshots agent state as OTel span events, content-hashed and diffable
+2. **Type** — canonical asset shapes (Email, Message, Contact, Event, Task, Document, Mesh) with JSON Schema validation
+3. **Render** — one WidgetData definition, six rendering targets:
+
+Authors return **WidgetData** JSON per size; the framework converts:
 
 - **JSON** (`WidgetData`) — the canonical primitive every author writes. Same JSON shape Daslab iOS, Daslab web, and any third-party renderer can consume.
 - **HTML** — rendered from WidgetData for humans, dashboards, the [scene-otel](https://github.com/daslabhq/scene-otel) scrubber, iOS/web viewers
@@ -35,7 +41,30 @@ Vendor types declare `extends: ["email/mailbox"]` etc. — tools that consume ca
 npm install scenecast
 ```
 
-## Use
+## Capture agent state
+
+```ts
+import { scene } from "scenecast/otel";
+
+scene.set("inbox",   emails);          // → OTel span event, type: table
+scene.set("flagged", flagged.length);  // → type: metric
+scene.set("draft",   draft);           // → type: text
+```
+
+Each `scene.set` emits an event on the active OTel span with a content-addressed snapshot. Works with any OTel pipeline — Phoenix, Braintrust, Honeycomb, Datadog, Daslab. Widget type is inferred from the value shape.
+
+```ts
+import { sceneDiff, buildSnapshot } from "scenecast/diff";
+
+const before = buildSnapshot(events, commitHashA);
+const after  = buildSnapshot(events, commitHashB);
+const diff   = sceneDiff(before, after);
+// → { added: { draft: "..." }, changed: [{ key: "flagged", before: 0, after: 3 }], ... }
+```
+
+The `scenecast/otel` sub-export requires `@opentelemetry/api` as a peer dependency. The main `scenecast` import has zero OTel dependency — safe for rendering-only consumers (browsers, mobile, static sites).
+
+## Render to any surface
 
 ```ts
 import { Email } from "scenecast";
@@ -198,18 +227,24 @@ TableView.toHTML({
 
 Each primitive ships HTML + Markdown out of the box.
 
-## Pairs with `scene-otel`
+## Emit + Render together
 
-When emitting trace events with [scene-otel](https://github.com/daslabhq/scene-otel), pass the asset directly — the schema becomes the type contract for the snapshot, and the default view powers the scrubber's rendering automatically:
+The full loop — capture typed state, render it on any surface:
 
 ```ts
-import { Gmail } from "scenecast";
-import { scene } from "scene-otel";
+import { Email } from "scenecast";
+import { scene } from "scenecast/otel";
 
-scene.set(Gmail.type, world.gmail);              // schema-validated emit
+scene.set(Email.type, world.gmail);    // OTel span event with typed snapshot
+
+// Later — render the same data for a human
+const html = Email.defaultView.toHTML(world.gmail, { size: "medium" });
+
+// Or for an LLM
+const ctx = Email.defaultView.toMarkdown(world.gmail, { size: "medium" });
 ```
 
-The scene-otel scrubber auto-detects registered scenecast assets and renders cards with the asset's default view.
+The schema is the type contract for the snapshot, and the default view powers rendering automatically.
 
 ## Schemas
 
@@ -245,8 +280,9 @@ MIT. See [LICENSE](./LICENSE).
 
 ## Related
 
-- [`scene-otel`](https://github.com/daslabhq/scene-otel) — wire format for snapshotting agent state to OTel events. Pairs naturally — scenecast renders what scene-otel snapshots.
+- [`kern`](https://github.com/daslabhq/kern) — the agent wallet. Identity and secrets built on age encryption.
+- [`agent-otel`](https://github.com/mirkokiefer/agent-otel) — OTel router for agent telemetry. Fanout to any sink.
 - [`scenebench`](https://github.com/daslabhq/scenebench) — open harness for running, measuring, and visualizing agent benchmarks. Vendor types are authored with scenecast.
-- [`scenegrad`](https://github.com/daslabhq/scenegrad) — runtime goal assertions for agents. Scenecast schemas describe what is; scenegrad asserts what must be.
-- [`agent-otel`](https://github.com/mirkokiefer/agent-otel) — OTel router for agent telemetry.
+- [`scenegrad`](https://github.com/daslabhq/scenegrad) — runtime goal assertions for agents.
 - [`autocompile`](https://github.com/mirkokiefer/autocompile) — observes repeated agent runs, compiles invariant parts to code.
+- `scene-otel` — **deprecated**, now part of scenecast. Use `scenecast/otel` instead.
